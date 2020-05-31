@@ -1,0 +1,25 @@
+{
+  "name": "vitalfit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fedeabdo/vitalfit.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fedeabdo/vitalfit/issues"
+  },
+  "homepage": "https://github.com/fedeabdo/vitalfit#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.16",
+    "nodemon": "^2.0.4"
+  }
+}
