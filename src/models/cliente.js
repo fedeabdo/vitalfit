@@ -11,11 +11,12 @@ const ClienteSchema = new Schema({
     nacimiento: String,
     nro_contacto: Number,
     mail: String,
-    ejercicios: String, //hay que cambiar esto no se como poner un array de ejercicios
-    metricas_iniciales: String,//en realidad no es string
-    metricas_avance: String,//en realidad es un array de metricas
-    metricas_objetivo: String //en realidad es un array de metricas
+    ejercicios: Array,
+    metricas_iniciales: Array,
+    metricas_avance: Array,
+    metricas_objetivo: Array 
+
 });
 
 
-module.exports = mongoose.model('clientes',ClienteSchema)//se almacenan en 'personas'
+module.exports = mongoose.model('clientes',ClienteSchema)//se almacenan en 'clientes'
