@@ -19,4 +19,4 @@ const EjercicioSchema = new Schema({
 
 
 
-module.exports = mongoose.model('ejercicios',ClienteSchema)
+module.exports = mongoose.model('ejercicios',EjercicioSchema)
