@@ -6,10 +6,9 @@ const cliente = require("../models/cliente")
 
 ////////
 
-
-
-
-
+router.get('/home', (req, res) => { //lo que responde a '/'
+    res.send('Estas en home')    
+})
 
 
 ///////
