@@ -224,7 +224,7 @@ function installEvents2() {
 function alumno_upload(){
 	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Nueva sesion</button><br><button>Plan nuevo</button><br><button>Plan anterior</button><br></div>')
 
-	$('li a', ".lista-alumnos").append(alumno_upload_html);
+	$('li a', ".lista_alumnos").append(alumno_upload_html);
 	$('.alumno-upload').hide();
 }
 
@@ -233,6 +233,25 @@ $(document).ready(()=>{
 });
 
 function alumno_upload_onclick(event){
-	$()
+	$(".alumno-upload").not($(".alumno-upload",event)).slideUp()
 	$(".alumno-upload",event).slideToggle();
+}
+
+function filtro_alumnos(){
+	var input, filter, ul, li, a, i, txtValue;
+	input = $('.filtro_alumnos');
+	filter = input.val().toUpperCase();
+	ul = $(".lista_alumnos");
+	li = $('li', ".lista_alumnos");
+  
+	// Loop through all list items, and hide those who don't match the search query
+	for (i = 0; i < li.length; i++) {
+	  a = $("a", li[i]);
+	  txtValue = a.text();
+	  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		li[i].style.display = "";
+	  } else {
+		li[i].style.display = "none";
+	  }
+	}
 }
