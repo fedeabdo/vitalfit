@@ -20,8 +20,11 @@
   "homepage": "https://github.com/fedeabdo/vitalfit#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "keen-ui": "^1.3.0",
     "mongoose": "^5.9.16",
     "mongose": "0.0.2-security",
+    "node": "^14.4.0",
+    "node-dev": "^4.0.0",
     "nodemon": "^2.0.4"
   }
 }

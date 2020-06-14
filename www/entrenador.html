@@ -12,6 +12,7 @@
 
 	<link rel="stylesheet" href="mobileui/mui.min.css" type="text/css">
 	<link rel="stylesheet" href="custom/custom.css" type="text/css">
+	<link rel="stylesheet" href="node_modules/keen-ui/dist/keen-ui.min.css">
 
 	<script src="phonegap.js"></script>
 	<script src="vendors/fastclick.min.js" type="text/javascript"></script>
@@ -23,6 +24,35 @@
 
 	<script src="mobileui/mui.min.js" type="text/javascript"></script>
 	<script src="custom/custom.js" type="text/javascript"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="node_modules/keen-ui/dist/keen-ui.min.js"></script>
+
+
+	<script>
+		$(document).ready(() => {
+
+			const vm = new Vue({
+				el: '#app',
+				data:{
+					selectedItem: null,
+					dias: ['DIA 1', 'DIA 2', 'DIA 3', 'DIA 4']
+				},
+				methods: {
+					openModal( event ) {
+						this.selectedItem = event.target;
+						this.$refs.modal.open();
+					},
+					agregarDia: function(){
+						this.dias.push('DIA ' + this.dias.length)
+					}
+				}
+			})
+
+		})
+	</script>
+
+
 </head>
 
 <body>
@@ -43,7 +73,8 @@
 						<div>
 							<div class="col-80">
 								<br>
-								<input type="text" class="filtro_alumnos" onkeyup="filtro_alumnos()" placeholder="Buscar por nombre">
+								<input type="text" class="filtro_alumnos" onkeyup="filtro_alumnos()"
+									placeholder="Buscar por nombre">
 								<ul class="lista_alumnos"><br>
 									<li><a onclick="alumno_upload_onclick(this)">Alumno1</a></li>
 									<li><a onclick="alumno_upload_onclick(this)">Alumno2</a></li>
@@ -61,12 +92,13 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div>
+						<div id="app">
 							<p>Plan "Hipertrofia ENERO - ABRIL 2019"</p>
-							<button class="col-80">Agregar DIA</button><br><br>
-							<button class="col-80">Dia A</button>
-							<button class="col-80">Dia B</button>
-							<button class="col-80">Dia C</button>
+							<ui-button class="block col-80" @click="agregarDia">Agregar DIA</ui-button><br><br>
+							<ui-button class="col-80" @click="openModal" v-for="dia in dias">{{dia}}</ui-button>
+							<ui-modal ref="modal" title="">
+								
+							</ui-modal>
 						</div>
 					</div>
 				</div>
@@ -104,6 +136,8 @@
 		</div>
 
 	</div>
+
+
 </body>
 
 </html>
