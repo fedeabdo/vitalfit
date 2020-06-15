@@ -12,7 +12,7 @@ app.listen(port,  function () {
 });
 
 //conectar a bdd
-mongoose.connect('mongodb://localhost/vitalfit')
+mongoose.connect('mongodb://localhost/vitalfit', { useUnifiedTopology: true , useNewUrlParser: true })
     .then(db => console.log('DB connected'))//tira este mensaje si se conecto
     .catch(err => console.log(err))//tira esto si no conecto
 
