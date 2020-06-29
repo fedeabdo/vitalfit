@@ -32,19 +32,33 @@
 	<script>
 		$(document).ready(() => {
 
-			const vm = new Vue({
-				el: '#app',
-				data:{
+			const sesion = new Vue({
+				el: '#sesion-app',
+				data: {
+					selectedItem: null,
+					sesiones: ['SESION 1', 'SESION 2', 'SESION 3']
+				},
+				methods: {
+					agregarSesion: function () {
+						nro = this.sesiones.length + 1
+						this.sesiones.push('SESION ' + nro)
+					}
+				}
+			})
+			const dias = new Vue({
+				el: '#dia-app',
+				data: {
 					selectedItem: null,
 					dias: ['DIA 1', 'DIA 2', 'DIA 3', 'DIA 4']
 				},
 				methods: {
-					openModal( event ) {
+					openModal(event) {
 						this.selectedItem = event.target;
 						this.$refs.modal.open();
 					},
-					agregarDia: function(){
-						this.dias.push('DIA ' + this.dias.length)
+					agregarDia: function () {
+						nro = this.dias.length + 1
+						this.dias.push('DIA ' + nro)
 					}
 				}
 			})
@@ -84,25 +98,103 @@
 						</div>
 					</div>
 				</div>
-
-				<div id='template-page' class="mui-page">
+				<!-- CARGA DE DATOS PLAN ANTERIOR -->
+				<!-- sesiones -->
+				<div id='sesiones-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
 						<div class='mui-page-title'>Carga de Datos, Plan Anterior</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div id="app">
+						<div id="sesion-app">
+							<p>Plan "Hipertrofia ENERO - ABRIL 2019"</p>
+							<ui-button class="block col-80" @click="agregarSesion">Agregar SESIÓN</ui-button>
+							<br><br>
+							<ui-button class="sesion-boton col-80" @click="openModal" v-for="sesion in sesiones">
+								{{sesion}}</ui-button>
+						</div>
+					</div>
+				</div>
+				<!-- sesiones -->
+				<!-- dias -->
+				<div id='dias-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>Carga de Datos, Plan Anterior</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div id="dia-app">
 							<p>Plan "Hipertrofia ENERO - ABRIL 2019"</p>
 							<ui-button class="block col-80" @click="agregarDia">Agregar DIA</ui-button><br><br>
 							<ui-button class="col-80" @click="openModal" v-for="dia in dias">{{dia}}</ui-button>
-							<ui-modal ref="modal" title="">
-								
+							<ui-modal style="size: large;" ref="modal" title="DIA TAL">
+								<table>
+									<tr>
+										
+										<th><br>peso muerto <br>
+											ROM	<br>
+											tiempo
+										</th>
+										<th><table>
+
+											<tr><th>fecha 1<br>
+											<table>
+												<tr>
+													<th>series</th>
+													<th>rep</th>
+													<th>kg</th>
+													<th>intensidad</th>
+												</tr>
+												<tr>
+													<td>3</td>
+													<td>8</td>
+													<td>50</td>
+													<td>8</td>
+												</tr>
+											</table></th></tr>
+
+											<tr><th>fecha 2<br>
+												<table>
+													<tr>
+														<th>series</th>
+														<th>rep</th>
+														<th>kg</th>
+														<th>intensidad</th>
+													</tr>
+													<tr>
+														<td>3</td>
+														<td>8</td>
+														<td>50</td>
+														<td>8</td>
+													</tr>
+												</table></th></tr>
+
+												<tr><th>fecha 3<br>
+													<table>
+														<tr>
+															<th>series</th>
+															<th>rep</th>
+															<th>kg</th>
+															<th>intensidad</th>
+														</tr>
+														<tr>
+															<td>3</td>
+															<td>8</td>
+															<td>50</td>
+															<td>8</td>
+														</tr>
+													</table></th></tr>
+										</table></th>
+									</tr>
+								</table>
 							</ui-modal>
 						</div>
 					</div>
 				</div>
-
+				<!-- dias -->
+				<!-- CARGA DE DATOS PLAN ANTERIOR -->
 				<!-- Copy the code of "template-page" to add more pages -->
 				<!-- Copie el código de template-plage para agregar más páginas -->
 

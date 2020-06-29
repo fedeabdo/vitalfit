@@ -71,10 +71,19 @@ function installEvents() {
 			id: '.CargarDatosPlanAnterior',
 			ev: 'click',
 			fn: () => {
-				mui.viewport.showPage("template-page", "DEF");
+				mui.viewport.showPage("sesiones-page", "DEF");
 				return false;
 			}
 		},
+		{
+			id: '.sesion-boton',
+			ev: 'click',
+			fn: () => {
+				mui.viewport.showPage("dias-page", "DEF");
+				return false;
+			}
+		},
+
 		//Toolbar options ------------------------------------------
 		{
 			id: '#tabbar-button1',
