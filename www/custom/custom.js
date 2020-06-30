@@ -83,6 +83,14 @@ function installEvents() {
 				return false;
 			}
 		},
+		{
+			id: '.planNuevo',
+			ev: 'click',
+			fn: () => {
+				mui.viewport.showPage("planNuevo-page", 'DEF');
+				return false;
+			}
+		},
 
 		//Toolbar options ------------------------------------------
 		{
@@ -235,7 +243,7 @@ function installEvents2() {
 }
 
 function alumno_upload() {
-	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Nueva sesion</button><br><button>Plan nuevo</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
+	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Nueva sesion</button><br><button class="planNuevo">Plan nuevo</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
 
 	$('li a', ".lista_alumnos").append(alumno_upload_html);
 	$('.alumno-upload').hide();

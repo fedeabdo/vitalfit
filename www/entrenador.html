@@ -31,6 +31,9 @@
 
 	<script>
 		$(document).ready(() => {
+			const planNuevo = new Vue({
+				el: "#planNuevo-app"
+			})
 
 			const sesion = new Vue({
 				el: '#sesion-app',
@@ -59,6 +62,9 @@
 					agregarDia: function () {
 						nro = this.dias.length + 1
 						this.dias.push('DIA ' + nro)
+					},
+					showPage: function(){
+						mui.viewport.showPage("sesiones-page", "DEF");
 					}
 				}
 			})
@@ -98,6 +104,30 @@
 						</div>
 					</div>
 				</div>
+				<!-- CARGA DE DATOS PLAN NUEVO -->
+				<div id='planNuevo-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>Carga de Datos, Plan Nuevo</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div id="planNuevo-app">
+							<br>
+							<input type="text" placeholder="Nombre del Plan"><br>
+							<select name="cantidad_de_dias" id="cant_dias">
+								<option disabled value="">Seleccione cantidad de días</option>
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+								<option>6</option>
+								<option>7</option>
+							</select><br>
+							<ui-button>SIGUIENTE</ui-button> 
+						</div>
+					</div>
 				<!-- CARGA DE DATOS PLAN ANTERIOR -->
 				<!-- sesiones -->
 				<div id='sesiones-page' class="mui-page">
@@ -111,7 +141,7 @@
 							<p>Plan "Hipertrofia ENERO - ABRIL 2019"</p>
 							<ui-button class="block col-80" @click="agregarSesion">Agregar SESIÓN</ui-button>
 							<br><br>
-							<ui-button class="sesion-boton col-80" @click="openModal" v-for="sesion in sesiones">
+							<ui-button class="sesion-boton col-80" @click='showPage' v-for="sesion in sesiones">
 								{{sesion}}</ui-button>
 						</div>
 					</div>
