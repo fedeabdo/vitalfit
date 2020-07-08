@@ -60,6 +60,15 @@
 				}
 			})
 
+			const nuevoAlumno = new Vue({
+				el: "#nuevoAlumno-app",
+				methods: {
+					nuevoAlumno_page: function() {
+						mui.viewport.showPage("nuevoAlumno-page", "DEF")
+					}
+				}
+			})
+
 			const sesion = new Vue({
 				el: '#sesion-app',
 				data: {
@@ -70,6 +79,9 @@
 					agregarSesion: function () {
 						nro = this.sesiones.length + 1
 						this.sesiones.push('SESION ' + nro)
+					},
+					showPage: function () {
+						mui.viewport.showPage("sesiones-page", "DEF");
 					}
 				}
 			})
@@ -118,8 +130,10 @@
 						<div>
 							<div class="col-80">
 								<br>
-								<input type="text" class="filtro_alumnos" onkeyup="filtro_alumnos()"
-									placeholder="Buscar por nombre">
+								<span>
+									<input type="text" class="filtro_alumnos" onkeyup="filtro_alumnos()" placeholder="Buscar por nombre">
+									<button id="nuevoAlumno" class="agregar_alumno">＋</button>
+								</span>
 								<ul class="lista_alumnos"><br>
 									<li><a onclick="alumno_upload_onclick(this)">Alumno1</a></li>
 									<li><a onclick="alumno_upload_onclick(this)">Alumno2</a></li>
@@ -129,11 +143,31 @@
 						</div>
 					</div>
 				</div>
+				<!-- CARGA DE DATOS NUEVO ALUMNO -->
+				<div id='nuevoAlumno-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>Carga de Datos - Nuevo Alumno</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div class="col-80" id="nuevoAlumno-app">
+							<br>
+							<input type="text" placeholder="Nombre"><br>
+							<input type="text" placeholder="Apellido"><br>
+							<input type="date" placeholder="Fecha de Nacimiento"><br>
+							<input type="tel" placeholder="Nro. de Contacto"><br>
+							<input type="email" placeholder="Email"><br><br>
+							<button id="confirmarAlumno">Confirmar</button>
+						</div>
+					</div>
+				</div>
 				<!-- CARGA DE DATOS PLAN NUEVO -->
+				<!--
 				<div id='planNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos, Plan Nuevo</div>
+						<div class='mui-page-title'>Carga de Datos - Plan Nuevo</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
@@ -172,118 +206,139 @@
 							</ui-modal>
 						</div>
 					</div>
-					<!-- CARGA DE DATOS PLAN ANTERIOR -->
-					<!-- sesiones -->
-					<div id='sesiones-page' class="mui-page">
-						<div class="mui-page-header">
-							<a class="mui-backarrow" href="#"></a>
-							<div class='mui-page-title'>Carga de Datos, Plan Anterior</div>
-							<a class="mui-headmenu" href="#"></a>
-						</div>
-						<div class="mui-page-body mui-scrollable" id="second-body">
-							<div id="sesion-app">
-								<p>Plan "Hipertrofia ENERO - ABRIL 2019"</p>
-								<ui-button class="block col-80" @click="agregarSesion">Agregar SESIÓN</ui-button>
-								<br><br>
-								<ui-button class="sesion-boton col-80" @click='showPage' v-for="sesion in sesiones">
-									{{sesion}}</ui-button>
-							</div>
-						</div>
-					</div>
-					<!-- sesiones -->
-					<!-- dias -->
-					<div id='dias-page' class="mui-page">
-						<div class="mui-page-header">
-							<a class="mui-backarrow" href="#"></a>
-							<div class='mui-page-title'>Carga de Datos, Plan Anterior</div>
-							<a class="mui-headmenu" href="#"></a>
-						</div>
-						<div class="mui-page-body mui-scrollable" id="second-body">
-							<div id="dia-app">
-								<p>Plan "Hipertrofia ENERO - ABRIL 2019"</p>
-								<ui-button class="block col-80" @click="agregarDia">Agregar DIA</ui-button><br><br>
-								<ui-button class="col-80" @click="openModal" v-for="dia in dias">{{dia}}</ui-button>
-								<ui-modal style="size: large;" ref="modal" title="DIA TAL">
-									<table>
-										<tr>
-
-											<th><br>peso muerto <br>
-												ROM <br>
-												tiempo
-											</th>
-											<th>
-												<table>
-
-													<tr>
-														<th>fecha 1<br>
-															<table>
-																<tr>
-																	<th>series</th>
-																	<th>rep</th>
-																	<th>kg</th>
-																	<th>intensidad</th>
-																</tr>
-																<tr>
-																	<td>3</td>
-																	<td>8</td>
-																	<td>50</td>
-																	<td>8</td>
-																</tr>
-															</table>
-														</th>
-													</tr>
-
-													<tr>
-														<th>fecha 2<br>
-															<table>
-																<tr>
-																	<th>series</th>
-																	<th>rep</th>
-																	<th>kg</th>
-																	<th>intensidad</th>
-																</tr>
-																<tr>
-																	<td>3</td>
-																	<td>8</td>
-																	<td>50</td>
-																	<td>8</td>
-																</tr>
-															</table>
-														</th>
-													</tr>
-
-													<tr>
-														<th>fecha 3<br>
-															<table>
-																<tr>
-																	<th>series</th>
-																	<th>rep</th>
-																	<th>kg</th>
-																	<th>intensidad</th>
-																</tr>
-																<tr>
-																	<td>3</td>
-																	<td>8</td>
-																	<td>50</td>
-																	<td>8</td>
-																</tr>
-															</table>
-														</th>
-													</tr>
-												</table>
-											</th>
-										</tr>
-									</table>
-								</ui-modal>
-							</div>
-						</div>
-					</div>
-					<!-- dias -->
-					<!-- CARGA DE DATOS PLAN ANTERIOR -->
-					<!-- Copy the code of "template-page" to add more pages -->
-					<!-- Copie el código de template-plage para agregar más páginas -->
-
 				</div>
+
+			-->
+
+			<div id='planNuevo-page' class="mui-page">
+				<div class="mui-page-header">
+					<a class="mui-backarrow" href="#"></a>
+					<div class='mui-page-title'>Carga de Datos - Plan Nuevo</div>
+					<a class="mui-headmenu" href="#"></a>
+				</div>
+				<div class="mui-page-body mui-scrollable" id="second-body">
+					<div class= "col-80" id="planNuevo-app">
+						<br>
+						<span>
+							<input type="text" class="filtro_dias" onkeyup="filtro_dias()" placeholder="Buscar día">
+							<button id="nuevoDia" class="agregar_dia">＋</button>
+						</span>
+						<ul class="lista_dias"><br>
+							<li><a>Dia1</a></li>
+							<li><a>Dia2</a></li>
+							<li><a>Dia3</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+				<!-- CARGA DE DATOS PLAN ANTERIOR -->
+				<!-- sesiones -->
+				<div id='sesiones-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>Carga de Datos, Plan Anterior</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div id="sesion-app">
+							<p>Plan "Hipertrofia ENERO - ABRIL 2019"</p>
+							<ui-button class="block col-80" @click="agregarSesion">Agregar SESIÓN</ui-button>
+							<br><br>
+							<ui-button class="sesion-boton col-80" @click='showPage' v-for="sesion in sesiones">
+								{{sesion}}</ui-button>
+						</div>
+					</div>
+				</div>
+				<!-- sesiones -->
+				<!-- dias -->
+				<div id='dias-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>Carga de Datos, Plan Anterior</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div id="dia-app">
+							<p>Plan "Hipertrofia ENERO - ABRIL 2019"</p>
+							<ui-button class="block col-80" @click="agregarDia">Agregar DIA</ui-button><br><br>
+							<ui-button class="col-80" @click="openModal" v-for="dia in dias">{{dia}}</ui-button>
+							<ui-modal style="size: large;" ref="modal" title="DIA TAL">
+								<table>
+									<tr>
+										<th><br>peso muerto <br>
+											ROM <br>
+											tiempo
+										</th>
+										<th>
+											<table>
+												<tr>
+													<th>fecha 1<br>
+														<table>
+															<tr>
+																<th>series</th>
+																<th>rep</th>
+																<th>kg</th>
+																<th>intensidad</th>
+															</tr>
+															<tr>
+																<td>3</td>
+																<td>8</td>
+																<td>50</td>
+																<td>8</td>
+															</tr>
+														</table>
+													</th>
+												</tr>
+
+												<tr>
+													<th>fecha 2<br>
+														<table>
+															<tr>
+																<th>series</th>
+																<th>rep</th>
+																<th>kg</th>
+																<th>intensidad</th>
+															</tr>
+															<tr>
+																<td>3</td>
+																<td>8</td>
+																<td>50</td>
+																<td>8</td>
+															</tr>
+														</table>
+													</th>
+												</tr>
+
+												<tr>
+													<th>fecha 3<br>
+														<table>
+															<tr>
+																<th>series</th>
+																<th>rep</th>
+																<th>kg</th>
+																<th>intensidad</th>
+															</tr>
+															<tr>
+																<td>3</td>
+																<td>8</td>
+																<td>50</td>
+																<td>8</td>
+															</tr>
+														</table>
+													</th>
+												</tr>
+											</table>
+										</th>
+									</tr>
+								</table>
+							</ui-modal>
+						</div>
+					</div>
+				</div>
+				<!-- dias -->
+				<!-- CARGA DE DATOS PLAN ANTERIOR -->
+				<!-- Copy the code of "template-page" to add more pages -->
+				<!-- Copie el código de template-plage para agregar más páginas -->
 
 				<!-- Optional.Toolbar out of mui-viewport to be omnipresent. Remove if not needed. -->
 				<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->

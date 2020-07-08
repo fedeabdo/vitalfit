@@ -91,6 +91,14 @@ function installEvents() {
 				return false;
 			}
 		},
+		{
+			id: '#nuevoAlumno',
+			ev: 'click',
+			fn: () => {
+				mui.viewport.showPage("nuevoAlumno-page", 'DEF');
+				return false;
+			}
+		},
 
 		//Toolbar options ------------------------------------------
 		{
@@ -277,6 +285,23 @@ function filtro_alumnos() {
 	}
 }
 
+function filtro_dias() {
+	var input, filter, ul, li, a, i, txtValue;
+	input = $('.filtro_dias');
+	filter = input.val().toUpperCase();
+	ul = $(".lista_dias");
+	li = $('li', ".lista_dias");
 
+	// Loop through all list items, and hide those who don't match the search query
+	for (i = 0; i < li.length; i++) {
+		a = $("a", li[i]);
+		txtValue = a.text();
+		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+			li[i].style.display = "";
+		} else {
+			li[i].style.display = "none";
+		}
+	}
+}
 
 
