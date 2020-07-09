@@ -233,16 +233,25 @@ button{
 	font-weight: bold;
 }
 
-#nuevoAlumno-app input{
+#nuevoAlumnoID input{
 	margin: 0px 0px 10px 0px; 
 }
 
-#confirmarAlumno{
+.confirmar{
 	width: 50%;
 	padding: 5px;
 	margin: 0 25% 0 25%;
 }
 
+.nombre_plan_label{
+	margin: 0px 0px 5px 0px;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.nombre_plan_input{
+	margin: 5px 0 20px 0;
+}
 
 .lista_dias{
 	text-align: center;
@@ -255,7 +264,7 @@ button{
 	border-top:	solid 1px lightgrey;
 }
 
-.col-80 .agregar_dia{
+.col-80 .agregar{
 	width : 10%;
 	padding: 5px;
 	font-weight: bold;
@@ -269,4 +278,28 @@ button{
 	font-size: 16px; /* Increase font-size */
 	border: 1px solid #ddd; /* Add a grey border */
 	margin-bottom: 12px; /* Add some space below the input */
+}
+
+.lista_ejercicios{
+	list-style: none;
+	padding-left: 0px;
+}
+
+.lista_ejercicios p{
+	margin: 5px 0 5px 0;
+}
+
+.lista_ejercicios span>p{
+	font-size: 15px;
+	font-weight: bold;
+	margin: 8px 0 8px 0;
+	text-align: center;
+}
+
+
+.agregarEjercicio{
+	width: 60%;
+	margin: 0 20% 0 20%;
+	padding: 5px;
+	font-weight: bold;
 }
