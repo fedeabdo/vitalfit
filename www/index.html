@@ -23,6 +23,11 @@
 
 	<script src="mobileui/mui.min.js" type="text/javascript"></script>
 	<script src="custom/custom.js" type="text/javascript"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="node_modules/keen-ui/dist/keen-ui.min.js"></script>
+
+
 </head>
 
 <body>
@@ -38,10 +43,13 @@
 						<div class="page-logo"></div>
 						<div>
 							<div class="col-80">
-								<div class="iniciar-sesion-ventana">
-									<input type="text" placeholder="Usuario"><br><br>
-									<input type="password" placeholder="Contraseña"><br><br><br><br>
-									<button onclick="window.location.href='./entrenador.html'">Iniciar Sesión</button>
+								<div id='inicio-sesion-app' class="iniciar-sesion-ventana">
+									<div>
+										<span id="alerta" style="color: red;"></span>
+									</div><br>
+									<input id='uname' type="text" placeholder="Usuario"><br><br>
+									<input id='pword' type="password" placeholder="Contraseña"><br><br><br><br>
+									<button @click="inicio_sesion">Iniciar Sesión</button>
 								</div>
 							</div>
 
@@ -61,7 +69,61 @@
 		<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->
 
 	</div>
-	</div>
+
+	<script>
+
+		const inicio_sesion_app = new Vue({
+			el: '#inicio-sesion-app',
+			methods: {
+				inicio_sesion: function () {
+					uname = $('#uname').val()
+					pword = $('#pword').val()
+					$.ajax({
+						type: 'POST',
+						// beforeSend: function (request) {
+						// 	request.setRequestHeader("Access-Control-Allow-Origin", '*');
+						// },
+						url: 'https://app-personal-trainer.herokuapp.com/login',
+						crossDomain: true,
+						data: { 'username': uname, 'password': pword },
+						dataType: 'json',
+						success: function (responseData, textStatus, jqXHR) {
+							var value = responseData;
+							console.log(value)
+							console.log(typeof (value.login))
+							if (value.login == true) {
+								console.log("contra correcta")
+								alert("login")
+								$.ajax({
+									type: 'GET',
+									url: 'https://app-personal-trainer.herokuapp.com/clientes/myinfo',
+									success: function (responseData) {
+										var esAdmin = responseData.admin
+										if (esAdmin) {
+											document.location.href = "entrenador.html"
+										} else if (!esAdmin) {
+											document.location.href = "cliente.html"
+										}
+									}
+								})
+								
+
+							} else if (value.login == false) {
+
+								console.log("contra incorrecta")
+								$("#alerta").text("Usuario o Contraseña incorrecta.")
+							}
+						},
+						error: function (responseData, textStatus, errorThrown) {
+							console.log(responseData)
+							console.log(errorThrown)
+							alert('POST failed.');
+						}
+					});
+				}
+			}
+		})
+	</script>
 </body>
 
 </html>

@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "keen-ui": "^1.3.0"
+    "ajax": "0.0.4",
+    "keen-ui": "^1.3.0",
+    "vue": "^2.6.11"
   }
 }
