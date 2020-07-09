@@ -42,6 +42,8 @@
 			// 		}
 			// 	}
 			// })
+
+			/*
 			const planNuevo2 = new Vue({
 				el: "#planNuevo-app-2",
 				methods: {
@@ -50,21 +52,86 @@
 					}
 				}
 			})
+			*/
+			
 
-			const planNuevo = new Vue({
-				el: "#planNuevo-app",
+			const homePage = new Vue({
+				el: "#home-page",
 				methods: {
-					planNuevo_page_2: function() {
-						mui.viewport.showPage("planNuevo-page-2", "DEF")
+					nuevoAlumno: function() {
+						mui.viewport.showPage("nuevoAlumno-page", 'DEF')
 					}
 				}
 			})
 
-			const nuevoAlumno = new Vue({
-				el: "#nuevoAlumno-app",
+			const alumno = new Vue({
+				el: "#nuevoAlumno-page",
+				data: {
+					alumnos: [],
+					alumno:{
+						nombre: "",
+						apellido: "",
+						fechaDeNac: "",
+						nroContacto: "",
+						email: ""
+					}
+				},
 				methods: {
-					nuevoAlumno_page: function() {
-						mui.viewport.showPage("nuevoAlumno-page", "DEF")
+					confirmarAlumno: function() {
+						this.alumnos.push(this.alumno)
+						this.alumno.nombre = ""
+						this.alumno.apellido = ""
+						this.alumno.fechaDeNac = ""
+						this.alumno.nroContacto = ""
+						this.alumno.email = ""
+						mui.viewport.showPage("home-page", "DEF")
+					}
+				}
+			})
+
+			const planNuevo = new Vue({
+				el: "#planNuevo-app",
+				data: {
+					nombrePlan: '',
+					dias: [],
+					diaActual: 0,
+				},
+				methods: {
+					agregarDia: function () {
+						nro = this.dias.length + 1
+						this.dias.push('DIA ' + nro)
+					},
+					diaNuevo: function () {
+						mui.viewport.showPage("diaNuevo-page", "DEF")
+					},
+					confirmarPlan: function() {
+						mui.viewport.showPage("home-page", "DEF")
+					}
+				}
+			})
+
+			const diaNuevo = new Vue({
+				el: '#diaNuevo-app',
+				data: {
+					ejerciciosHtml: [],
+					ejercicios: [],
+					ejercicio: {
+						nombre: "",
+						series: "",
+						reps: "",
+						intensidad: "",
+						tiempo: ""
+					}
+				},
+				methods: {
+					agregarEjercicio: function () {
+						nro = this.ejercicios.length + 1
+						this.ejercicios.push(this.ejercicio)
+						this.ejerciciosHtml.push('<div class= "col-80"><span><p>Ejercicio' + nro + '</p></span><p>Nombre:</p><input type="Text" v-model="ejercicios[' + nro + '].nombre"><br><p>Series:</p><input type="Number" v-model="ejercicios[' + nro + '].series"><br><p>Reps:</p><input type="Number" v-model="ejercicios[' + nro + '].reps"><br><p>Intensidad:</p><input type="Number" v-model="ejercicios[' + nro + '].intensidad"><br><p>Tiempo:</p><input type="Number" v-model="ejercicios[' + nro + '].tiempo"><br></div><br><hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">')
+					},
+					confirmarEjercicio: function() {
+						console.log(this.ejercicios)
+						mui.viewport.showPage("planNuevo-page", "DEF")
 					}
 				}
 			})
@@ -79,26 +146,6 @@
 					agregarSesion: function () {
 						nro = this.sesiones.length + 1
 						this.sesiones.push('SESION ' + nro)
-					},
-					showPage: function () {
-						mui.viewport.showPage("sesiones-page", "DEF");
-					}
-				}
-			})
-			const dias = new Vue({
-				el: '#dia-app',
-				data: {
-					selectedItem: null,
-					dias: ['DIA 1', 'DIA 2', 'DIA 3', 'DIA 4']
-				},
-				methods: {
-					openModal(event) {
-						this.selectedItem = event.target;
-						this.$refs.modal.open();
-					},
-					agregarDia: function () {
-						nro = this.dias.length + 1
-						this.dias.push('DIA ' + nro)
 					},
 					showPage: function () {
 						mui.viewport.showPage("sesiones-page", "DEF");
@@ -120,19 +167,18 @@
 			<!-- Ddefault viewport. Do not remove. It will make your life simpler and happy. -->
 			<!-- ViewPort por defecto. No lo elimines. Hará tu vida más simple y feliz. -->
 			<div id="mui-viewport" class="mui-viewport">
-
-				<div id='home-page' class="mui-page">
+				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
 						<div class="mui-page-logo"></div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<div class="mui-page-body mui-scrollable" id="home-body">
+					<div class="mui-page-body" id="home-body">
 						<div>
 							<div class="col-80">
 								<br>
 								<span>
-									<input type="text" class="filtro_alumnos" onkeyup="filtro_alumnos()" placeholder="Buscar por nombre">
-									<button id="nuevoAlumno" class="agregar_alumno">＋</button>
+									<input type="text" class="filtro_alumnos" onkeyup="filtro('.filtro_alumnos', '.lista_alumnos')" placeholder="Buscar por nombre">
+									<button class="agregar_alumno" @click="nuevoAlumno">＋</button>
 								</span>
 								<ul class="lista_alumnos"><br>
 									<li><a onclick="alumno_upload_onclick(this)">Alumno1</a></li>
@@ -151,19 +197,18 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div class="col-80" id="nuevoAlumno-app">
+						<div class="col-80" id="nuevoAlumnoID">
 							<br>
-							<input type="text" placeholder="Nombre"><br>
-							<input type="text" placeholder="Apellido"><br>
-							<input type="date" placeholder="Fecha de Nacimiento"><br>
-							<input type="tel" placeholder="Nro. de Contacto"><br>
-							<input type="email" placeholder="Email"><br><br>
-							<button id="confirmarAlumno">Confirmar</button>
+							<input type="text" placeholder="Nombre" v-model="alumno.nombre"><br>
+							<input type="text" placeholder="Apellido" v-model="alumno.apellido"><br>
+							<input type="date" placeholder="Fecha de Nacimiento" v-model="alumno.fechaDeNac"><br>
+							<input type="tel" placeholder="Nro. de Contacto" v-model="alumno.nroContacto"><br>
+							<input type="email" placeholder="Email" v-model="alumno.email"><br><br>
+							<button class="confirmar" @click="confirmarAlumno">Confirmar</button>
 						</div>
 					</div>
 				</div>
 				<!-- CARGA DE DATOS PLAN NUEVO -->
-				<!--
 				<div id='planNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
@@ -172,65 +217,55 @@
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
 						<div id="planNuevo-app">
+							<div class= "col-80">
+								<br>
+								<div>
+									<label class="nombre_plan_label">Nombre del Plan: </label>
+									<input v-model="nombrePlan" type="text" class="nombre_plan_input">
+								</div>
+							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<br>
-							<input type="text" placeholder="Nombre del Plan"><br>
-							<select name="cantidad_de_dias" id="cant_dias">
-								<option disabled value="">Seleccione cantidad de días</option>
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-								<option>7</option>
-							</select><br>
-							<ui-button @click='planNuevo_page_2'>SIGUIENTE</ui-button>
+							<div class= "col-80">
+								<span>
+									<input type="text" class="filtro_dias" onkeyup="filtro('.filtro_dias', '.lista_dias')" placeholder="Buscar día">
+									<button id="nuevoDia" class="agregar" v-on:click="agregarDia">＋</button>
+								</span>
+								<ul class="lista_dias">
+									<li  v-for="dia in dias">
+										<a v-on:click="diaNuevo" v-text="dia"></a>
+									</li>
+								</ul>
+								<br>
+								<button class="confirmar" @click="confirmarPlan">Confirmar</button>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div id='planNuevo-page-2' class="mui-page">
+
+				<!-- CARGA DE EJERCICIOS AL DIA -->
+				<div id='diaNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos, Plan Nuevo</div>
+						<div class='mui-page-title'>Carga de Datos - Día Nuevo</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div id="planNuevo-app-2">
-							<ui-button @click='openModal'>Agregar Ejercicio</ui-button>
-
-							<ui-modal style="size: large;" ref="modal" title="AGREGAR EJERCICIO">
-								<select name="ejercicio" id="ejercicio">
-									<option disabled value="">Seleccione ejercicio</option>
-									<option value=""></option>
-								</select>
-							</ui-modal>
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
+						<div id="diaNuevo-app">
+							<br>
+							<div class= "col-80">
+								<button id="nuevoEjercicio" class="agregarEjercicio" v-on:click="agregarEjercicio">Agregar Ejercicio</button>
+							</div>
+							<ul class="lista_ejercicios">
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+								<li v-for="ejercicio in ejerciciosHtml" v-html="ejercicio"></li>
+							</ul>
+							<br>
+							<button class="confirmar" @click="confirmarEjercicio">Confirmar</button>
 						</div>
 					</div>
 				</div>
 
-			-->
-
-			<div id='planNuevo-page' class="mui-page">
-				<div class="mui-page-header">
-					<a class="mui-backarrow" href="#"></a>
-					<div class='mui-page-title'>Carga de Datos - Plan Nuevo</div>
-					<a class="mui-headmenu" href="#"></a>
-				</div>
-				<div class="mui-page-body mui-scrollable" id="second-body">
-					<div class= "col-80" id="planNuevo-app">
-						<br>
-						<span>
-							<input type="text" class="filtro_dias" onkeyup="filtro_dias()" placeholder="Buscar día">
-							<button id="nuevoDia" class="agregar_dia">＋</button>
-						</span>
-						<ul class="lista_dias"><br>
-							<li><a>Dia1</a></li>
-							<li><a>Dia2</a></li>
-							<li><a>Dia3</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
 				<!-- CARGA DE DATOS PLAN ANTERIOR -->
 				<!-- sesiones -->
 				<div id='sesiones-page' class="mui-page">
@@ -373,3 +408,51 @@
 </body>
 
 </html>
+
+<!--PLAN NUEVO - CODIGO VIEJO-->
+<!--
+<div id='planNuevo-page' class="mui-page">
+	<div class="mui-page-header">
+		<a class="mui-backarrow" href="#"></a>
+		<div class='mui-page-title'>Carga de Datos - Plan Nuevo</div>
+		<a class="mui-headmenu" href="#"></a>
+	</div>
+	<div class="mui-page-body mui-scrollable" id="second-body">
+		<div id="planNuevo-app">
+			<br>
+			<input type="text" placeholder="Nombre del Plan"><br>
+			<select name="cantidad_de_dias" id="cant_dias">
+				<option disabled value="">Seleccione cantidad de días</option>
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+				<option>6</option>
+				<option>7</option>
+			</select><br>
+			<ui-button @click='planNuevo_page_2'>SIGUIENTE</ui-button>
+		</div>
+	</div>
+</div>
+<div id='planNuevo-page-2' class="mui-page">
+	<div class="mui-page-header">
+		<a class="mui-backarrow" href="#"></a>
+		<div class='mui-page-title'>Carga de Datos, Plan Nuevo</div>
+		<a class="mui-headmenu" href="#"></a>
+	</div>
+	<div class="mui-page-body mui-scrollable" id="second-body">
+		<div id="planNuevo-app-2">
+			<ui-button @click='openModal'>Agregar Ejercicio</ui-button>
+
+			<ui-modal style="size: large;" ref="modal" title="AGREGAR EJERCICIO">
+				<select name="ejercicio" id="ejercicio">
+					<option disabled value="">Seleccione ejercicio</option>
+					<option value=""></option>
+				</select>
+			</ui-modal>
+		</div>
+	</div>
+</div>
+
+-->

@@ -91,14 +91,6 @@ function installEvents() {
 				return false;
 			}
 		},
-		{
-			id: '#nuevoAlumno',
-			ev: 'click',
-			fn: () => {
-				mui.viewport.showPage("nuevoAlumno-page", 'DEF');
-				return false;
-			}
-		},
 
 		//Toolbar options ------------------------------------------
 		{
@@ -251,8 +243,7 @@ function installEvents2() {
 }
 
 function alumno_upload() {
-	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Nueva sesion</button><br><button class="planNuevo">Plan nuevo</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
-
+	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Visualizar Alumno</button><br><button>Visualizar Planes</button><br><button class="planNuevo">Nuevo Plan</button><br><button>Nueva sesion</button><br><button>Asignar Plan</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
 	$('li a', ".lista_alumnos").append(alumno_upload_html);
 	$('.alumno-upload').hide();
 }
@@ -266,12 +257,12 @@ function alumno_upload_onclick(event) {
 	$(".alumno-upload", event).slideToggle();
 }
 
-function filtro_alumnos() {
+function filtro(filtro, lista) {
 	var input, filter, ul, li, a, i, txtValue;
-	input = $('.filtro_alumnos');
+	input = $(filtro);
 	filter = input.val().toUpperCase();
-	ul = $(".lista_alumnos");
-	li = $('li', ".lista_alumnos");
+	ul = $(lista);
+	li = $('li', lista);
 
 	// Loop through all list items, and hide those who don't match the search query
 	for (i = 0; i < li.length; i++) {
@@ -284,24 +275,3 @@ function filtro_alumnos() {
 		}
 	}
 }
-
-function filtro_dias() {
-	var input, filter, ul, li, a, i, txtValue;
-	input = $('.filtro_dias');
-	filter = input.val().toUpperCase();
-	ul = $(".lista_dias");
-	li = $('li', ".lista_dias");
-
-	// Loop through all list items, and hide those who don't match the search query
-	for (i = 0; i < li.length; i++) {
-		a = $("a", li[i]);
-		txtValue = a.text();
-		if (txtValue.toUpperCase().indexOf(filter) > -1) {
-			li[i].style.display = "";
-		} else {
-			li[i].style.display = "none";
-		}
-	}
-}
-
-
