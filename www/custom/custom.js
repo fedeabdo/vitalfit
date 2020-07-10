@@ -243,7 +243,7 @@ function installEvents2() {
 }
 
 function alumno_upload() {
-	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Visualizar Alumno</button><br><button>Visualizar Planes</button><br><button class="planNuevo">Nuevo Plan</button><br><button>Nueva sesion</button><br><button>Asignar Plan</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
+	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Visualizar Alumno</button><br><button>Visualizar Planes</button><br><button class="planNuevo" v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button>Nueva sesion</button><br><button>Asignar Plan</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
 	$('li a', ".lista_alumnos").append(alumno_upload_html);
 	$('.alumno-upload').hide();
 }
