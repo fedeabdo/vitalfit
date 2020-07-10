@@ -94,6 +94,7 @@
 					confirmarAlumno: function() {
 						// this.alumnos.push(this.alumno)
 						$.ajax({
+							type: 'POST',
 							url: 'https://app-personal-trainer.herokuapp.com/clientes/',
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
@@ -101,11 +102,11 @@
 								'nombre': this.alumno.nombre + " " + this.alumno.apellido,
 								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.toLowerCase(),
 								'admin': false,
-								'password': this.alumno.password
+								'password': this.alumno.apellido
 							},
 							dataType: 'json',
-							success: ()=>{
-								alert("alumno creado con exito")
+							success: (responseData)=>{
+								alert(responseData)
 							}
 
 						})
