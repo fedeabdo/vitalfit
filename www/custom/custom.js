@@ -257,6 +257,17 @@ function alumno_upload_onclick(event) {
 	$(".alumno-upload", event).slideToggle();
 }
 
+function desplegarDias() {
+	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Visualizar Alumno</button><br><button>Visualizar Planes</button><br><button class="planNuevo" v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button>Nueva sesion</button><br><button>Asignar Plan</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
+	$('li a', ".lista_alumnos").append(alumno_upload_html);
+	$('.alumno-upload').hide();
+}
+
+function desplegarDiasOnclick(event) {
+	$(".alumno-upload").not($(".alumno-upload", event)).slideUp()
+	$(".alumno-upload", event).slideToggle();
+}
+
 function filtro(filtro, lista) {
 	var input, filter, ul, li, a, i, txtValue;
 	input = $(filtro);
