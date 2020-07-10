@@ -243,13 +243,14 @@ function installEvents2() {
 }
 
 function alumno_upload() {
-	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Visualizar Alumno</button><br><button>Visualizar Planes</button><br><button class="planNuevo" v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button>Nueva sesion</button><br><button>Asignar Plan</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
+	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Visualizar Alumno</button><br><button>Visualizar Planes</button><br><button class="planNuevo" v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva sesion</button><br><button>Asignar Plan</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
 	$('li a', ".lista_alumnos").append(alumno_upload_html);
 	$('.alumno-upload').hide();
 }
 
 $(document).ready(() => {
 	alumno_upload();
+	desplegarDias();
 });
 
 function alumno_upload_onclick(event) {
@@ -258,14 +259,14 @@ function alumno_upload_onclick(event) {
 }
 
 function desplegarDias() {
-	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Visualizar Alumno</button><br><button>Visualizar Planes</button><br><button class="planNuevo" v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button>Nueva sesion</button><br><button>Asignar Plan</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
-	$('li a', ".lista_alumnos").append(alumno_upload_html);
-	$('.alumno-upload').hide();
+	let diasHtml = $('<div class="diasDesplegados"><div v-for="dia in plan.dias"><button class="botonSesionDia" v-on:click="abrirDiaSesionNueva">{{dia}}</button><br></div></div>')
+	$('li a', ".lista_planes").append(diasHtml);
+	$('.diasDesplegados').hide();
 }
 
 function desplegarDiasOnclick(event) {
-	$(".alumno-upload").not($(".alumno-upload", event)).slideUp()
-	$(".alumno-upload", event).slideToggle();
+	$(".diasDesplegados").not($(".diasDesplegados", event)).slideUp()
+	$(".diasDesplegados", event).slideToggle();
 }
 
 function filtro(filtro, lista) {

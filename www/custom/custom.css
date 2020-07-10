@@ -309,3 +309,41 @@ button{
 	padding: 5px;
 	font-weight: bold;
 }
+
+.lista_planes{
+	text-align: center;
+	list-style: none;
+	padding-left: 0px;
+}
+.lista_planes li{
+	padding-bottom: 10px;
+	padding-top: 10px;
+	border-top:	solid 1px lightgrey;
+}
+.desplegarDias button{
+	padding: 5px;
+	margin-bottom: 5px;
+	width: 50%;
+}
+
+button.botonSesionDia {
+	width: 50%;
+	padding: 5px;
+	margin-top: 5px;
+}
+
+.lista_sesion_ejercicios{
+	list-style: none;
+	padding-left: 0px;
+}
+
+.lista_sesion_ejercicios p{
+	margin: 5px 0 5px 0;
+}
+
+.lista_sesion_ejercicios span>p{
+	font-size: 15px;
+	font-weight: bold;
+	margin: 8px 0 8px 0;
+	text-align: center;
+}
