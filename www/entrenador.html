@@ -92,7 +92,24 @@
 				},
 				methods: {
 					confirmarAlumno: function() {
-						this.alumnos.push(this.alumno)
+						// this.alumnos.push(this.alumno)
+						$.ajax({
+							url: 'https://app-personal-trainer.herokuapp.com/clientes/',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							data: {
+								'nombre': this.alumno.nombre + " " + this.alumno.apellido,
+								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.toLowerCase(),
+								'admin': false,
+								'password': this.alumno.password
+							},
+							dataType: 'json',
+							success: ()=>{
+								alert("alumno creado con exito")
+							}
+
+						})
+						alert(this.alumno.nombre)
 						this.alumno.nombre = ""
 						this.alumno.apellido = ""
 						this.alumno.fechaDeNac = ""
@@ -213,7 +230,9 @@
 						</div>
 					</div>
 				</div>
-				<!-- CARGA DE DATOS NUEVO ALUMNO -->
+
+
+<!-- CARGA DE DATOS NUEVO ALUMNO -->
 				<div id='nuevoAlumno-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
@@ -232,7 +251,11 @@
 						</div>
 					</div>
 				</div>
-				<!-- CARGA DE DATOS PLAN NUEVO -->
+
+
+<!-- CARGA DE DATOS PLAN NUEVO -->
+
+
 				<div id='planNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
