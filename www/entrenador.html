@@ -64,6 +64,9 @@
 				methods: {
 					nuevoAlumno: function() {
 						mui.viewport.showPage("nuevoAlumno-page", 'DEF')
+					},
+					abrirPlanNuevo: function() {
+						mui.viewport.showPage("planNuevo-page", 'DEF')
 					}
 				}
 			})
@@ -175,6 +178,24 @@
 				}
 			})
 
+			const nuevaSesion = new Vue({
+				el: '#nuevaSesion-app',
+				data: {
+					planes:[
+						{dias: ['DIA 1', 'DIA 2', 'DIA 3']}
+					]
+				},
+				methods: {
+					agregarSesion: function () {
+						nro = this.sesiones.length + 1
+						this.sesiones.push('SESION ' + nro)
+					},
+					showPage: function () {
+						mui.viewport.showPage("sesiones-page", "DEF");
+					}
+				}
+			})
+
 			const sesion = new Vue({
 				el: '#sesion-app',
 				data: {
@@ -206,12 +227,17 @@
 			<!-- Ddefault viewport. Do not remove. It will make your life simpler and happy. -->
 			<!-- ViewPort por defecto. No lo elimines. Hará tu vida más simple y feliz. -->
 			<div id="mui-viewport" class="mui-viewport">
+
+
+<!-- PAGINA INICIO -->
+
+
 				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
 						<div class="mui-page-logo"></div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<div class="mui-page-body" id="home-body">
+					<div class="mui-page-body" id="home-body" style="overflow:scroll">
 						<div>
 							<div class="col-80">
 								<br>
@@ -223,9 +249,6 @@
 									<li v-for='alumno in alumnos'>
 										<a onclick="alumno_upload_onclick(this)">{{alumno.nombre}}</a>
 									</li>
-									<!-- <li><a onclick="alumno_upload_onclick(this)">Alumno1</a></li>
-									<li><a onclick="alumno_upload_onclick(this)">Alumno2</a></li>
-									<li><a onclick="alumno_upload_onclick(this)">alumno3</a></li> -->
 								</ul>
 							</div>
 						</div>
@@ -234,13 +257,15 @@
 
 
 <!-- CARGA DE DATOS NUEVO ALUMNO -->
+
+
 				<div id='nuevoAlumno-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
 						<div class='mui-page-title'>Carga de Datos - Nuevo Alumno</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<div class="mui-page-body mui-scrollable" id="second-body">
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div class="col-80" id="nuevoAlumnoID">
 							<br>
 							<input type="text" placeholder="Nombre" v-model="alumno.nombre"><br>
@@ -263,7 +288,7 @@
 						<div class='mui-page-title'>Carga de Datos - Plan Nuevo</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<div class="mui-page-body mui-scrollable" id="second-body">
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div id="planNuevo-app">
 							<div class= "col-80">
 								<br>
@@ -295,7 +320,10 @@
 					</div>
 				</div>
 
-				<!-- CARGA DE EJERCICIOS AL DIA -->
+
+<!-- CARGA DE EJERCICIOS AL DIA -->
+
+
 				<div id='diaNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
@@ -318,7 +346,37 @@
 					</div>
 				</div>
 
-				<!-- CARGA DE DATOS PLAN ANTERIOR -->
+
+<!-- CARGA DE DATOS SESION NUEVA -->
+
+
+				<div id="nuevaSesion-page" class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>Carga de Datos - Nueva Sesion</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
+						<div>
+							<div id="nuevaSesion-app">
+								<div class="col-80">
+									<br>
+									<ul class="lista_planes"><br>
+										<li v-for='plan in planes'>
+											<a onclick="alumno_upload_onclick(this)">{{alumno.nombre}}</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+<!-- CARGA DE DATOS PLAN ANTERIOR -->
+
+
 				<!-- sesiones -->
 				<div id='sesiones-page' class="mui-page">
 					<div class="mui-page-header">
