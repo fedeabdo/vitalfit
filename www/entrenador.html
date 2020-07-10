@@ -57,10 +57,24 @@
 
 			const homePage = new Vue({
 				el: "#home-page",
+				data: {
+					alumnos: [],
+					
+				},
 				methods: {
 					nuevoAlumno: function() {
 						mui.viewport.showPage("nuevoAlumno-page", 'DEF')
 					}
+				}
+			})
+			
+			$.ajax({
+				type: 'GET',
+				url: 'https://app-personal-trainer.herokuapp.com/clientes/',
+				xhrFields: { withCredentials: true },
+				crossDomain: true,
+				success: function(data){
+					homePage.alumnos = data
 				}
 			})
 
@@ -181,9 +195,12 @@
 									<button class="agregar_alumno" @click="nuevoAlumno">＋</button>
 								</span>
 								<ul class="lista_alumnos"><br>
-									<li><a onclick="alumno_upload_onclick(this)">Alumno1</a></li>
+									<li v-for='alumno in alumnos'>
+										<a onclick="alumno_upload_onclick(this)">{{alumno.nombre}}</a>
+									</li>
+									<!-- <li><a onclick="alumno_upload_onclick(this)">Alumno1</a></li>
 									<li><a onclick="alumno_upload_onclick(this)">Alumno2</a></li>
-									<li><a onclick="alumno_upload_onclick(this)">alumno3</a></li>
+									<li><a onclick="alumno_upload_onclick(this)">alumno3</a></li> -->
 								</ul>
 							</div>
 						</div>
