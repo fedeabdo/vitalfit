@@ -93,13 +93,20 @@
 				el: "#planNuevo-app",
 				data: {
 					nombrePlan: '',
-					dias: [],
-					diaActual: 0,
+					dias: []
 				},
 				methods: {
 					agregarDia: function () {
 						nro = this.dias.length + 1
-						this.dias.push('DIA ' + nro)
+						diaAux = {
+							nombre:"",
+							ejercicios:[]
+						}
+						diaAux.nombre = 'DIA ' + nro
+						this.dias.push(diaAux)
+					},
+					quitarDia: function () {
+						this.dias.pop()
 					},
 					diaNuevo: function () {
 						mui.viewport.showPage("diaNuevo-page", "DEF")
@@ -229,11 +236,15 @@
 							<div class= "col-80">
 								<span>
 									<input type="text" class="filtro_dias" onkeyup="filtro('.filtro_dias', '.lista_dias')" placeholder="Buscar día">
-									<button id="nuevoDia" class="agregar" v-on:click="agregarDia">＋</button>
 								</span>
+								<span>
+									<button id="nuevoDia" class="agregar" v-on:click="agregarDia">＋</button>
+									<button id="quitarDia" class="quitar" v-on:click="quitarDia">&minus;</button>
+								</span>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<ul class="lista_dias">
 									<li  v-for="dia in dias">
-										<a v-on:click="diaNuevo" v-text="dia"></a>
+										<a v-on:click="diaNuevo" v-text="dia.nombre"></a>
 									</li>
 								</ul>
 								<br>

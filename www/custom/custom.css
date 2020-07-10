@@ -261,10 +261,16 @@ button{
 .lista_dias li{
 	padding-bottom: 10px;
 	padding-top: 10px;
-	border-top:	solid 1px lightgrey;
+	border-bottom:	solid 1px lightgrey;
 }
 
 .col-80 .agregar{
+	width : 10%;
+	padding: 5px;
+	font-weight: bold;
+}
+
+.col-80 .quitar{
 	width : 10%;
 	padding: 5px;
 	font-weight: bold;
@@ -274,7 +280,7 @@ button{
 	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
 	background-position: 10px 12px; /* Position the search icon */
 	background-repeat: no-repeat; /* Do not repeat the icon image */
-	width: 87%; /* Full-width */
+	width: 100%; /* Full-width */
 	font-size: 16px; /* Increase font-size */
 	border: 1px solid #ddd; /* Add a grey border */
 	margin-bottom: 12px; /* Add some space below the input */
