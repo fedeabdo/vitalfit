@@ -63,7 +63,7 @@
 						mui.viewport.showPage("visualizarPlanes-page", 'DEF')
 					},
 					abrirPlanNuevo: function(value) {
-						this.alumnos[value - 1].id = planNuevo.alumnoId
+						this.alumnos[value]._id = planNuevo.alumnoId
 						mui.viewport.showPage("planNuevo-page", 'DEF')
 					},
 					abrirNuevaSesion: function() {
@@ -152,11 +152,6 @@
 					nombrePlan: '',
 					dias: [],
 					nombreDia: "",
-					indiceAux: 0,
-					diaSeleccionado: {
-						nombre: "",
-						ejercicios: []
-					}
 				},
 				methods: {
 					agregarDia: function () {
@@ -164,7 +159,6 @@
 							nombre: this.nombreDia,
 							ejercicios:[]
 						}
-						diaAux.nombre = 'DIA ' + nro
 						this.dias.push(diaAux)
 						
 					},
@@ -219,12 +213,27 @@
 					planes:[
 						{
 							nombre: 'Prueba',
-							dias: ['DIA 1', 'DIA 2', 'DIA 3']
+							dias: [
+								{
+									nombre: "Dia de Pecho",
+									ejercicios: [
+										{
+											nombre: "pecho plano",
+											series: 3,
+											reps: 2,
+											intensidad: 10,
+											tiempo: 60,
+											sesiones:[]
+										}
+									]
+								}
+							]
 						}
 					]
 				},
 				methods: {
-					abrirDiaSesionNueva: function() {
+					abrirDiaSesionNueva: function(value1, value2) {
+						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
 						mui.viewport.showPage("nuevaSesionEjercicios-page", "DEF")
 					},
 					confirmarSesion: function() {
@@ -236,18 +245,19 @@
 			const ejerciciosSesion = new Vue({
 				el: '#nuevaSesionEjercicios-app',
 				data: {
-					ejercicios: [
-						{
-						nombre: "Pecho Plano",
-						series: "",
-						reps: "",
-						intensidad: "",
-						tiempo: ""
-						}
-					]
+					ejercicios: []
 				},
 				methods: {
 					confirmarSesionEjercicios: function() {
+						for (const ejercicioAux in this.ejercicios) {
+							const sesionAux = {
+								nombre: "",
+								series: "",
+								reps: "",
+								intesidad: "",
+								tiempo: ""
+							}
+						}
 						mui.viewport.showPage("nuevaSesion-page", "DEF")
 					}
 				}
@@ -315,7 +325,7 @@
 
 				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
-						<button @click="logout">Cerrar sesión</button>>
+						<button @click="logout">Cerrar sesión</button>
 						<div class="mui-page-logo"></div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
@@ -410,6 +420,7 @@
 								<span>
 									<button id="nuevoDia" class="agregar_boton" v-on:click="agregarDia">＋</button>
 									<button id="quitarDia" class="quitar_boton" v-on:click="quitarDia">&minus;</button>
+									<input type="text" class="nombre_dia_input" v-model="nombreDia" placeholder="Ingrese Nombre Dia">
 								</span>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<ul class="lista_dias">
@@ -484,7 +495,7 @@
 									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
 									<br>
 									<ul class="lista_planes"><br>
-										<li v-for='plan in planes'>
+										<li v-for='(plan, index1) in planes'>
 											<a onclick="desplegarDiasOnclick(this)">{{plan.nombre}}</a>
 										</li>
 									</ul>
