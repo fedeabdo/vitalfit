@@ -73,7 +73,15 @@
 						mui.viewport.showPage("asignarPlan-page", 'DEF')
 					},
 					eliminarAlumno: function() {
-						
+						$.ajax({
+							type: 'DELETE',
+							url: "https://app-personal-trainer.herokuapp.com/cliente" + username,
+							xhrFields: { withCredentials: true},
+							crossDomain: true,
+							success: function(data){
+								alert("Sep")
+							}
+						})
 					},
 					logout: function(){
 						$.ajax({
