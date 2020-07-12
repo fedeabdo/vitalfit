@@ -62,7 +62,8 @@
 					verPlanes: function(){
 						mui.viewport.showPage("visualizarPlanes-page", 'DEF')
 					},
-					abrirPlanNuevo: function() {
+					abrirPlanNuevo: function(value) {
+						this.alumnos[value - 1].id = planNuevo.alumnoId
 						mui.viewport.showPage("planNuevo-page", 'DEF')
 					},
 					abrirNuevaSesion: function() {
@@ -147,6 +148,7 @@
 			const planNuevo = new Vue({
 				el: "#planNuevo-app",
 				data: {
+					alumnoId: "",
 					nombrePlan: '',
 					dias: [],
 					nombreDia: "",
@@ -176,15 +178,10 @@
 					},
 					confirmarPlan: function() {
 						var planAux = {
-							nombreAux = this.nombrePlan,
-							diasAux = this.dias
+							nombreAux: this.nombrePlan,
+							diasAux: this.dias
 						}
 						mui.viewport.showPage("home-page", "DEF")
-					},
-					reasignarDia: function() {
-						if ((store.state.diaSeleccionado.id - 1) > (-1)){
-							//this.dias[store.diaSeleccionado.id - 1] = store.diaSeleccionado
-						}
 					}
 				}
 			})
@@ -331,7 +328,7 @@
 									<button class="agregar_alumno_boton" @click="nuevoAlumno">＋</button>
 								</span>
 								<ul class="lista_alumnos"><br>
-									<li v-for="alumno in alumnos">
+									<li v-for="(alumno, index) in alumnos">
 										<a onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
 									</li>
 								</ul>
