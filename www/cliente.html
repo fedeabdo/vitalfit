@@ -161,10 +161,10 @@
 							<div class="col-80">
                                 <p> Bienvenido {{alumno.nombre}} </p>
                                 <span>
-									<button class="mostrar_planes" @click="verPlanes"> Mostrar todos los planes </button>
+									<button class="col-80" @click="verPlanes"> Mostrar todos los planes </button>
 								</span>
 								<span>
-									<button class="mostrar_plan" @click="verPlanActual"> Mostrar plan actual </button>
+									<button class="col-80" @click="verPlanActual"> Mostrar plan actual </button>
 								</span>
 							</div>
 						</div>
@@ -184,7 +184,7 @@
 							<div class="col-80">
                                 <p> Lista de planes</p>
                                 <span>
-									<button class="block col-80" v-for="plan in planes" @click="handleSelectPlan(plan)">{{plan.nombre}}</button>
+									<button class="col-80" v-for="plan in planes" @click="handleSelectPlan(plan)">{{plan.nombre}}</button>
 								</span>
 							</div>
 						</div>
@@ -210,12 +210,13 @@
 						<div class='mui-page-title'>{{dia.nombre}}</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<!-- Slideshow container -->
 					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div class="col-80" v-for="ejercicio in dia.ejercicios" @click="handleSelectEjercicio(ejercicio)">
-							<!-- <img src="img1.jpg" style="width:100%"> -->
-							<button class="col-80">{{ejercicio.nombre}}</button>
-							<div v-for="sesion in ejercicio.sesiones"> {{sesion}} </div>
+						<div class="col-80">
+							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios" @click="handleSelectEjercicio(ejercicio)">
+								<!-- <img src="img1.jpg" style="width:100%"> -->
+								<button class="col-80">{{ejercicio.nombre}}</button>
+								<div v-for="sesion in ejercicio.sesiones"> {{sesion.nombre}} </div>
+							</div>
 						</div>
 						<!-- Next and previous buttons -->
 					</div>
@@ -224,8 +225,23 @@
 				<div id='ejercicio-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>{{ejercicio.nombre}}</div>
+						<div class='mui-page-title'> Agregar sesion a {{ejercicio.nombre}}</div>
 						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div class= "col-80">
+							<p>Series:</p><input type="Number" placeholder="Número de Series" v-model="ejercicio.series">
+							<br>
+							<p>Reps:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.reps">
+							<br>
+							<p>Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="ejercicio.intensidad">
+							<br>
+							<p>Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="ejercicio.tiempo">
+							<br>
+						</div>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<br>
+							<button class="confirmar_boton" @click="confirmarSesionEjercicios">Confirmar</button>
 					</div>
 				</div>
                 
