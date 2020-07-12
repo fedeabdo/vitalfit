@@ -82,7 +82,12 @@
 					},
 					asignacionPlan: function() {
 						mui.viewport.showPage("asignarPlan-page", 'DEF')
-					},
+					}
+				}
+			})
+			const menuPanel = new Vue({
+				el: "#menu-panel",
+				methods:{
 					logout: function(){
 						$.ajax({
 							type: 'GET',
@@ -96,7 +101,6 @@
 					}
 				}
 			})
-
 			const alumnoNuevo = new Vue({
 				el: "#nuevoAlumno-page",
 				data: {
@@ -317,7 +321,6 @@
 
 				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
-						<button @click="logout">Cerrar sesión</button>>
 						<div class="mui-page-logo"></div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
@@ -635,6 +638,7 @@
 			<div class="mui-panel-body">
 				<div>
 					<ul id='menuoptions' class='mui-list'>
+						<li><a @click="logout">Cerrar sesión</li></a>
 						<li><a id='option1' href="#">Go Home Page</a></li>
 						<li><a id='option2' href="#">Go Page 2</a></li>
 					</ul>
