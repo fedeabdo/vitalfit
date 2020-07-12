@@ -33,7 +33,7 @@
 		$(document).ready(() => {
             $.ajax({
 				type: 'GET',
-				url: 'https://app-personal-trainer.herokuapp.com/clientes/myinfo',
+				url: 'https://app-personal-trainer.herokuapp.com/myinfo',
 				xhrFields: { withCredentials: true },
 				crossDomain: true,
 				success: function(data){
@@ -41,6 +41,7 @@
 				}
 			})
 			
+
             const homePage = new Vue({
 				el: "#home-page",
 				data: {
@@ -51,7 +52,8 @@
                         nro_contacto: Number,
                         mail: String,
                         planes: Array
-                    }
+                    },
+					
 				},
 				methods: {
 					verPlanes: function(){
