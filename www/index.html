@@ -87,6 +87,7 @@
 						crossDomain: true,
 						data: { 'username': uname, 'password': pword },
 						dataType: 'json',
+						xhrFields: { withCredentials: true },
 						success: function (responseData, textStatus, jqXHR) {
 							var value = responseData;
 							//console.log(value)
@@ -95,12 +96,14 @@
 								//console.log("contra correcta")
 								//console.log("contra correcta")
 								//alert("login")
+								//alert(req.cookies['connect.sid'])
+								
 								$('#alerta').text()
 								$.ajax({
 									type: 'GET',
 									xhrFields: { withCredentials: true },
 									crossDomain: true,
-									url: 'https://app-personal-trainer.herokuapp.com/clientes/myinfo',
+									url: 'https://app-personal-trainer.herokuapp.com/myinfo',
 									success: function (responseData) {
 										var esAdmin = responseData.admin
 										if (esAdmin) {
