@@ -146,6 +146,17 @@
 					ejercicio: Object
 				},
                 methods: {
+					confirmarSesionEjercicios: function(){
+						$.ajax({
+							type: 'PUT',
+							url: 'https://app-personal-trainer.herokuapp.com/myinfo/plan_asignado',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								planPage.plan = data
+							}
+						})
+					}
 				}
 				
 			})
@@ -243,13 +254,14 @@
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
 						<div class= "col-80">
-							<p>Series:</p><input type="Number" placeholder="Número de Series" v-model="ejercicio.series">
+
+							<p>Nombre:</p><input type="String" placeholder="" v-model="sesios.series">
 							<br>
-							<p>Reps:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.reps">
+							<p>Series:</p><input type="Number" placeholder="Series realizadas" v-model="sesion.series">
 							<br>
-							<p>Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="ejercicio.intensidad">
+							<p>Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="sesion.intensidad">
 							<br>
-							<p>Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="ejercicio.tiempo">
+							<p>Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="sesion.tiempo">
 							<br>
 						</div>
 						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
