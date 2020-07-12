@@ -12,7 +12,7 @@
 
 	<link rel="stylesheet" href="mobileui/mui.min.css" type="text/css">
 	<link rel="stylesheet" href="custom/custom.css" type="text/css">
-	<link rel="stylesheet" href="node_modules/keen-ui/dist/keen-ui.min.css">
+	<!-- <link rel="stylesheet" href="node_modules/keen-ui/dist/keen-ui.min.css"> -->
 
 	<script src="phonegap.js"></script>
 	<script src="vendors/fastclick.min.js" type="text/javascript"></script>
@@ -26,7 +26,7 @@
 	<script src="custom/custom.js" type="text/javascript"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="node_modules/keen-ui/dist/keen-ui.min.js"></script>
+	<!-- <script src="node_modules/keen-ui/dist/keen-ui.min.js"></script> -->
 
     
 	<script>
@@ -193,8 +193,8 @@
                 methods: {
 					confirmarSesionEjercicios: function(){
 						idEjercicio= ejercicioPage.ejercicio._id;
-						POSTData = JSON.stringify(ejercicioPage.sesion);
-						urlSesiones = 'https://app-personal-trainer.herokuapp.com/plan_asignado/dias/'+ejercicioPage.idDia+'/ejercicios/'+idEjercicio+'/sesiones'
+						POSTData = ejercicioPage.sesion;
+						urlSesiones = 'https://app-personal-trainer.herokuapp.com/myinfo/plan_asignado/dias/'+ejercicioPage.idDia+'/ejercicios/'+idEjercicio+'/sesiones'
 						$.ajax({
 							type: 'POST',
 							dataType: "json",
@@ -203,9 +203,10 @@
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
 							success: function(data){
-								alert("Hay que cambiar esta alerta, pero agrego sesion")
+								mui.viewport.showPage("dia-page-asignado", "DEF");
 							}
 						})
+						
 					}
 				}
 				
