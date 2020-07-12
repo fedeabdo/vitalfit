@@ -12,7 +12,7 @@
 
 	<link rel="stylesheet" href="mobileui/mui.min.css" type="text/css">
 	<link rel="stylesheet" href="custom/custom.css" type="text/css">
-	<link rel="stylesheet" href="node_modules/keen-ui/dist/keen-ui.min.css">
+	<!-- <link rel="stylesheet" href="node_modules/keen-ui/dist/keen-ui.min.css"> -->
 
 	<script src="phonegap.js"></script>
 	<script src="vendors/fastclick.min.js" type="text/javascript"></script>
@@ -26,7 +26,7 @@
 	<script src="custom/custom.js" type="text/javascript"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="node_modules/keen-ui/dist/keen-ui.min.js"></script>
+	<!-- <script src="node_modules/keen-ui/dist/keen-ui.min.js"></script> -->
 
     
 	<script>
@@ -53,7 +53,8 @@
                         nro_contacto: Number,
                         mail: String,
                         planes: Array
-                    }
+                    },
+					
 				},
 				methods: {
 					verPlanes: function(){
@@ -75,10 +76,21 @@
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
 							success: function(data){
-								planPage.plan = data
+								planPageAsignado.plan = data
 							}
 						})
-						mui.viewport.showPage("plan-page", 'DEF')
+						mui.viewport.showPage("plan-page-asignado", 'DEF')
+					},
+					logout: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/logout',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								document.location.href = "index.html"
+							}
+						})
 					}
 					
 				}
@@ -93,10 +105,27 @@
 					showPagePlan: function () {
 						mui.viewport.showPage("plan-page", "DEF");
                     },
-                    handleSelectPlan(plan){
-						planPage.selectedPlan = plan;
-                        showPagePlan;
+                    handleSelectPlan: function(plan){
+						planPage.plan = plan;
+						mui.viewport.showPage("plan-page", "DEF");
                     }
+				}
+			})
+
+			const menuPanel = new Vue({
+				el: "#menu-panel",
+				methods:{
+					logout: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/logout',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								document.location.href = "index.html"
+							}
+						})
+					}
 				}
 			})
 
@@ -106,7 +135,81 @@
 					plan: Object
 				},
                 methods: {
+					handleSelectDia: function(dia){
+						diaPage.dia = dia;
+						mui.viewport.showPage("dia-page", "DEF");
+					}
 				}
+				
+			})
+
+			const planPageAsignado = new Vue({
+				el:"#plan-page-asignado",
+				data: {
+					plan: Object
+				},
+                methods: {
+					handleSelectDia: function(dia){
+						diaPageAsignado.dia = dia;
+						mui.viewport.showPage("dia-page-asignado", "DEF");
+					}
+				}
+				
+			})
+
+			const diaPage = new Vue({
+				el:"#dia-page",
+				data: {
+					dia: Object
+				},
+                methods: {
+				}
+				
+			})
+
+			const diaPageAsignado = new Vue({
+				el:"#dia-page-asignado",
+				data: {
+					dia: Object
+				},
+                methods: {
+					handleSelectEjercicio: function(ejercicio){
+						ejercicioPage.idDia = diaPageAsignado.dia._id;
+						ejercicioPage.ejercicio = ejercicio;
+						mui.viewport.showPage("ejercicio-page", "DEF");
+					}
+				}
+				
+			})
+
+			const ejercicioPage = new Vue({
+				el:"#ejercicio-page",
+				data: {
+					plan: Object,
+					ejercicio: Object,
+					idDia: String,
+					sesion: Object
+				},
+                methods: {
+					confirmarSesionEjercicios: function(){
+						idEjercicio= ejercicioPage.ejercicio._id;
+						POSTData = ejercicioPage.sesion;
+						urlSesiones = 'https://app-personal-trainer.herokuapp.com/myinfo/plan_asignado/dias/'+ejercicioPage.idDia+'/ejercicios/'+idEjercicio+'/sesiones'
+						$.ajax({
+							type: 'POST',
+							dataType: "json",
+							data: POSTData,
+							url: urlSesiones,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								mui.viewport.showPage("dia-page-asignado", "DEF");
+							}
+						})
+						
+					}
+				}
+				
 			})
 		})
 	</script>
@@ -132,10 +235,10 @@
 							<div class="col-80">
                                 <p> Bienvenido {{alumno.nombre}} </p>
                                 <span>
-									<button class="mostrar_planes" @click="verPlanes"> Mostrar todos los planes </button>
+									<button class="col-80" @click="verPlanes"> Mostrar todos los planes </button>
 								</span>
 								<span>
-									<button class="mostrar_plan" @click="verPlanActual"> Mostrar plan actual </button>
+									<button class="col-80" @click="verPlanActual"> Mostrar plan actual </button>
 								</span>
 							</div>
 						</div>
@@ -155,7 +258,7 @@
 							<div class="col-80">
                                 <p> Lista de planes</p>
                                 <span>
-									<button class="block col-80" v-for="plan in planes" @click="handleSelectPlan(plan)">{{plan.nombre}}</button>
+									<button class="col-80" v-for="plan in planes" @click="handleSelectPlan(plan)">{{plan.nombre}}</button>
 								</span>
 							</div>
 						</div>
@@ -170,12 +273,83 @@
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
 						<div id="plan-inside">
-							<button class="col-80" v-for="dia in plan.dias" @click=>{{dia.nombre}}</button>
-								
-							</ui-modal>
+							<button class="col-80" v-for="dia in plan.dias" @click="handleSelectDia(dia)">{{dia.nombre}}</button>
 						</div>
 					</div>
-                </div>
+				</div>
+
+				<div id='plan-page-asignado' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>{{plan.nombre}}</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div id="plan-inside">
+							<button class="col-80" v-for="dia in plan.dias" @click="handleSelectDia(dia)">{{dia.nombre}}</button>
+						</div>
+					</div>
+				</div>
+
+				<div id='dia-page-asignado' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>{{dia.nombre}}</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div class="col-80">
+							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios" @click="handleSelectEjercicio(ejercicio)">
+								<!-- <img src="img1.jpg" style="width:100%"> -->
+								<button class="col-80">{{ejercicio.nombre}}</button>
+								<div v-for="sesion in ejercicio.sesiones"> {{sesion.nombre}} </div>
+							</div>
+						</div>
+					</div>
+					<br>
+				</div>
+				
+				<div id='dia-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>{{dia.nombre}}</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div class="col-80">
+							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios">
+								<!-- <img src="img1.jpg" style="width:100%"> -->
+								<button class="col-80">{{ejercicio.nombre}}</button>
+								<div v-for="sesion in ejercicio.sesiones"> {{sesion.nombre}} </div>
+							</div>
+						</div>
+						<!-- Next and previous buttons -->
+					</div>
+					<br>
+				</div>
+				<div id='ejercicio-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'> Agregar sesion a {{ejercicio.nombre}}</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div class= "col-80">
+
+							<p>Nombre:</p><input type="String" placeholder="Nombre de sesion" v-model="sesion.nombre">
+							<br>
+							<p>Series:</p><input type="Number" placeholder="Series realizadas" v-model="sesion.series">
+							<br>
+							<p>Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="sesion.intensidad">
+							<br>
+							<p>Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="sesion.tiempo">
+							<br>
+						</div>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<br>
+							<button class="confirmar_boton" @click="confirmarSesionEjercicios">Confirmar</button>
+					</div>
+				</div>
                 
 				<!-- Optional.Toolbar out of mui-viewport to be omnipresent. Remove if not needed. -->
 				<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->
@@ -190,21 +364,22 @@
 
 			<!-- mui-screen level panel -->
 			<!-- Panel a nivel de mui-screen -->
-			<div id="menu-panel" class="mui-panel">
-				<div class="mui-panel-header">
-					<div class='mui-panel-title'>Menu</div>
-				</div>
-				<div class="mui-panel-body">
-					<div>
-						<ul id='menuoptions' class='mui-list'>
-							<li><a id='option1' href="#">Go Home Page</a></li>
-							<li><a id='option2' href="#">Go Page 2</a></li>
-						</ul>
-					</div>
+		</div>
+		<div id="menu-panel" class="mui-panel">
+			<div class="mui-panel-header">
+				<div class='mui-panel-title'>Menu</div>
+			</div>
+			<div class="mui-panel-body">
+				<div>
+					<ul id='menuoptions' class='mui-list'>
+						<li><a @click="logout">Cerrar sesión</li></a>
+						<li><a id='option1' href="#">Go Home Page</a></li>
+						<li><a id='option2' href="#">Go Page 2</a></li>
+					</ul>
 				</div>
 			</div>
-
 		</div>
+	</div>
 
 
 </body>

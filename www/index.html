@@ -25,7 +25,7 @@
 	<script src="custom/custom.js" type="text/javascript"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="node_modules/keen-ui/dist/keen-ui.min.js"></script>
+	<!-- <script src="node_modules/keen-ui/dist/keen-ui.min.js"></script> -->
 
 
 </head>
@@ -87,6 +87,7 @@
 						crossDomain: true,
 						data: { 'username': uname, 'password': pword },
 						dataType: 'json',
+						xhrFields: { withCredentials: true },
 						success: function (responseData, textStatus, jqXHR) {
 							var value = responseData;
 							//console.log(value)
@@ -95,6 +96,8 @@
 								//console.log("contra correcta")
 								//console.log("contra correcta")
 								//alert("login")
+								//alert(req.cookies['connect.sid'])
+								
 								$('#alerta').text()
 								$.ajax({
 									type: 'GET',
@@ -116,6 +119,7 @@
 
 								console.log("contra incorrecta")
 								$("#alerta").text("Usuario o Contraseña incorrecta.")
+								$('#pword').val("")
 							}
 						},
 						error: function (responseData, textStatus, errorThrown) {
