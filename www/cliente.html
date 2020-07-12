@@ -79,7 +79,7 @@
 								planPage.plan = data
 							}
 						})
-						mui.viewport.showPage("plan-page", 'DEF')
+						mui.viewport.showPage("plan-page-asignado", 'DEF')
 					}
 					
 				}
@@ -115,8 +115,35 @@
 				
 			})
 
+			const planPageAsignado = new Vue({
+				el:"#plan-page-asignado",
+				data: {
+					plan: Object
+				},
+                methods: {
+					handleSelectDia: function(dia){
+						diaPage.dia = dia;
+						mui.viewport.showPage("dia-page", "DEF");
+					}
+				}
+				
+			})
+
 			const diaPage = new Vue({
 				el:"#dia-page",
+				data: {
+					dia: Object
+				},
+                methods: {
+					handleSelectEjercicio: function(ejercicio){
+						ejercicioPage.ejercicio = ejercicio;
+					}
+				}
+				
+			})
+
+			const diaPageAsignado = new Vue({
+				el:"#dia-page-asignado",
 				data: {
 					dia: Object
 				},
@@ -132,17 +159,29 @@
 			const ejercicioPage = new Vue({
 				el:"#ejercicio-page",
 				data: {
+					plan: Object,
 					ejercicio: Object
 				},
                 methods: {
 					confirmarSesionEjercicios: function(){
+						
 						$.ajax({
-							type: 'PUT',
+							type: 'GET',
 							url: 'https://app-personal-trainer.herokuapp.com/myinfo/plan_asignado',
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
 							success: function(data){
-								planPage.plan = data
+							ejercicioPage.plan = data
+							}
+						})
+
+						$.ajax({
+							type: 'PUT',
+							url: 'https://app-personal-trainer.herokuapp.com/plan_asignado/dias/:iddia/ejercicios/:idejercicio/sesiones',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								ejercicioPage.ejer = data
 							}
 						})
 					}
@@ -243,7 +282,7 @@
 					<div class="mui-page-body mui-scrollable" id="second-body">
 						<div class= "col-80">
 
-							<p>Nombre:</p><input type="String" placeholder="" v-model="sesios.series">
+							<p>Nombre:</p><input type="String" placeholder="Nombre de sesion" v-model="sesion.nombre">
 							<br>
 							<p>Series:</p><input type="Number" placeholder="Series realizadas" v-model="sesion.series">
 							<br>
