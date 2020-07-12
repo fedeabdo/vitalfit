@@ -112,6 +112,23 @@
 				}
 			})
 
+			const menuPanel = new Vue({
+				el: "#menu-panel",
+				methods:{
+					logout: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/logout',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								document.location.href = "index.html"
+							}
+						})
+					}
+				}
+			})
+
 			const planPage = new Vue({
 				el:"#plan-page",
 				data: {
@@ -208,7 +225,8 @@
 			<div id="mui-viewport" class="mui-viewport">
 				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
-						<button @click="logout">Cerrar sesión</button>>
+						<div class="mui-page-logo"></div>
+						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="home-body">
 						<div>
@@ -344,21 +362,22 @@
 
 			<!-- mui-screen level panel -->
 			<!-- Panel a nivel de mui-screen -->
-			<div id="menu-panel" class="mui-panel">
-				<div class="mui-panel-header">
-					<div class='mui-panel-title'>Menu</div>
-				</div>
-				<div class="mui-panel-body">
-					<div>
-						<ul id='menuoptions' class='mui-list'>
-							<li><a id='option1' href="#">Go Home Page</a></li>
-							<li><a id='option2' href="#">Go Page 2</a></li>
-						</ul>
-					</div>
+		</div>
+		<div id="menu-panel" class="mui-panel">
+			<div class="mui-panel-header">
+				<div class='mui-panel-title'>Menu</div>
+			</div>
+			<div class="mui-panel-body">
+				<div>
+					<ul id='menuoptions' class='mui-list'>
+						<li><a @click="logout">Cerrar sesión</li></a>
+						<li><a id='option1' href="#">Go Home Page</a></li>
+						<li><a id='option2' href="#">Go Page 2</a></li>
+					</ul>
 				</div>
 			</div>
-
 		</div>
+	</div>
 
 
 </body>
