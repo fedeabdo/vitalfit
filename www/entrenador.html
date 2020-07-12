@@ -12,7 +12,7 @@
 
 	<link rel="stylesheet" href="mobileui/mui.min.css" type="text/css">
 	<link rel="stylesheet" href="custom/custom.css" type="text/css">
-	<!-- <link rel="stylesheet" href="node_modules/keen-ui/dist/keen-ui.min.css"> -->
+	<link rel="stylesheet" href="node_modules/keen-ui/dist/keen-ui.min.css">
 
 	<script src="phonegap.js"></script>
 	<script src="vendors/fastclick.min.js" type="text/javascript"></script>
@@ -32,8 +32,6 @@
 	<script>
 		$(document).ready(() => {	
 			
-			
-
 //******** INTERACCIONES CON LA BASE DE DATOS **********//
 
 			$.ajax({
@@ -52,25 +50,13 @@
 			const homePage = new Vue({
 				el: "#home-page",
 				data: {
-					alumnos: [],
-					alumnoSeleccionado: ''
+					alumnos: []
 				},
 				methods: {
-					seleccionarAlumno: function (alumno){
-						this.alumnoSeleccionado = alumno
-					},
 					nuevoAlumno: function() {
 						mui.viewport.showPage("nuevoAlumno-page", 'DEF')
 					},
 					verAlumno: function() {
-						console.log(this.alumnoSeleccionado)
-						let nombre = this.alumnoSeleccionado.nombre.split(" ")[0]
-						let apellido = this.alumnoSeleccionado.nombre.split(" ")[1]
-						verAlumno.alumno.nombre = nombre
-						verAlumno.alumno.apellido = apellido
-						verAlumno.alumno.fechaDeNac = this.alumnoSeleccionado.fecha_nacimiento.split("T")[0]
-						verAlumno.alumno.nroContacto = this.alumnoSeleccionado.nro_contacto
-						verAlumno.alumno.email = this.alumnoSeleccionado.mail
 						mui.viewport.showPage("visualizarAlumno-page", 'DEF')
 					},
 					verPlanes: function(){
@@ -85,14 +71,6 @@
 					asignacionPlan: function() {
 						mui.viewport.showPage("asignarPlan-page", 'DEF')
 					},
-					eliminarAlumno: function() {
-						//Faltar hacer el codigo
-					}
-				}
-			})
-			const menuPanel = new Vue({
-				el: "#menu-panel",
-				methods:{
 					logout: function(){
 						$.ajax({
 							type: 'GET',
@@ -106,6 +84,7 @@
 					}
 				}
 			})
+
 			const alumnoNuevo = new Vue({
 				el: "#nuevoAlumno-page",
 				data: {
@@ -128,16 +107,13 @@
 							crossDomain: true,
 							data: {
 								'nombre': this.alumno.nombre + " " + this.alumno.apellido,
-								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.split(" ")[0].toLowerCase(),
+								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.toLowerCase(),
 								'admin': false,
-								'password': this.alumno.apellido.toLowerCase(),
-								'mail': this.alumno.email,
-								'fecha_nacimiento': this.alumno.fechaDeNac,
-								'nro_contacto': this.alumno.nroContacto
+								'password': this.alumno.apellido
 							},
 							dataType: 'json',
 							success: (responseData)=>{
-								console.log(responseData)
+								alert(responseData)
 							}
 
 						})
@@ -156,16 +132,11 @@
 				el:"#visualizarAlumno-page",
 				data: {
 					alumno: {
-						nombre: "",
-						apellido: "",
-						fechaDeNac: "",
-						nroContacto: "",
-						email: ""
-					}
-				},
-				methods: {
-					visualizarAlumno: ()=>{
-
+						nombre: "Juan",
+						apellido: "Caputto",
+						fechaDeNac: "30/06/97",
+						nroContacto: "095860232",
+						email: "jmcaputto.smc@gmail.com"
 					}
 				}
 			})
@@ -173,7 +144,6 @@
 			const planNuevo = new Vue({
 				el: "#planNuevo-app",
 				data: {
-					id: "",
 					nombrePlan: '',
 					dias: [],
 					nombreDia: "",
@@ -192,7 +162,7 @@
 							nombre: this.nombreDia,
 							ejercicios:[]
 						}
-						this.nombreDia = "";
+						diaAux.nombre = 'DIA ' + nro
 						this.dias.push(diaAux)
 						
 					},
@@ -215,11 +185,11 @@
 			})
 
 			const diaNuevo = new Vue({
-				el: '#diaNuevo-page',
+				el: '#diaNuevo-app',
 				data: {
+					ejerciciosHtml: [],
 					ejercicios: [],
 					ejercicio: {
-						id: 0,
 						nombre: "",
 						series: "",
 						reps: "",
@@ -229,14 +199,9 @@
 				},
 				methods: {
 					agregarEjercicio: function () {
-						const ejercicioAux = {
-							nombre: "",
-							series: "",
-							reps: "",
-							intensidad: "",
-							tiempo: ""
-						}
-						this.ejercicios.push(ejercicioAux)
+						nro = this.ejercicios.length + 1
+						this.ejercicios.push(this.ejercicio)
+						this.ejerciciosHtml.push('<div class= "col-80"><span><p>Ejercicio' + nro + '</p></span><p>Nombre:</p><input type="Text" v-model="ejercicios[' + nro + '].nombre"><br><p>Series:</p><input type="Number" v-model="ejercicios[' + nro + '].series"><br><p>Reps:</p><input type="Number" v-model="ejercicios[' + nro + '].reps"><br><p>Intensidad:</p><input type="Number" v-model="ejercicios[' + nro + '].intensidad"><br><p>Tiempo:</p><input type="Number" v-model="ejercicios[' + nro + '].tiempo"><br></div><br><hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">')
 					},
 					confirmarEjercicio: function() {
 						this.ejercicios = []
@@ -329,7 +294,6 @@
 				methods: {}
 			})
 		})
-
 	</script>
 </head>
 
@@ -348,6 +312,7 @@
 
 				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
+						<button @click="logout">Cerrar sesión</button>>
 						<div class="mui-page-logo"></div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
@@ -361,7 +326,7 @@
 								</span>
 								<ul class="lista_alumnos"><br>
 									<li v-for="alumno in alumnos">
-										<a @click="seleccionarAlumno(alumno)" onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
+										<a onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
 									</li>
 								</ul>
 							</div>
@@ -442,7 +407,6 @@
 								<span>
 									<button id="nuevoDia" class="agregar_boton" v-on:click="agregarDia">＋</button>
 									<button id="quitarDia" class="quitar_boton" v-on:click="quitarDia">&minus;</button>
-									<input v-model="nombreDia" type="text" placeholder="Ingrese Nombre Día" id="nombre_dia_input" class="nombre_dia_input">
 								</span>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<ul class="lista_dias">
@@ -475,23 +439,7 @@
 							</div>
 							<ul class="lista_ejercicios">
 								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-								<li v-for="(ejercicioA,index) in ejercicios">
-									<div class= "col-80">
-										<span><p>Ejercicio - {{ index }}</p></span>
-										<p>Nombre:</p><input type="Text" v-model="ejercicioA.nombre">
-										<br>
-										<p>Series:</p><input type="Number" v-model="ejercicioA.series">
-										<br>
-										<p>Reps:</p><input type="Number" v-model="ejercicioA.reps">
-										<br>
-										<p>Intensidad:</p><input type="Number" v-model="ejercicioA.intensidad">
-										<br>
-										<p>Tiempo:</p><input type="Number" v-model="ejercicioA.tiempo">
-										<br>
-									</div>
-									<br>
-									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-								</li>
+								<li v-for="ejercicio in ejerciciosHtml" v-html="ejercicio"></li>
 							</ul>
 							<br>
 							<button class="confirmar_boton" @click="confirmarEjercicio">Confirmar</button>
@@ -682,7 +630,6 @@
 			<div class="mui-panel-body">
 				<div>
 					<ul id='menuoptions' class='mui-list'>
-						<li><a @click="logout">Cerrar sesión</li></a>
 						<li><a id='option1' href="#">Go Home Page</a></li>
 						<li><a id='option2' href="#">Go Page 2</a></li>
 					</ul>

@@ -347,9 +347,6 @@ button.plan_dia_boton {
 .nombre_plan_input{
 	margin: 5px 0 20px 0;
 }
-.col-80 input.nombre_dia_input{
-	width: 75%;
-}
 .col-80 .filtro_dias_input{
 	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
 	background-position: 10px 12px; /* Position the search icon */

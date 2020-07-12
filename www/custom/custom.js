@@ -238,7 +238,7 @@ function installEvents2() {
 }
 
 function desplegarOpciones() {
-	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva sesion</button><br><button v-on:click="asignacionPlan">Asignar Plan</button><br><button v-on:click="eliminarAlumno">Eliminar Alumno</button><br></div>')
+	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva sesion</button><br><button v-on:click="asignacionPlan">Asignar Plan</button><br></div>')
 	$('li a', ".lista_alumnos").append(desplegarOpcionesHtml)
 	$('.desplegar_opciones').hide()
 }
