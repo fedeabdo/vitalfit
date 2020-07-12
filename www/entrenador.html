@@ -282,6 +282,8 @@
 				methods: {
 					abrirDiaSesionNueva: function(value1, value2) {
 						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
+						ejerciciosSesion.planId = value1
+						ejerciciosSesion.diaId = value2
 						mui.viewport.showPage("nuevaSesionEjercicios-page", "DEF")
 					},
 					confirmarSesion: function() {
@@ -293,19 +295,25 @@
 			const ejerciciosSesion = new Vue({
 				el: '#nuevaSesionEjercicios-app',
 				data: {
+					planId: 0,
+					diaId: 0,
 					ejercicios: []
 				},
 				methods: {
 					confirmarSesionEjercicios: function() {
+						var i = 0
 						for (const ejercicioAux in this.ejercicios) {
 							const sesionAux = {
-								nombre: "",
-								series: "",
-								reps: "",
-								intesidad: "",
-								tiempo: ""
+								nombre: ejercicioAux.nombre,
+								series: ejercicioAux.series,
+								reps: ejercicioAux.reps,
+								intesidad: ejercicioAux.intensidad,
+								tiempo: ejercicioAux.tiempo
 							}
+							sesionNueva.planes[this.planId].dias[diasId].ejercicios[i].sesiones.push(sesionAux)
+							i = i + 1
 						}
+						this.ejercicios = []
 						mui.viewport.showPage("nuevaSesion-page", "DEF")
 					}
 				}
