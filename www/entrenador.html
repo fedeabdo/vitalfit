@@ -28,10 +28,40 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<!-- <script src="node_modules/keen-ui/dist/keen-ui.min.js"></script> -->
 
+	<script src="vue/dist/vue.js"></script>
+	<script src="vuex/dist/vuex.js"></script>
+
 
 	<script>
+		Vue.use(Vuex)
+
+		const store = new Vuex.Store({
+		state: {
+			diaSeleccionado: {
+				id: 0,
+				nombre: "",
+				ejercicios: []
+			}
+		},
+		mutations: {
+			updateDiaSeleccionado (state, payload) {
+				state.diaSeleccionado = payload
+			},
+			updateEjerciciosDiaSeleccionado (state, payload) {
+				state.diaSeleccionado.ejercicios = payload
+			}
+		}
+		})
+
+		new Vue({
+				store: store
+			})
+		
+		
 		$(document).ready(() => {	
 			
+			
+
 //******** INTERACCIONES CON LA BASE DE DATOS **********//
 
 			$.ajax({
@@ -82,6 +112,9 @@
 					},
 					asignacionPlan: function() {
 						mui.viewport.showPage("asignarPlan-page", 'DEF')
+					},
+					eliminarAlumno: function() {
+						//Faltar hacer el codigo
 					}
 				}
 			})
@@ -168,37 +201,59 @@
 			const planNuevo = new Vue({
 				el: "#planNuevo-app",
 				data: {
+					id: "",
 					nombrePlan: '',
-					dias: []
+					dias: [],
+					nombreDia: "",
+					indiceAux: 0,
+					diaSeleccionado: {
+						id: 0,
+						nombre: "",
+						ejercicios: []
+					}
 				},
 				methods: {
 					agregarDia: function () {
 						nro = this.dias.length + 1
 						diaAux = {
-							nombre:"",
+							id: nro,
+							nombre: this.nombreDia,
 							ejercicios:[]
 						}
-						diaAux.nombre = 'DIA ' + nro
+						this.nombreDia = "";
 						this.dias.push(diaAux)
 					},
 					quitarDia: function () {
 						this.dias.pop()
 					},
-					diaNuevo: function () {
+					diaNuevo: function (value) {
+						store.commit("updateDiaSeleccionado", this.dias[value - 1])
 						mui.viewport.showPage("diaNuevo-page", "DEF")
 					},
 					confirmarPlan: function() {
 						mui.viewport.showPage("home-page", "DEF")
+					},
+					reasignarDia: function() {
+						if ((store.state.diaSeleccionado.id - 1) > (-1)){
+							this.dias[store.diaSeleccionado.id - 1] = store.diaSeleccionado
+							console.log("Funciona")
+						}
 					}
+				},
+				created: function() {
+					this.reasignarDia()
+				},
+				update: function() {
+					this.reasignarDia()
 				}
 			})
 
 			const diaNuevo = new Vue({
-				el: '#diaNuevo-app',
+				el: '#diaNuevo-page',
 				data: {
-					ejerciciosHtml: [],
 					ejercicios: [],
 					ejercicio: {
+						id: 0,
 						nombre: "",
 						series: "",
 						reps: "",
@@ -208,13 +263,37 @@
 				},
 				methods: {
 					agregarEjercicio: function () {
-						nro = this.ejercicios.length + 1
-						this.ejercicios.push(this.ejercicio)
-						this.ejerciciosHtml.push('<div class= "col-80"><span><p>Ejercicio' + nro + '</p></span><p>Nombre:</p><input type="Text" v-model="ejercicios[' + nro + '].nombre"><br><p>Series:</p><input type="Number" v-model="ejercicios[' + nro + '].series"><br><p>Reps:</p><input type="Number" v-model="ejercicios[' + nro + '].reps"><br><p>Intensidad:</p><input type="Number" v-model="ejercicios[' + nro + '].intensidad"><br><p>Tiempo:</p><input type="Number" v-model="ejercicios[' + nro + '].tiempo"><br></div><br><hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">')
+						const ejercicioAux = {
+							nombre: "",
+							series: "",
+							reps: "",
+							intensidad: "",
+							tiempo: ""
+						}
+						this.ejercicios.push(ejercicioAux)
 					},
 					confirmarEjercicio: function() {
-						console.log(this.ejercicios)
+						store.commit("updateEjerciciosDiaSeleccionado", this.ejercicios)
+						console.log(store.state.diaSeleccionado.ejercicios)
+						this.ejercicios = []
+						console.log(store.state.diaSeleccionado.ejercicios)
 						mui.viewport.showPage("planNuevo-page", "DEF")
+					}
+				},
+				computed: {
+					serial: function() {
+						return this.ejercicios.length
+					}
+				},
+				created: function() {
+					for (ejercicioAux in store.state.diaSeleccionado.ejercicios) {
+						this.agregarEjercicio()
+						console.log("Funciona")
+					}
+				},
+				update: function() {
+					for (ejercicioAux in store.state.diaSeleccionado.ejercicios) {
+						this.agregarEjercicio()
 					}
 				}
 			})
@@ -303,6 +382,7 @@
 				methods: {}
 			})
 		})
+
 	</script>
 </head>
 
@@ -415,11 +495,12 @@
 								<span>
 									<button id="nuevoDia" class="agregar_boton" v-on:click="agregarDia">＋</button>
 									<button id="quitarDia" class="quitar_boton" v-on:click="quitarDia">&minus;</button>
+									<input v-model="nombreDia" type="text" placeholder="Ingrese Nombre Día" id="nombre_dia_input" class="nombre_dia_input">
 								</span>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<ul class="lista_dias">
 									<li  v-for="dia in dias">
-										<a v-on:click="diaNuevo" v-text="dia.nombre"></a>
+										<a v-on:click="diaNuevo(dia.id)" v-text="dia.nombre"></a>
 									</li>
 								</ul>
 								<br>
@@ -447,7 +528,23 @@
 							</div>
 							<ul class="lista_ejercicios">
 								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-								<li v-for="ejercicio in ejerciciosHtml" v-html="ejercicio"></li>
+								<li v-for="(ejercicioA,index) in ejercicios">
+									<div class= "col-80">
+										<span><p>Ejercicio - {{ index }}</p></span>
+										<p>Nombre:</p><input type="Text" v-model="ejercicioA.nombre">
+										<br>
+										<p>Series:</p><input type="Number" v-model="ejercicioA.series">
+										<br>
+										<p>Reps:</p><input type="Number" v-model="ejercicioA.reps">
+										<br>
+										<p>Intensidad:</p><input type="Number" v-model="ejercicioA.intensidad">
+										<br>
+										<p>Tiempo:</p><input type="Number" v-model="ejercicioA.tiempo">
+										<br>
+									</div>
+									<br>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+								</li>
 							</ul>
 							<br>
 							<button class="confirmar_boton" @click="confirmarEjercicio">Confirmar</button>
