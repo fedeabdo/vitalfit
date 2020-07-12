@@ -337,20 +337,20 @@
 								<button class="col-80" style="overflow:scroll" @click="handleSelectEjercicio(ejercicio)">
 									{{ejercicio.nombre}}
 									<li>
-										<a>Nombre de ejercicio: {{ ejercicio.nombre }}</a>
-										<a>Series: {{ ejercicio.series }}</a>
-										<a>Intensidad: {{ ejercicio.intensidad }}</a>
-										<a>Tiempo: {{ ejercicio.tiempo }}</a>
+										<a> Nombre de ejercicio: {{ ejercicio.nombre }}</a>
+										<a> Series: {{ ejercicio.series }}</a>
+										<a> Intensidad: {{ ejercicio.intensidad }}</a>
+										<a> Tiempo: {{ ejercicio.tiempo }}</a>
 									</li>
 								</button>
-								<ul class="lista_sesiones"><br>
+								<li class="lista_sesiones"><br>
 									<li v-for="sesion in ejercicio.sesiones">
-										<a>Nombre: {{ sesion.nombre }}</a>
-										<a>Series: {{ sesion.series }}</a>
-										<a>Intensidad: {{ sesion.intensidad }}</a>
-										<a>Tiempo: {{ sesion.tiempo }}</a>
+										<a> Nombre: {{ sesion.nombre }}</a>
+										<a> Series: {{ sesion.series }}</a>
+										<a> Intensidad: {{ sesion.intensidad }}</a>
+										<a> Tiempo: {{ sesion.tiempo }}</a>
 									</li>
-								</ul>
+								</li>
 							</div>
 						</div>
 					</div>
