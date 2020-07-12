@@ -84,8 +84,18 @@
 						mui.viewport.showPage("asignarPlan-page", 'DEF')
 					},
 					eliminarAlumno: function() {
-						
+						username = this.alumnoSeleccionado.username
+						$.ajax({
+							type: 'DELETE',
+							url: 'https://app-personal-trainer.herokuapp.com/clientes/' + username,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								alert("Eliminado")
+							}
+						})
 					},
+					
 					logout: function(){
 						$.ajax({
 							type: 'GET',
@@ -199,6 +209,27 @@
 							diasAux: this.dias
 						}
 						mui.viewport.showPage("home-page", "DEF")
+					}
+				}
+			})
+			
+
+			const menuPanel = new Vue({
+				el: "#menu-panel",
+				methods:{
+					logout: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/logout',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								document.location.href = "index.html"
+							}
+						})
+					},
+					irachangepassword: function(){
+						mui.viewport.showPage("changepassword-page", "DEF");
 					}
 				}
 			})
