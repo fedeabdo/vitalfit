@@ -33,7 +33,7 @@ a {
 /* Agregar tabbar neceista espacio abajo */
 #mui-viewport {
 	top: 0px;
-	bottom: 48px; 
+	/*bottom: 48px;*/ 
 }
 /*Page sample  ------------------------------------------------------------------ */
 .mui-page-header {
@@ -257,6 +257,17 @@ button{
 	font-weight: bold;
 }
 
+.lista_planes_visualizar{
+	text-align: center;
+	list-style: none;
+	padding-left: 0px;
+}
+.lista_planes_visualizar li{
+	padding-bottom: 10px;
+	padding-top: 10px;
+	border-top:	solid 1px lightgrey;
+}
+
 /* ---------- BOTONES ----------- */
 
 .desplegar_opciones button{
@@ -302,6 +313,11 @@ button{
 	width: 50%;
 }
 button.sesion_dia_boton {
+	width: 50%;
+	padding: 5px;
+	margin-top: 5px;
+}
+button.plan_dia_boton {
 	width: 50%;
 	padding: 5px;
 	margin-top: 5px;
@@ -364,3 +380,15 @@ button.sesion_dia_boton {
 	font-weight: bold;
 }
 
+.nombre_ejercicio{
+	font-size: 14;
+	text-align: center;
+	width: 100%;
+	font-weight: bold;
+}
+
+.seleccionar_plan_label{
+	font-size: 14;
+	width: 100%;
+	font-weight: bold;
+}
