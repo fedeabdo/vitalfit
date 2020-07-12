@@ -76,10 +76,21 @@
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
 							success: function(data){
-								planPage.plan = data
+								planPageAsignado.plan = data
 							}
 						})
 						mui.viewport.showPage("plan-page-asignado", 'DEF')
+					},
+					logout: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/logout',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								document.location.href = "index.html"
+							}
+						})
 					}
 					
 				}
@@ -122,8 +133,8 @@
 				},
                 methods: {
 					handleSelectDia: function(dia){
-						diaPage.dia = dia;
-						mui.viewport.showPage("dia-page", "DEF");
+						diaPageAsignado.dia = dia;
+						mui.viewport.showPage("dia-page-asignado", "DEF");
 					}
 				}
 				
@@ -135,9 +146,6 @@
 					dia: Object
 				},
                 methods: {
-					handleSelectEjercicio: function(ejercicio){
-						ejercicioPage.ejercicio = ejercicio;
-					}
 				}
 				
 			})
@@ -149,6 +157,7 @@
 				},
                 methods: {
 					handleSelectEjercicio: function(ejercicio){
+						ejercicioPage.idDia = diaPageAsignado.dia._id;
 						ejercicioPage.ejercicio = ejercicio;
 						mui.viewport.showPage("ejercicio-page", "DEF");
 					}
@@ -160,28 +169,23 @@
 				el:"#ejercicio-page",
 				data: {
 					plan: Object,
-					ejercicio: Object
+					ejercicio: Object,
+					idDia: String,
+					sesion: Object
 				},
                 methods: {
 					confirmarSesionEjercicios: function(){
-						
-						$.ajax({
-							type: 'GET',
-							url: 'https://app-personal-trainer.herokuapp.com/myinfo/plan_asignado',
-							xhrFields: { withCredentials: true },
-							crossDomain: true,
-							success: function(data){
-							ejercicioPage.plan = data
-							}
-						})
-
+						idEjercicio= ejercicioPage.ejercicio._id;
+						POSTData = JSON.stringify(sesion);
 						$.ajax({
 							type: 'PUT',
-							url: 'https://app-personal-trainer.herokuapp.com/plan_asignado/dias/:iddia/ejercicios/:idejercicio/sesiones',
+							dataType: "json",
+							data: POSTData,
+							url: 'https://app-personal-trainer.herokuapp.com/plan_asignado/dias/'+idDia+'/ejercicios/'+idEjercicio+'/sesiones',
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
 							success: function(data){
-								ejercicioPage.ejer = data
+								alert("Hay que cambiar esta alerta, pero agrego sesion")
 							}
 						})
 					}
@@ -204,8 +208,7 @@
 			<div id="mui-viewport" class="mui-viewport">
 				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
-						<div class="mui-page-logo"></div>
-						<a class="mui-headmenu" href="#"></a>
+						<button @click="logout">Cerrar sesión</button>>
 					</div>
 					<div class="mui-page-body" id="home-body">
 						<div>
@@ -254,6 +257,37 @@
 						</div>
 					</div>
 				</div>
+
+				<div id='plan-page-asignado' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>{{plan.nombre}}</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div id="plan-inside">
+							<button class="col-80" v-for="dia in plan.dias" @click="handleSelectDia(dia)">{{dia.nombre}}</button>
+						</div>
+					</div>
+				</div>
+
+				<div id='dia-page-asignado' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>{{dia.nombre}}</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div class="col-80">
+							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios" @click="handleSelectEjercicio(ejercicio)">
+								<!-- <img src="img1.jpg" style="width:100%"> -->
+								<button class="col-80">{{ejercicio.nombre}}</button>
+								<div v-for="sesion in ejercicio.sesiones"> {{sesion.nombre}} </div>
+							</div>
+						</div>
+					</div>
+					<br>
+				</div>
 				
 				<div id='dia-page' class="mui-page">
 					<div class="mui-page-header">
@@ -263,7 +297,7 @@
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
 						<div class="col-80">
-							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios" @click="handleSelectEjercicio(ejercicio)">
+							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios">
 								<!-- <img src="img1.jpg" style="width:100%"> -->
 								<button class="col-80">{{ejercicio.nombre}}</button>
 								<div v-for="sesion in ejercicio.sesiones"> {{sesion.nombre}} </div>

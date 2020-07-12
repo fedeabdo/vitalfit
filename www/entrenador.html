@@ -50,13 +50,25 @@
 			const homePage = new Vue({
 				el: "#home-page",
 				data: {
-					alumnos: []
+					alumnos: [],
+					alumnoSeleccionado: ''
 				},
 				methods: {
+					seleccionarAlumno: function (alumno){
+						this.alumnoSeleccionado = alumno
+					},
 					nuevoAlumno: function() {
 						mui.viewport.showPage("nuevoAlumno-page", 'DEF')
 					},
 					verAlumno: function() {
+						console.log(this.alumnoSeleccionado)
+						let nombre = this.alumnoSeleccionado.nombre.split(" ")[0]
+						let apellido = this.alumnoSeleccionado.nombre.split(" ")[1]
+						verAlumno.alumno.nombre = nombre
+						verAlumno.alumno.apellido = apellido
+						verAlumno.alumno.fechaDeNac = this.alumnoSeleccionado.fecha_nacimiento.split("T")[0]
+						verAlumno.alumno.nroContacto = this.alumnoSeleccionado.nro_contacto
+						verAlumno.alumno.email = this.alumnoSeleccionado.mail
 						mui.viewport.showPage("visualizarAlumno-page", 'DEF')
 					},
 					verPlanes: function(){
@@ -73,7 +85,22 @@
 					}
 				}
 			})
-
+			const menuPanel = new Vue({
+				el: "#menu-panel",
+				methods:{
+					logout: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/logout',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								document.location.href = "index.html"
+							}
+						})
+					}
+				}
+			})
 			const alumnoNuevo = new Vue({
 				el: "#nuevoAlumno-page",
 				data: {
@@ -96,13 +123,16 @@
 							crossDomain: true,
 							data: {
 								'nombre': this.alumno.nombre + " " + this.alumno.apellido,
-								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.toLowerCase(),
+								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.split(" ")[0].toLowerCase(),
 								'admin': false,
-								'password': this.alumno.apellido
+								'password': this.alumno.apellido.toLowerCase(),
+								'mail': this.alumno.email,
+								'fecha_nacimiento': this.alumno.fechaDeNac,
+								'nro_contacto': this.alumno.nroContacto
 							},
 							dataType: 'json',
 							success: (responseData)=>{
-								alert(responseData)
+								console.log(responseData)
 							}
 
 						})
@@ -121,11 +151,16 @@
 				el:"#visualizarAlumno-page",
 				data: {
 					alumno: {
-						nombre: "Juan",
-						apellido: "Caputto",
-						fechaDeNac: "30/06/97",
-						nroContacto: "095860232",
-						email: "jmcaputto.smc@gmail.com"
+						nombre: "",
+						apellido: "",
+						fechaDeNac: "",
+						nroContacto: "",
+						email: ""
+					}
+				},
+				methods: {
+					visualizarAlumno: ()=>{
+
 					}
 				}
 			})
@@ -299,7 +334,7 @@
 								</span>
 								<ul class="lista_alumnos"><br>
 									<li v-for="alumno in alumnos">
-										<a onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
+										<a @click="seleccionarAlumno(alumno)" onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
 									</li>
 								</ul>
 							</div>
@@ -603,6 +638,7 @@
 			<div class="mui-panel-body">
 				<div>
 					<ul id='menuoptions' class='mui-list'>
+						<li><a @click="logout">Cerrar sesión</li></a>
 						<li><a id='option1' href="#">Go Home Page</a></li>
 						<li><a id='option2' href="#">Go Page 2</a></li>
 					</ul>
