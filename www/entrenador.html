@@ -50,16 +50,25 @@
 			const homePage = new Vue({
 				el: "#home-page",
 				data: {
-					alumnos: []
+					alumnos: [],
+					alumnoSeleccionado: ""
 				},
 				methods: {
 					nuevoAlumno: function() {
 						mui.viewport.showPage("nuevoAlumno-page", 'DEF')
 					},
 					verAlumno: function() {
+						verAlumno.alumno.nombre =this.alumnoSeleccionado.nombre.split(" ")[0]
+						verAlumno.alumno.apellido = this.alumnoSeleccionado.nombre.split(" ")[1]
+						if(this.alumnoSeleccionado.fecha_nacimiento != undefined){
+							verAlumno.alumno.fecha_nacimiento = this.alumnoSeleccionado.fecha_nacimiento.split("T")[0]
+						}
+						verAlumno.alumno.nro_contacto = this.alumnoSeleccionado.nro_contacto
+						verAlumno.alumno.mail = this.alumnoSeleccionado.mail
 						mui.viewport.showPage("visualizarAlumno-page", 'DEF')
 					},
 					verPlanes: function(){
+						verPlanes.alumno = this.alumnoSeleccionado
 						mui.viewport.showPage("visualizarPlanes-page", 'DEF')
 					},
 					abrirPlanNuevo: function() {
@@ -81,6 +90,9 @@
 								document.location.href = "index.html"
 							}
 						})
+					},
+					seleccionarAlumno(alumno){
+						this.alumnoSeleccionado = alumno
 					}
 				}
 			})
@@ -107,9 +119,12 @@
 							crossDomain: true,
 							data: {
 								'nombre': this.alumno.nombre + " " + this.alumno.apellido,
-								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.toLowerCase(),
+								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.split(" ")[0].toLowerCase(),
 								'admin': false,
-								'password': this.alumno.apellido
+								'password': this.alumno.apellido,
+								'fecha_nacimiento': this.alumno.fecha_nacimiento,
+								'nro_contacto': this.alumno.nro_contacto,
+								'mail': this.alumno.mail
 							},
 							dataType: 'json',
 							success: (responseData)=>{
@@ -132,11 +147,11 @@
 				el:"#visualizarAlumno-page",
 				data: {
 					alumno: {
-						nombre: "Juan",
-						apellido: "Caputto",
-						fechaDeNac: "30/06/97",
-						nroContacto: "095860232",
-						email: "jmcaputto.smc@gmail.com"
+						nombre: "",
+						apellido: "",
+						fecha_nacimiento: "",
+						nro_contacto: "",
+						mail: ""
 					}
 				}
 			})
@@ -253,6 +268,7 @@
 			const verPlanes = new Vue({
 				el: '#visualizarPlanes-page',
 				data: {
+					alumno: '',
 					planes:[
 						{
 							nombre: 'Prueba',
@@ -263,6 +279,9 @@
 				methods: {
 					abrirEjerciciosVisualizar: function() {
 						mui.viewport.showPage("visualizarEjercicios-page", "DEF")
+					},
+					cargarPlanes(){
+						
 					}
 				}
 			})
@@ -312,7 +331,6 @@
 
 				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
-						<button @click="logout">Cerrar sesión</button>>
 						<div class="mui-page-logo"></div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
@@ -326,7 +344,7 @@
 								</span>
 								<ul class="lista_alumnos"><br>
 									<li v-for="alumno in alumnos">
-										<a onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
+										<a @click="seleccionarAlumno(alumno)" onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
 									</li>
 								</ul>
 							</div>
@@ -372,9 +390,9 @@
 							<br>
 							<p class="propiedad">Nombre:</p><p v-text="alumno.nombre"></p>
 							<p class="propiedad">Apellido:</p><p v-text="alumno.apellido"></p>
-							<p class="propiedad">Fecha de Nacimiento:</p><p v-text="alumno.fechaDeNac"></p>
-							<p class="propiedad">Nro. de Contacto:</p><p v-text="alumno.nroContacto"></p>
-							<p class="propiedad">Email:</p><p v-text="alumno.email"></p><br>
+							<p class="propiedad">Fecha de Nacimiento:</p><p v-text="alumno.fecha_nacimiento"></p>
+							<p class="propiedad">Nro. de Contacto:</p><p v-text="alumno.nro_contacto"></p>
+							<p class="propiedad">Email:</p><p v-text="alumno.mail"></p><br>
 						</div>
 					</div>
 				</div>
@@ -632,6 +650,7 @@
 					<ul id='menuoptions' class='mui-list'>
 						<li><a id='option1' href="#">Go Home Page</a></li>
 						<li><a id='option2' href="#">Go Page 2</a></li>
+						<li><a @click="logout">Cerrar sesión</a></li>
 					</ul>
 				</div>
 			</div>
