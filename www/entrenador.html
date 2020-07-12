@@ -62,11 +62,13 @@
 					},
 					verAlumno: function() {
 						console.log(this.alumnoSeleccionado)
-						verAlumno.alumno.nombre = this.alumnoSeleccionado.nombre
-						verAlumno.alumno.apellido = this.alumnoSeleccionado.apellido
-						verAlumno.alumno.fechaDeNac = this.alumnoSeleccionado.fechaDeNac
-						verAlumno.alumno.nroContacto = this.alumnoSeleccionado.nroContacto
-						verAlumno.alumno.email = this.alumnoSeleccionado.email
+						let nombre = this.alumnoSeleccionado.nombre.split(" ")[0]
+						let apellido = this.alumnoSeleccionado.nombre.split(" ")[1]
+						verAlumno.alumno.nombre = nombre
+						verAlumno.alumno.apellido = apellido
+						verAlumno.alumno.fechaDeNac = this.alumnoSeleccionado.fecha_nacimiento.split("T")[0]
+						verAlumno.alumno.nroContacto = this.alumnoSeleccionado.nro_contacto
+						verAlumno.alumno.email = this.alumnoSeleccionado.mail
 						mui.viewport.showPage("visualizarAlumno-page", 'DEF')
 					},
 					verPlanes: function(){
@@ -106,13 +108,16 @@
 							crossDomain: true,
 							data: {
 								'nombre': this.alumno.nombre + " " + this.alumno.apellido,
-								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.toLowerCase(),
+								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.split(" ")[0].toLowerCase(),
 								'admin': false,
-								'password': this.alumno.apellido
+								'password': this.alumno.apellido.toLowerCase(),
+								'mail': this.alumno.email,
+								'fecha_nacimiento': this.alumno.fechaDeNac,
+								'nro_contacto': this.alumno.nroContacto
 							},
 							dataType: 'json',
 							success: (responseData)=>{
-								alert(responseData)
+								console.log(responseData)
 							}
 
 						})
