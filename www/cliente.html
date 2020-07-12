@@ -31,6 +31,7 @@
     
 	<script>
 		$(document).ready(() => {
+
             $.ajax({
 				type: 'GET',
 				url: 'https://app-personal-trainer.herokuapp.com/myinfo',
@@ -40,6 +41,7 @@
 					homePage.alumno = data
 				}
 			})
+			
 			
             const homePage = new Vue({
 				el: "#home-page",
@@ -55,65 +57,36 @@
 				},
 				methods: {
 					verPlanes: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/myinfo/planes',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								planesPage.planes = data
+							}
+						})
 						mui.viewport.showPage("planes-page", 'DEF')
-					},
-					abrirPlanNuevo: function() {
-						mui.viewport.showPage("planNuevo-page", 'DEF')
-					},
-					abrirNuevaSesion: function() {
-						mui.viewport.showPage("nuevaSesion-page", 'DEF')
 					}
+					
 				}
 			})
             
-            const verAlumno = new Vue({
+            const planesPage = new Vue({
 				el:"#planes-page",
 				data: {
-					alumno: {
-						nombre: "Juan",
-						apellido: "Caputto",
-						nacimiento: "30/06/97",
-						nro_contacto: "095860232",
-                        email: "jmcaputto.smc@gmail.com",
-                        planes:[
-						{
-							nombre: 'Prueba',
-							dias: ['DIA 1', 'DIA 2', 'DIA 3']
-                        },
-                        {
-							nombre: 'Prueba2',
-							dias: ['DIA 13', 'DIA 22', 'DIA 33']
-						}
-					]
-                        
-                    },
-                    selectedPlan: null,
-                },
+					planes: []
+				},
                 methods: {
 					showPagePlanes: function () {
 						mui.viewport.showPage("plan-page", "DEF");
                     },
                     handleSelectPlan(plan){
+						this.selectedPlan = plan;
                         showPagePlan;
-                        this.selectedPlan = plan;
                     }
 				}
 			})
-
-			const sesion = new Vue({
-                el: '#planes-page',
-				methods: {
-					agregarSesion: function () {
-						nro = this.sesiones.length + 1
-						this.sesiones.push('SESION ' + nro)
-					},
-					showPagePlan: function () {
-						mui.viewport.showPage("plan-page", "DEF");
-					}
-				}
-            })
-            
-
 		})
 	</script>
 
@@ -158,7 +131,7 @@
 							<div class="col-80">
                                 <p> Lista de planes</p>
                                 <span>
-									<button class="block col-80" v-for="plan in alumno.planes" :key="plan.nombre" @click="handleSelectPlan(plan)">{{plan.nombre}}</button>
+									<button class="block col-80" v-for="plan in planes" @click="handleSelectPlan(plan)">{{plan.nombre}}</button>
 								</span>
 							</div>
 						</div>
