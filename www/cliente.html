@@ -170,14 +170,19 @@
 			const diaPageAsignado = new Vue({
 				el:"#dia-page-asignado",
 				data: {
-					dia: Object
+					dia: Object,
+					sesion: String
 				},
                 methods: {
 					handleSelectEjercicio: function(ejercicio){
 						ejercicioPage.idDia = diaPageAsignado.dia._id;
 						ejercicioPage.ejercicio = ejercicio;
 						mui.viewport.showPage("ejercicio-page", "DEF");
+					},
+					seleccionarSesion: function(sesionSelected){
+						this.sesion=sesionSelected;
 					}
+					
 				}
 				
 			})
@@ -299,10 +304,14 @@
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
 						<div class="col-80">
-							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios" @click="handleSelectEjercicio(ejercicio)">
+							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios">
 								<!-- <img src="img1.jpg" style="width:100%"> -->
-								<button class="col-80">{{ejercicio.nombre}}</button>
-								<div v-for="sesion in ejercicio.sesiones"> {{sesion.nombre}} </div>
+								<button class="col-80" @click="handleSelectEjercicio(ejercicio)">{{ejercicio.nombre}}</button>
+								<ul class="lista_sesiones"><br>
+									<li v-for="sesion in ejercicio.sesiones">
+										<a @click="seleccionarSesion(sesion)" onclick="desplegarOpcionesOnclick(this)">{{ sesion.nombre }}</a>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
