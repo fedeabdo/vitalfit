@@ -237,6 +237,17 @@ function installEvents2() {
 	});
 }
 
+function desplegarSesiones(sesion) {
+	let desplegarSesionesHtml = $('<div class="desplegar_sesiones"><br><button>Sesión: {{sesion.nombre}}</button><br><button>Series: {{sesion.series}}</button><br><button> Intensidad>:{{sesion.series}}</button><br><button>Tiempo: {{sesion.tiempo}}</button>')
+	$('li a', ".lista_sesiones").append(desplegarSesionesHtml)
+	$('.desplegar_sesiones(event)').hide()
+}
+
+function desplegarSesionesOnclick(event) {
+	$(".desplegar_sesiones(event)").not($(".desplegar_sesiones(event)", event)).slideUp()
+	$(".desplegar_sesiones(event)", event).slideToggle()
+}
+
 function desplegarOpciones() {
 	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva sesion</button><br><button v-on:click="asignacionPlan">Asignar Plan</button><br><button v-on:click="eliminarAlumno">Eliminar Alumno</button><br></div>')
 	$('li a', ".lista_alumnos").append(desplegarOpcionesHtml)

@@ -125,6 +125,9 @@
 								document.location.href = "index.html"
 							}
 						})
+					},
+					irachangepassword: function(){
+						mui.viewport.showPage("changepassword-page", "DEF");
 					}
 				}
 			})
@@ -170,14 +173,19 @@
 			const diaPageAsignado = new Vue({
 				el:"#dia-page-asignado",
 				data: {
-					dia: Object
+					dia: Object,
+					sesion: String
 				},
                 methods: {
 					handleSelectEjercicio: function(ejercicio){
 						ejercicioPage.idDia = diaPageAsignado.dia._id;
 						ejercicioPage.ejercicio = ejercicio;
 						mui.viewport.showPage("ejercicio-page", "DEF");
+					},
+					seleccionarSesion: function(sesionSelected){
+						this.sesion=sesionSelected;
 					}
+					
 				}
 				
 			})
@@ -210,6 +218,31 @@
 					}
 				}
 				
+			})
+
+			const changepasswordPage = new Vue({
+				el: "#changepassword-page",
+				data:{
+					password: Object
+				},
+				methods: {
+					changepassword: function(){
+						POSTData = ejercicioPage.password;
+						$.ajax({
+							type: 'POST',
+							dataType: "json",
+							data: {
+								'password': this.password.password
+							},
+							url: "https://app-personal-trainer.herokuapp.com/myinfo/changepassword",
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								alert("Contra cambiada");
+							}
+						})
+					}
+				}
 			})
 		})
 	</script>
@@ -298,11 +331,25 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div class="col-80">
-							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios" @click="handleSelectEjercicio(ejercicio)">
+						<div class="col-80" style="overflow:scroll">
+							<div class="iniciar-sesion-ventana" style="overflow:scroll" v-for="ejercicio in dia.ejercicios">
 								<!-- <img src="img1.jpg" style="width:100%"> -->
-								<button class="col-80">{{ejercicio.nombre}}</button>
-								<div v-for="sesion in ejercicio.sesiones"> {{sesion.nombre}} </div>
+								<button class="col-80" style="overflow:scroll" @click="handleSelectEjercicio(ejercicio)">{{ejercicio.nombre}}
+									<li>
+										<a>Nombre de ejercicio: {{ ejercicio.nombre }}</a>
+										<a>Series: {{ ejercicio.series }}</a>
+										<a>Intensidad: {{ ejercicio.intensidad }}</a>
+										<a>Tiempo: {{ ejercicio.tiempo }}</a>
+									</li>
+								</button>
+								<ul class="lista_sesiones"><br>
+									<li v-for="sesion in ejercicio.sesiones">
+										<a>Nombre: {{ sesion.nombre }}</a>
+										<a>Series: {{ sesion.series }}</a>
+										<a>Intensidad: {{ sesion.intensidad }}</a>
+										<a>Tiempo: {{ sesion.tiempo }}</a>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -350,6 +397,27 @@
 							<button class="confirmar_boton" @click="confirmarSesionEjercicios">Confirmar</button>
 					</div>
 				</div>
+
+				<div id='changepassword-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>Cambiar contraseña</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body mui-scrollable" id="second-body">
+						<div class= "col-80">
+	
+							<p>Contraseña anterior:</p><input type="password" placeholder="Nombre de sesion" v-model="password.oldPassword">
+							<br>
+							<p>Nueva contraseña:</p><input type="password" placeholder="Series realizadas" v-model="password.password">
+							<br>
+							
+						</div>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<br>
+							<button class="confirmar_boton" @click="changepassword">Confirmar cambio de contraseña</button>
+					</div>
+				</div>
                 
 				<!-- Optional.Toolbar out of mui-viewport to be omnipresent. Remove if not needed. -->
 				<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->
@@ -364,6 +432,10 @@
 
 			<!-- mui-screen level panel -->
 			<!-- Panel a nivel de mui-screen -->
+			
+			
+
+
 		</div>
 		<div id="menu-panel" class="mui-panel">
 			<div class="mui-panel-header">
@@ -373,6 +445,7 @@
 				<div>
 					<ul id='menuoptions' class='mui-list'>
 						<li><a @click="logout">Cerrar sesión</li></a>
+						<li><a @click="irachangepassword">Cambiar contraseña</li></a>
 						<li><a id='option1' href="#">Go Home Page</a></li>
 						<li><a id='option2' href="#">Go Page 2</a></li>
 					</ul>
