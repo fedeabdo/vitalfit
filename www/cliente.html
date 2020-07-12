@@ -67,6 +67,18 @@
 							}
 						})
 						mui.viewport.showPage("planes-page", 'DEF')
+					},
+					verPlanActual: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/myinfo/plan_asignado',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								planPage.plan = data
+							}
+						})
+						mui.viewport.showPage("plan-page", 'DEF')
 					}
 					
 				}
@@ -78,13 +90,22 @@
 					planes: []
 				},
                 methods: {
-					showPagePlanes: function () {
+					showPagePlan: function () {
 						mui.viewport.showPage("plan-page", "DEF");
                     },
                     handleSelectPlan(plan){
-						this.selectedPlan = plan;
+						planPage.selectedPlan = plan;
                         showPagePlan;
                     }
+				}
+			})
+
+			const planPage = new Vue({
+				el:"#plan-page",
+				data: {
+					plan: Object
+				},
+                methods: {
 				}
 			})
 		})
@@ -111,7 +132,10 @@
 							<div class="col-80">
                                 <p> Bienvenido {{alumno.nombre}} </p>
                                 <span>
-									<button class="mostrar_planes" @click="verPlanes"> Mostrar planes </button>
+									<button class="mostrar_planes" @click="verPlanes"> Mostrar todos los planes </button>
+								</span>
+								<span>
+									<button class="mostrar_plan" @click="verPlanActual"> Mostrar plan actual </button>
 								</span>
 							</div>
 						</div>
@@ -141,12 +165,12 @@
                 <div id='plan-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>{{selectedPlan.nombre}}</div>
+						<div class='mui-page-title'>{{plan.nombre}}</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
 						<div id="plan-inside">
-							<button class="col-80" v-for="dia in dias">{{dia}}</button>
+							<button class="col-80" v-for="dia in plan.dias" @click=>{{dia.nombre}}</button>
 								
 							</ui-modal>
 						</div>

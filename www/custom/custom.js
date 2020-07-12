@@ -238,16 +238,10 @@ function installEvents2() {
 }
 
 function desplegarOpciones() {
-	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva sesion</button><br><button>Asignar Plan</button><br></div>')
+	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva sesion</button><br><button v-on:click="asignacionPlan">Asignar Plan</button><br></div>')
 	$('li a', ".lista_alumnos").append(desplegarOpcionesHtml)
 	$('.desplegar_opciones').hide()
 }
-
-$(document).ready(() => {
-	desplegarOpciones()
-	desplegarDias()
-	//desplegarDiasVisualizar()
-});
 
 function desplegarOpcionesOnclick(event) {
 	$(".desplegar_opciones").not($(".desplegar_opciones", event)).slideUp()
@@ -264,18 +258,25 @@ function desplegarDiasOnclick(event) {
 	$(".dias_desplegados").not($(".dias_desplegados", event)).slideUp()
 	$(".dias_desplegados", event).slideToggle()
 }
-/*
+
 function desplegarDiasVisualizar() {
-	let diasHtml = $('<div class="dias_desplegados"><div v-for="dia in plan.dias"><button class="sesion_dia_boton" v-on:click="abrirEjerciciosVisualizar">{{dia}}</button><br></div></div>')
-	$('li a', ".lista_planes").append(diasHtml)
-	$('.dias_desplegados').hide()
+	let diasHtml = $('<div class="dias_desplegados_visualizar"><div v-for="dia in plan.dias"><button class="plan_dia_boton" v-on:click="abrirEjerciciosVisualizar">{{dia}}</button><br></div></div>')
+	$('li a', ".lista_planes_visualizar").append(diasHtml)
+	$('.dias_desplegados_visualizar').hide()
 }
 
 function desplegarDiasVisualizarOnclick(event) {
-	$(".dias_desplegados").not($(".dias_desplegados", event)).slideUp()
-	$(".dias_desplegados", event).slideToggle()
+	$(".dias_desplegados_visualizar").not($(".dias_desplegados_visualizar", event)).slideUp()
+	$(".dias_desplegados_visualizar", event).slideToggle()
 }
-*/
+
+$(document).ready(() => {
+	desplegarOpciones()
+	desplegarDias()
+	desplegarDiasVisualizar()
+});
+
+
 function filtro(filtro, lista) {
 	var input, filter, ul, li, a, i, txtValue
 	input = $(filtro)
