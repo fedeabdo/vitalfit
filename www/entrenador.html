@@ -67,9 +67,11 @@
 						verAlumno.alumno.mail = this.alumnoSeleccionado.mail
 						mui.viewport.showPage("visualizarAlumno-page", 'DEF')
 					},
-					verPlanes: function(){
+					verPlanes: async function(){
 						verPlanes.alumno = this.alumnoSeleccionado
-						mui.viewport.showPage("visualizarPlanes-page", 'DEF')
+						await verPlanes.cargarPlanes()
+							mui.viewport.showPage("visualizarPlanes-page", 'DEF')
+
 					},
 					abrirPlanNuevo: function(value) {
 						this.alumnos[value - 1].id = planNuevo.alumnoId
@@ -272,19 +274,26 @@
 				el: '#visualizarPlanes-page',
 				data: {
 					alumno: '',
-					planes:[
-						{
-							nombre: 'Prueba',
-							dias: ['DIA 1', 'DIA 2', 'DIA 3']
-						}
-					]
+					planes:[]
 				},
 				methods: {
-					abrirEjerciciosVisualizar: function() {
+					abrirEjerciciosVisualizar: function( dia ) {
+						verEjercicios.ejercicios = dia.ejercicios
 						mui.viewport.showPage("visualizarEjercicios-page", "DEF")
 					},
-					cargarPlanes(){
-						
+					async cargarPlanes(){
+						URL =  'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/planes'
+						await $.ajax({
+							type: 'GET',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							dataType: 'json',
+							success: (responseData)=>{
+								this.planes = responseData
+							}
+
+						})
 					}
 				}
 			})
@@ -292,15 +301,7 @@
 			const verEjercicios = new Vue({
 				el: '#visualizarEjercicios-page',
 				data: {
-					ejercicios: [
-						{
-						nombre: "Pecho Plano",
-						series: "3",
-						reps: "10",
-						intensidad: "10",
-						tiempo: "60"
-						}
-					]
+					ejercicios: []
 				},
 				methods: {}
 			})
