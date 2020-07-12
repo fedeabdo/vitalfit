@@ -50,13 +50,23 @@
 			const homePage = new Vue({
 				el: "#home-page",
 				data: {
-					alumnos: []
+					alumnos: [],
+					alumnoSeleccionado: ''
 				},
 				methods: {
+					seleccionarAlumno: function (alumno){
+						this.alumnoSeleccionado = alumno
+					},
 					nuevoAlumno: function() {
 						mui.viewport.showPage("nuevoAlumno-page", 'DEF')
 					},
 					verAlumno: function() {
+						console.log(this.alumnoSeleccionado)
+						verAlumno.alumno.nombre = this.alumnoSeleccionado.nombre
+						verAlumno.alumno.apellido = this.alumnoSeleccionado.apellido
+						verAlumno.alumno.fechaDeNac = this.alumnoSeleccionado.fechaDeNac
+						verAlumno.alumno.nroContacto = this.alumnoSeleccionado.nroContacto
+						verAlumno.alumno.email = this.alumnoSeleccionado.email
 						mui.viewport.showPage("visualizarAlumno-page", 'DEF')
 					},
 					verPlanes: function(){
@@ -121,11 +131,16 @@
 				el:"#visualizarAlumno-page",
 				data: {
 					alumno: {
-						nombre: "Juan",
-						apellido: "Caputto",
-						fechaDeNac: "30/06/97",
-						nroContacto: "095860232",
-						email: "jmcaputto.smc@gmail.com"
+						nombre: "",
+						apellido: "",
+						fechaDeNac: "",
+						nroContacto: "",
+						email: ""
+					}
+				},
+				methods: {
+					visualizarAlumno: ()=>{
+
 					}
 				}
 			})
@@ -299,7 +314,7 @@
 								</span>
 								<ul class="lista_alumnos"><br>
 									<li v-for="alumno in alumnos">
-										<a onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
+										<a @click="seleccionarAlumno(alumno)" onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
 									</li>
 								</ul>
 							</div>
