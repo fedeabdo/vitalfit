@@ -26,7 +26,7 @@
 	<script src="custom/custom.js" type="text/javascript"></script>
 
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="node_modules/keen-ui/dist/keen-ui.min.js"></script>
+	<!-- <script src="node_modules/keen-ui/dist/keen-ui.min.js"></script> -->
 
 
 	<script>
@@ -145,26 +145,41 @@
 				el: "#planNuevo-app",
 				data: {
 					nombrePlan: '',
-					dias: []
+					dias: [],
+					nombreDia: "",
+					indiceAux: 0,
+					diaSeleccionado: {
+						seleccionado: false,
+						nombre: "",
+						ejercicios: []
+					}
 				},
 				methods: {
 					agregarDia: function () {
 						nro = this.dias.length + 1
 						diaAux = {
-							nombre:"",
+							seleccionado: false,
+							nombre: this.nombreDia,
 							ejercicios:[]
 						}
 						diaAux.nombre = 'DIA ' + nro
 						this.dias.push(diaAux)
+						
 					},
 					quitarDia: function () {
 						this.dias.pop()
 					},
-					diaNuevo: function () {
+					diaNuevo: function (value) {
+						this.dias[value - 1].seleccionado = true
 						mui.viewport.showPage("diaNuevo-page", "DEF")
 					},
 					confirmarPlan: function() {
 						mui.viewport.showPage("home-page", "DEF")
+					},
+					reasignarDia: function() {
+						if ((store.state.diaSeleccionado.id - 1) > (-1)){
+							//this.dias[store.diaSeleccionado.id - 1] = store.diaSeleccionado
+						}
 					}
 				}
 			})
@@ -189,7 +204,7 @@
 						this.ejerciciosHtml.push('<div class= "col-80"><span><p>Ejercicio' + nro + '</p></span><p>Nombre:</p><input type="Text" v-model="ejercicios[' + nro + '].nombre"><br><p>Series:</p><input type="Number" v-model="ejercicios[' + nro + '].series"><br><p>Reps:</p><input type="Number" v-model="ejercicios[' + nro + '].reps"><br><p>Intensidad:</p><input type="Number" v-model="ejercicios[' + nro + '].intensidad"><br><p>Tiempo:</p><input type="Number" v-model="ejercicios[' + nro + '].tiempo"><br></div><br><hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">')
 					},
 					confirmarEjercicio: function() {
-						console.log(this.ejercicios)
+						this.ejercicios = []
 						mui.viewport.showPage("planNuevo-page", "DEF")
 					}
 				}
@@ -395,8 +410,8 @@
 								</span>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<ul class="lista_dias">
-									<li  v-for="dia in dias">
-										<a v-on:click="diaNuevo" v-text="dia.nombre"></a>
+									<li  v-for="(dia, index) in dias">
+										<a v-on:click="diaNuevo(index)" v-text="dia.nombre"></a>
 									</li>
 								</ul>
 								<br>
