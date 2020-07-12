@@ -28,36 +28,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<!-- <script src="node_modules/keen-ui/dist/keen-ui.min.js"></script> -->
 
-	<script src="vue/dist/vue.js"></script>
-	<script src="vuex/dist/vuex.js"></script>
-
 
 	<script>
-		Vue.use(Vuex)
-
-		const store = new Vuex.Store({
-		state: {
-			diaSeleccionado: {
-				id: 0,
-				nombre: "",
-				ejercicios: []
-			}
-		},
-		mutations: {
-			updateDiaSeleccionado (state, payload) {
-				state.diaSeleccionado = payload
-			},
-			updateEjerciciosDiaSeleccionado (state, payload) {
-				state.diaSeleccionado.ejercicios = payload
-			}
-		}
-		})
-
-		new Vue({
-				store: store
-			})
-		
-		
 		$(document).ready(() => {	
 			
 			
@@ -207,7 +179,7 @@
 					nombreDia: "",
 					indiceAux: 0,
 					diaSeleccionado: {
-						id: 0,
+						seleccionado: false,
 						nombre: "",
 						ejercicios: []
 					}
@@ -216,18 +188,19 @@
 					agregarDia: function () {
 						nro = this.dias.length + 1
 						diaAux = {
-							id: nro,
+							seleccionado: false,
 							nombre: this.nombreDia,
 							ejercicios:[]
 						}
 						this.nombreDia = "";
 						this.dias.push(diaAux)
+						
 					},
 					quitarDia: function () {
 						this.dias.pop()
 					},
 					diaNuevo: function (value) {
-						store.commit("updateDiaSeleccionado", this.dias[value - 1])
+						this.dias[value - 1].seleccionado = true
 						mui.viewport.showPage("diaNuevo-page", "DEF")
 					},
 					confirmarPlan: function() {
@@ -235,16 +208,9 @@
 					},
 					reasignarDia: function() {
 						if ((store.state.diaSeleccionado.id - 1) > (-1)){
-							this.dias[store.diaSeleccionado.id - 1] = store.diaSeleccionado
-							console.log("Funciona")
+							//this.dias[store.diaSeleccionado.id - 1] = store.diaSeleccionado
 						}
 					}
-				},
-				created: function() {
-					this.reasignarDia()
-				},
-				update: function() {
-					this.reasignarDia()
 				}
 			})
 
@@ -273,27 +239,8 @@
 						this.ejercicios.push(ejercicioAux)
 					},
 					confirmarEjercicio: function() {
-						store.commit("updateEjerciciosDiaSeleccionado", this.ejercicios)
-						console.log(store.state.diaSeleccionado.ejercicios)
 						this.ejercicios = []
-						console.log(store.state.diaSeleccionado.ejercicios)
 						mui.viewport.showPage("planNuevo-page", "DEF")
-					}
-				},
-				computed: {
-					serial: function() {
-						return this.ejercicios.length
-					}
-				},
-				created: function() {
-					for (ejercicioAux in store.state.diaSeleccionado.ejercicios) {
-						this.agregarEjercicio()
-						console.log("Funciona")
-					}
-				},
-				update: function() {
-					for (ejercicioAux in store.state.diaSeleccionado.ejercicios) {
-						this.agregarEjercicio()
 					}
 				}
 			})
@@ -499,8 +446,8 @@
 								</span>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<ul class="lista_dias">
-									<li  v-for="dia in dias">
-										<a v-on:click="diaNuevo(dia.id)" v-text="dia.nombre"></a>
+									<li  v-for="(dia, index) in dias">
+										<a v-on:click="diaNuevo(index)" v-text="dia.nombre"></a>
 									</li>
 								</ul>
 								<br>
