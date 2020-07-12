@@ -173,22 +173,18 @@
 			const planNuevo = new Vue({
 				el: "#planNuevo-app",
 				data: {
-					id: "",
 					nombrePlan: '',
 					dias: [],
 					nombreDia: "",
 					indiceAux: 0,
 					diaSeleccionado: {
-						seleccionado: false,
 						nombre: "",
 						ejercicios: []
 					}
 				},
 				methods: {
 					agregarDia: function () {
-						nro = this.dias.length + 1
 						diaAux = {
-							seleccionado: false,
 							nombre: this.nombreDia,
 							ejercicios:[]
 						}
@@ -200,10 +196,15 @@
 						this.dias.pop()
 					},
 					diaNuevo: function (value) {
-						this.dias[value - 1].seleccionado = true
+						diaNuevo.ejercicios = this.dias[value].ejercicios
+						diaNuevo.indiceDia = value
 						mui.viewport.showPage("diaNuevo-page", "DEF")
 					},
 					confirmarPlan: function() {
+						var planAux = {
+							nombreAux = this.nombrePlan,
+							diasAux = this.dias
+						}
 						mui.viewport.showPage("home-page", "DEF")
 					},
 					reasignarDia: function() {
@@ -217,6 +218,7 @@
 			const diaNuevo = new Vue({
 				el: '#diaNuevo-page',
 				data: {
+					indiceDia: 0,
 					ejercicios: [],
 					ejercicio: {
 						id: 0,
@@ -239,6 +241,7 @@
 						this.ejercicios.push(ejercicioAux)
 					},
 					confirmarEjercicio: function() {
+						planNuevo.dias[this.indiceDia].ejercicios = this.ejercicios
 						this.ejercicios = []
 						mui.viewport.showPage("planNuevo-page", "DEF")
 					}
@@ -477,7 +480,7 @@
 								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<li v-for="(ejercicioA,index) in ejercicios">
 									<div class= "col-80">
-										<span><p>Ejercicio - {{ index }}</p></span>
+										<span><p>Ejercicio - {{ index + 1}}</p></span>
 										<p>Nombre:</p><input type="Text" v-model="ejercicioA.nombre">
 										<br>
 										<p>Series:</p><input type="Number" v-model="ejercicioA.series">
@@ -646,8 +649,8 @@
 							<div class="col-80">
 								<p class="seleccionar_plan">Seleccionar Plan:</p>
 								<br>
-								<select class="planes_selector">
-									<option v-for="plan in planes"></option>
+								<select class="col-80 planes_selector">
+									<option v-for="plan in planes">{{plan.nombre}}</option>
 								</select>
 							</div>
 						</div>
