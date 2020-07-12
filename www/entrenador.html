@@ -71,7 +71,8 @@
 						verPlanes.alumno = this.alumnoSeleccionado
 						mui.viewport.showPage("visualizarPlanes-page", 'DEF')
 					},
-					abrirPlanNuevo: function() {
+					abrirPlanNuevo: function(value) {
+						this.alumnos[value - 1].id = planNuevo.alumnoId
 						mui.viewport.showPage("planNuevo-page", 'DEF')
 					},
 					abrirNuevaSesion: function() {
@@ -79,6 +80,9 @@
 					},
 					asignacionPlan: function() {
 						mui.viewport.showPage("asignarPlan-page", 'DEF')
+					},
+					eliminarAlumno: function() {
+						
 					},
 					logout: function(){
 						$.ajax({
@@ -159,21 +163,19 @@
 			const planNuevo = new Vue({
 				el: "#planNuevo-app",
 				data: {
+					alumnoId: "",
 					nombrePlan: '',
 					dias: [],
 					nombreDia: "",
 					indiceAux: 0,
 					diaSeleccionado: {
-						seleccionado: false,
 						nombre: "",
 						ejercicios: []
 					}
 				},
 				methods: {
 					agregarDia: function () {
-						nro = this.dias.length + 1
 						diaAux = {
-							seleccionado: false,
 							nombre: this.nombreDia,
 							ejercicios:[]
 						}
@@ -185,16 +187,16 @@
 						this.dias.pop()
 					},
 					diaNuevo: function (value) {
-						this.dias[value - 1].seleccionado = true
+						diaNuevo.ejercicios = this.dias[value].ejercicios
+						diaNuevo.indiceDia = value
 						mui.viewport.showPage("diaNuevo-page", "DEF")
 					},
 					confirmarPlan: function() {
-						mui.viewport.showPage("home-page", "DEF")
-					},
-					reasignarDia: function() {
-						if ((store.state.diaSeleccionado.id - 1) > (-1)){
-							//this.dias[store.diaSeleccionado.id - 1] = store.diaSeleccionado
+						var planAux = {
+							nombreAux: this.nombrePlan,
+							diasAux: this.dias
 						}
+						mui.viewport.showPage("home-page", "DEF")
 					}
 				}
 			})
@@ -202,7 +204,7 @@
 			const diaNuevo = new Vue({
 				el: '#diaNuevo-app',
 				data: {
-					ejerciciosHtml: [],
+					indiceDia: 0,
 					ejercicios: [],
 					ejercicio: {
 						nombre: "",
@@ -219,6 +221,7 @@
 						this.ejerciciosHtml.push('<div class= "col-80"><span><p>Ejercicio' + nro + '</p></span><p>Nombre:</p><input type="Text" v-model="ejercicios[' + nro + '].nombre"><br><p>Series:</p><input type="Number" v-model="ejercicios[' + nro + '].series"><br><p>Reps:</p><input type="Number" v-model="ejercicios[' + nro + '].reps"><br><p>Intensidad:</p><input type="Number" v-model="ejercicios[' + nro + '].intensidad"><br><p>Tiempo:</p><input type="Number" v-model="ejercicios[' + nro + '].tiempo"><br></div><br><hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">')
 					},
 					confirmarEjercicio: function() {
+						planNuevo.dias[this.indiceDia].ejercicios = this.ejercicios
 						this.ejercicios = []
 						mui.viewport.showPage("planNuevo-page", "DEF")
 					}
@@ -343,7 +346,7 @@
 									<button class="agregar_alumno_boton" @click="nuevoAlumno">＋</button>
 								</span>
 								<ul class="lista_alumnos"><br>
-									<li v-for="alumno in alumnos">
+									<li v-for="(alumno, index) in alumnos">
 										<a @click="seleccionarAlumno(alumno)" onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
 									</li>
 								</ul>
@@ -457,7 +460,23 @@
 							</div>
 							<ul class="lista_ejercicios">
 								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-								<li v-for="ejercicio in ejerciciosHtml" v-html="ejercicio"></li>
+								<li v-for="(ejercicioA,index) in ejercicios">
+									<div class= "col-80">
+										<span><p>Ejercicio - {{ index + 1}}</p></span>
+										<p>Nombre:</p><input type="Text" v-model="ejercicioA.nombre">
+										<br>
+										<p>Series:</p><input type="Number" v-model="ejercicioA.series">
+										<br>
+										<p>Reps:</p><input type="Number" v-model="ejercicioA.reps">
+										<br>
+										<p>Intensidad:</p><input type="Number" v-model="ejercicioA.intensidad">
+										<br>
+										<p>Tiempo:</p><input type="Number" v-model="ejercicioA.tiempo">
+										<br>
+									</div>
+									<br>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+								</li>
 							</ul>
 							<br>
 							<button class="confirmar_boton" @click="confirmarEjercicio">Confirmar</button>
@@ -612,8 +631,8 @@
 							<div class="col-80">
 								<p class="seleccionar_plan">Seleccionar Plan:</p>
 								<br>
-								<select class="planes_selector">
-									<option v-for="plan in planes"></option>
+								<select class="col-80 planes_selector">
+									<option v-for="plan in planes">{{plan.nombre}}</option>
 								</select>
 							</div>
 						</div>
