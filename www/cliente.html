@@ -193,12 +193,13 @@
                 methods: {
 					confirmarSesionEjercicios: function(){
 						idEjercicio= ejercicioPage.ejercicio._id;
-						POSTData = JSON.stringify(sesion);
+						POSTData = JSON.stringify(ejercicioPage.sesion);
+						urlSesiones = 'https://app-personal-trainer.herokuapp.com/plan_asignado/dias/'+ejercicioPage.idDia+'/ejercicios/'+idEjercicio+'/sesiones'
 						$.ajax({
-							type: 'PUT',
+							type: 'POST',
 							dataType: "json",
 							data: POSTData,
-							url: 'https://app-personal-trainer.herokuapp.com/plan_asignado/dias/'+idDia+'/ejercicios/'+idEjercicio+'/sesiones',
+							url: urlSesiones,
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
 							success: function(data){
