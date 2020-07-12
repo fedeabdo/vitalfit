@@ -80,6 +80,17 @@
 							}
 						})
 						mui.viewport.showPage("plan-page", 'DEF')
+					},
+					logout: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/logout',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								document.location.href = "index.html"
+							}
+						})
 					}
 					
 				}
@@ -154,6 +165,7 @@
 			<div id="mui-viewport" class="mui-viewport">
 				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
+						<button @click="logout">Cerrar sesión</button>>
 						<div class="mui-page-logo"></div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
