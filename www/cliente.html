@@ -303,13 +303,23 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div class="col-80">
-							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios">
+						<div class="col-80" style="overflow:scroll">
+							<div class="iniciar-sesion-ventana" style="overflow:scroll" v-for="ejercicio in dia.ejercicios">
 								<!-- <img src="img1.jpg" style="width:100%"> -->
-								<button class="col-80" @click="handleSelectEjercicio(ejercicio)">{{ejercicio.nombre}}</button>
+								<button class="col-80" style="overflow:scroll" @click="handleSelectEjercicio(ejercicio)">{{ejercicio.nombre}}
+									<li>
+										<a>Nombre de ejercicio: {{ ejercicio.nombre }}</a>
+										<a>Series: {{ ejercicio.series }}</a>
+										<a>Intensidad: {{ ejercicio.intensidad }}</a>
+										<a>Tiempo: {{ ejercicio.tiempo }}</a>
+									</li>
+								</button>
 								<ul class="lista_sesiones"><br>
 									<li v-for="sesion in ejercicio.sesiones">
-										<a @click="seleccionarSesion(sesion)" onclick="desplegarOpcionesOnclick(this)">{{ sesion.nombre }}</a>
+										<a>Nombre: {{ sesion.nombre }}</a>
+										<a>Series: {{ sesion.series }}</a>
+										<a>Intensidad: {{ sesion.intensidad }}</a>
+										<a>Tiempo: {{ sesion.tiempo }}</a>
 									</li>
 								</ul>
 							</div>
