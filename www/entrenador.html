@@ -60,6 +60,7 @@
 					verAlumno: function() {
 						verAlumno.alumno.nombre =this.alumnoSeleccionado.nombre.split(" ")[0]
 						verAlumno.alumno.apellido = this.alumnoSeleccionado.nombre.split(" ")[1]
+						verAlumno.alumno.username = this.alumnoSeleccionado.username
 						if(this.alumnoSeleccionado.fecha_nacimiento != undefined){
 							verAlumno.alumno.fecha_nacimiento = this.alumnoSeleccionado.fecha_nacimiento.split("T")[0]
 						}
@@ -84,18 +85,7 @@
 					asignacionPlan: function() {
 						mui.viewport.showPage("asignarPlan-page", 'DEF')
 					},
-					eliminarAlumno: function() {
-						username = this.alumnoSeleccionado.username
-						$.ajax({
-							type: 'DELETE',
-							url: 'https://app-personal-trainer.herokuapp.com/clientes/' + username,
-							xhrFields: { withCredentials: true },
-							crossDomain: true,
-							success: function(data){
-								alert("Eliminado")
-							}
-						})
-					},
+					
 					
 					logout: function(){
 						$.ajax({
@@ -168,7 +158,23 @@
 						apellido: "",
 						fecha_nacimiento: "",
 						nro_contacto: "",
-						mail: ""
+						mail: "",
+						username: ""
+					}
+				},
+				methods: {
+					eliminarAlumno: function() {
+						username = this.alumno.username
+						$.ajax({
+							type: 'POST',
+							url: 'https://app-personal-trainer.herokuapp.com/clientes/' + username + "/borrar",
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								alert("Eliminado")
+							}
+						})
+						return false
 					}
 				}
 			})
@@ -467,6 +473,8 @@
 							<p class="propiedad">Nro. de Contacto:</p><p v-text="alumno.nro_contacto"></p>
 							<p class="propiedad">Email:</p><p v-text="alumno.mail"></p><br>
 						</div>
+
+							<button class="confirmar_boton" @click="eliminarAlumno"> Eliminar usuario </button>
 					</div>
 				</div>
 
