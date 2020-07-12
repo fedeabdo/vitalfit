@@ -134,6 +134,17 @@
 					ejercicio: Object
 				},
                 methods: {
+					confirmarSesionEjercicios: function(){
+						$.ajax({
+							type: 'PUT',
+							url: 'https://app-personal-trainer.herokuapp.com/myinfo/plan_asignado',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								planPage.plan = data
+							}
+						})
+					}
 				}
 				
 			})
