@@ -67,6 +67,9 @@
 					},
 					abrirNuevaSesion: function() {
 						mui.viewport.showPage("nuevaSesion-page", 'DEF')
+					},
+					asignacionPlan: function() {
+						mui.viewport.showPage("asignarPlan-page", 'DEF')
 					}
 				}
 			})
@@ -220,7 +223,7 @@
 					}
 				}
 			})
-/*
+
 			const verPlanes = new Vue({
 				el: '#visualizarPlanes-page',
 				data: {
@@ -233,11 +236,37 @@
 				},
 				methods: {
 					abrirEjerciciosVisualizar: function() {
-						//mui.viewport.showPage("visualizarEjercicios-page", "DEF")
+						mui.viewport.showPage("visualizarEjercicios-page", "DEF")
 					}
 				}
 			})
-*/
+
+			const verEjercicios = new Vue({
+				el: '#visualizarEjercicios-page',
+				data: {
+					ejercicios: [
+						{
+						nombre: "Pecho Plano",
+						series: "3",
+						reps: "10",
+						intensidad: "10",
+						tiempo: "60"
+						}
+					]
+				},
+				methods: {}
+			})
+
+			const asignarPlan = new Vue({
+				el: '#asignarPlan-page',
+				data: {
+					planes: [
+						{nombre: "Pecho"},
+						{nombre: "torso"}
+					]
+				},
+				methods: {}
+			})
 		})
 	</script>
 </head>
@@ -463,11 +492,11 @@
 
 <!-- VISUALIZAR PLANES -->
 
-<!--
+
 				<div id="visualizarPlanes-page" class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Nueva Sesión</div>
+						<div class='mui-page-title'>Planes</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -477,9 +506,9 @@
 									<br>
 									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
 									<br>
-									<ul class="lista_planes"><br>
+									<ul class="lista_planes_visualizar"><br>
 										<li v-for='plan in planes'>
-											<a onclick="desplegarDiasOnclick(this)">{{plan.nombre}}</a>
+											<a onclick="desplegarDiasVisualizarOnclick(this)">{{plan.nombre}}</a>
 										</li>
 									</ul>
 								</div>
@@ -487,7 +516,65 @@
 						</div>
 					</div>
 				</div>
--->
+
+
+<!-- VISUALIZAR EJERCICIOS -->
+
+
+				<div id='visualizarEjercicios-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>Ejercicios</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
+						<br>
+						<div class= "col-80">
+						</div>
+						<ul class="lista_sesion_ejercicios">
+							<li v-for="ejercicio in ejercicios">
+								<div class= "col-80">
+									<p class="nombre_ejercicio">{{ejercicio.nombre}}</p>
+									<br>
+									<p>Series: {{ejercicio.series}}</p>
+									<br>
+									<p>Reps: {{ejercicio.reps}}</p>
+									<br>
+									<p>Intensidad: {{ejercicio.intensidad}}</p>
+									<br>
+									<p>Tiempo: {{ejercicio.tiempo}}</p>
+									<br>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<br>
+								</div>
+								<br>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+<!-- ASIGNAR PLAN -->
+
+
+				<div id="asignarPlan-page" class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>Asignar Plan</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
+						<div>
+							<div class="col-80">
+								<p class="seleccionar_plan">Seleccionar Plan:</p>
+								<br>
+								<select class="planes_selector">
+									<option v-for="plan in planes"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
 
 <!-- Copy the code of "template-page" to add more pages -->
 <!-- Copie el código de template-plage para agregar más páginas -->
