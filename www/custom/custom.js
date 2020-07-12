@@ -216,11 +216,6 @@ function installEvents2() {
 		return false;
 	});
 
-	// $('#CargarDatosPlanAnterior').click(() => {
-	// 	mui.viewport.showPage("template-page", "DEF");
-	// 	return false;
-	// });
-
 	$("#tabbar-button5").click(function () {
 		mui.alert("tab 5", "Selected");
 		return false;
@@ -242,47 +237,60 @@ function installEvents2() {
 	});
 }
 
-function alumno_upload() {
-	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Visualizar Alumno</button><br><button>Visualizar Planes</button><br><button class="planNuevo" v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button>Nueva sesion</button><br><button>Asignar Plan</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
-	$('li a', ".lista_alumnos").append(alumno_upload_html);
-	$('.alumno-upload').hide();
+function desplegarOpciones() {
+	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva sesion</button><br><button>Asignar Plan</button><br></div>')
+	$('li a', ".lista_alumnos").append(desplegarOpcionesHtml)
+	$('.desplegar_opciones').hide()
 }
 
 $(document).ready(() => {
-	alumno_upload();
+	desplegarOpciones()
+	desplegarDias()
+	//desplegarDiasVisualizar()
 });
 
-function alumno_upload_onclick(event) {
-	$(".alumno-upload").not($(".alumno-upload", event)).slideUp()
-	$(".alumno-upload", event).slideToggle();
+function desplegarOpcionesOnclick(event) {
+	$(".desplegar_opciones").not($(".desplegar_opciones", event)).slideUp()
+	$(".desplegar_opciones", event).slideToggle()
 }
 
 function desplegarDias() {
-	let alumno_upload_html = $('<div class="alumno-upload"><br><button>Visualizar Alumno</button><br><button>Visualizar Planes</button><br><button class="planNuevo" v-on:click="abrirPlanNuevo">Nuevo Plan</button><br><button>Nueva sesion</button><br><button>Asignar Plan</button><br><button class="CargarDatosPlanAnterior">Plan anterior</button><br></div>')
-	$('li a', ".lista_alumnos").append(alumno_upload_html);
-	$('.alumno-upload').hide();
+	let diasHtml = $('<div class="dias_desplegados"><div v-for="dia in plan.dias"><button class="sesion_dia_boton" v-on:click="abrirDiaSesionNueva">{{dia}}</button><br></div></div>')
+	$('li a', ".lista_planes").append(diasHtml)
+	$('.dias_desplegados').hide()
 }
 
 function desplegarDiasOnclick(event) {
-	$(".alumno-upload").not($(".alumno-upload", event)).slideUp()
-	$(".alumno-upload", event).slideToggle();
+	$(".dias_desplegados").not($(".dias_desplegados", event)).slideUp()
+	$(".dias_desplegados", event).slideToggle()
+}
+/*
+function desplegarDiasVisualizar() {
+	let diasHtml = $('<div class="dias_desplegados"><div v-for="dia in plan.dias"><button class="sesion_dia_boton" v-on:click="abrirEjerciciosVisualizar">{{dia}}</button><br></div></div>')
+	$('li a', ".lista_planes").append(diasHtml)
+	$('.dias_desplegados').hide()
 }
 
+function desplegarDiasVisualizarOnclick(event) {
+	$(".dias_desplegados").not($(".dias_desplegados", event)).slideUp()
+	$(".dias_desplegados", event).slideToggle()
+}
+*/
 function filtro(filtro, lista) {
-	var input, filter, ul, li, a, i, txtValue;
-	input = $(filtro);
-	filter = input.val().toUpperCase();
-	ul = $(lista);
-	li = $('li', lista);
+	var input, filter, ul, li, a, i, txtValue
+	input = $(filtro)
+	filter = input.val().toUpperCase()
+	ul = $(lista)
+	li = $('li', lista)
 
 	// Loop through all list items, and hide those who don't match the search query
 	for (i = 0; i < li.length; i++) {
-		a = $("a", li[i]);
-		txtValue = a.text();
+		a = $("a", li[i])
+		txtValue = a.text()
 		if (txtValue.toUpperCase().indexOf(filter) > -1) {
-			li[i].style.display = "";
+			li[i].style.display = ""
 		} else {
-			li[i].style.display = "none";
+			li[i].style.display = "none"
 		}
 	}
 }

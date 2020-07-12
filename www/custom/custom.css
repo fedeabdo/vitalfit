@@ -179,6 +179,16 @@ button{
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
+
+.mui-viewport{
+	background: rgb(245,180,27);
+	background: linear-gradient(0deg, rgba(245,180,27,1) 0%, rgba(135,145,154,1) 15%);
+}
+
+			/*  ---------------------------ESTILOS PERSONALIZADOS------------------------------ */
+
+/* ---------- LISTAS ----------- */
+
 .lista_alumnos{
 	text-align: center;
 	list-style: none;
@@ -188,69 +198,6 @@ button{
 	padding-bottom: 10px;
 	padding-top: 10px;
 	border-top:	solid 1px lightgrey;
-}
-.alumno-upload button{
-	padding: 5px;
-	margin-bottom: 5px;
-	width: 50%;
-}
-.mui-viewport{
-	background: rgb(245,180,27);
-	background: linear-gradient(0deg, rgba(245,180,27,1) 0%, rgba(135,145,154,1) 15%);
-}
-.iniciar-sesion-ventana{
-	padding: 10%;
-	border: solid 1px rgba(189, 195, 199, 0.6);
-	background-color: rgba(189, 195, 199, 0.5);
-	border-radius: 3px;
-}
-.iniciar-sesion-ventana input{
-	border-color: lightgrey;
-	border-style: none;
-	padding: 5%;
-	border-radius: 2px;
-}
-
-.iniciar-sesion-ventana button{
-	border: none;
-	background-color: 	grey;
-	color: white;
-}
-
-.col-80 .filtro_alumnos{
-	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
-	background-position: 10px 12px; /* Position the search icon */
-	background-repeat: no-repeat; /* Do not repeat the icon image */
-	width: 87%; /* Full-width */
-	font-size: 16px; /* Increase font-size */
-	border: 1px solid #ddd; /* Add a grey border */
-	margin-bottom: 12px; /* Add some space below the input */
-}
-
-.col-80 .agregar_alumno{
-	width : 10%;
-	padding: 5px;
-	font-weight: bold;
-}
-
-#nuevoAlumnoID input{
-	margin: 0px 0px 10px 0px; 
-}
-
-.confirmar{
-	width: 50%;
-	padding: 5px;
-	margin: 0 25% 0 25%;
-}
-
-.nombre_plan_label{
-	margin: 0px 0px 5px 0px;
-	font-size: 15px;
-	font-weight: bold;
-}
-
-.nombre_plan_input{
-	margin: 5px 0 20px 0;
 }
 
 .lista_dias{
@@ -264,19 +211,136 @@ button{
 	border-bottom:	solid 1px lightgrey;
 }
 
-.col-80 .agregar{
+.lista_ejercicios{
+	list-style: none;
+	padding-left: 0px;
+}
+.lista_ejercicios p{
+	margin: 5px 0 5px 0;
+}
+.lista_ejercicios span>p{
+	font-size: 15px;
+	font-weight: bold;
+	margin: 8px 0 8px 0;
+	text-align: center;
+}
+
+.lista_planes{
+	text-align: center;
+	list-style: none;
+	padding-left: 0px;
+}
+.lista_planes li{
+	padding-bottom: 10px;
+	padding-top: 10px;
+	border-top:	solid 1px lightgrey;
+}
+
+.lista_sesion_ejercicios{
+	list-style: none;
+	padding-left: 0px;
+}
+.lista_sesion_ejercicios p{
+	margin: 5px 0 5px 0;
+}
+.lista_sesion_ejercicios span>p{
+	font-size: 15px;
+	font-weight: bold;
+	margin: 8px 0 8px 0;
+	text-align: center;
+}
+#vistaAlumno p{
+	margin: 5px 0px 5px 0px;
+}
+#vistaAlumno p.propiedad{
+	margin: 20px 0px 5px 0px;
+	font-weight: bold;
+}
+
+/* ---------- BOTONES ----------- */
+
+.desplegar_opciones button{
+	padding: 5px;
+	margin-bottom: 5px;
+	width: 50%;
+}
+.iniciar-sesion-ventana button{
+	border: none;
+	background-color: 	grey;
+	color: white;
+}
+.col-80 .agregar_alumno_boton{
 	width : 10%;
 	padding: 5px;
 	font-weight: bold;
 }
-
-.col-80 .quitar{
+.confirmar_boton{
+	width: 50%;
+	padding: 5px;
+	margin: 15px 25% 0 25%;
+	font-weight: bold;
+}
+.col-80 .agregar_boton{
 	width : 10%;
 	padding: 5px;
 	font-weight: bold;
 }
+.col-80 .quitar_boton{
+	width : 10%;
+	padding: 5px;
+	font-weight: bold;
+}
+.agregar_ejercicio_boton{
+	width: 60%;
+	margin: 0 20% 0 20%;
+	padding: 5px;
+	font-weight: bold;
+}
+.desplegar_dias button{
+	padding: 5px;
+	margin-bottom: 5px;
+	width: 50%;
+}
+button.sesion_dia_boton {
+	width: 50%;
+	padding: 5px;
+	margin-top: 5px;
+}
 
-.col-80 .filtro_dias{
+/*-----------INPUTS------------*/
+
+.iniciar-sesion-ventana input{
+	border-color: lightgrey;
+	border-style: none;
+	padding: 5%;
+	border-radius: 2px;
+}
+.col-80 .filtro_alumnos_input{
+	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
+	background-position: 10px 12px; /* Position the search icon */
+	background-repeat: no-repeat; /* Do not repeat the icon image */
+	width: 87%; /* Full-width */
+	font-size: 16px; /* Increase font-size */
+	border: 1px solid #ddd; /* Add a grey border */
+	margin-bottom: 12px; /* Add some space below the input */
+}
+#nuevoAlumnoID p{
+	margin: 20px 0px 5px 0px;
+	font-weight: bold;
+}
+.nombre_plan_input{
+	margin: 5px 0 20px 0;
+}
+.col-80 .filtro_dias_input{
+	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
+	background-position: 10px 12px; /* Position the search icon */
+	background-repeat: no-repeat; /* Do not repeat the icon image */
+	width: 100%; /* Full-width */
+	font-size: 16px; /* Increase font-size */
+	border: 1px solid #ddd; /* Add a grey border */
+	margin-bottom: 12px; /* Add some space below the input */
+}
+.col-80 .filtro_planes_input{
 	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
 	background-position: 10px 12px; /* Position the search icon */
 	background-repeat: no-repeat; /* Do not repeat the icon image */
@@ -286,26 +350,17 @@ button{
 	margin-bottom: 12px; /* Add some space below the input */
 }
 
-.lista_ejercicios{
-	list-style: none;
-	padding-left: 0px;
-}
+/*-----------OTROS------------*/
 
-.lista_ejercicios p{
-	margin: 5px 0 5px 0;
+.iniciar-sesion-ventana{
+	padding: 10%;
+	border: solid 1px rgba(189, 195, 199, 0.6);
+	background-color: rgba(189, 195, 199, 0.5);
+	border-radius: 3px;
 }
-
-.lista_ejercicios span>p{
+.nombre_plan_label{
+	margin: 0px 0px 5px 0px;
 	font-size: 15px;
 	font-weight: bold;
-	margin: 8px 0 8px 0;
-	text-align: center;
 }
 
-
-.agregarEjercicio{
-	width: 60%;
-	margin: 0 20% 0 20%;
-	padding: 5px;
-	font-weight: bold;
-}
