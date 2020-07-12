@@ -271,7 +271,7 @@ function desplegarDiasOnclick(event) {
 }
 
 function desplegarDiasVisualizar() {
-	let diasHtml = $('<div class="dias_desplegados_visualizar"><div v-for="dia in plan.dias"><button class="plan_dia_boton" v-on:click="abrirEjerciciosVisualizar">{{dia}}</button><br></div></div>')
+	let diasHtml = $('<div class="dias_desplegados_visualizar"><div v-for="dia in plan.dias"><button class="plan_dia_boton" v-on:click="abrirEjerciciosVisualizar(dia)">{{dia.nombre}}</button><br></div></div>')
 	$('li a', ".lista_planes_visualizar").append(diasHtml)
 	$('.dias_desplegados_visualizar').hide()
 }
