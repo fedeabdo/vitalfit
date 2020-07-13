@@ -66,21 +66,21 @@
 						}
 						verAlumno.alumno.nro_contacto = this.alumnoSeleccionado.nro_contacto
 						verAlumno.alumno.mail = this.alumnoSeleccionado.mail
-						mui.viewport.showPage("visualizarAlumno-page", 'DEF')
+						mui.viewport.showPage("visualizarAlumno-page", 'SLIDE_LEFT')
 					},
 					verPlanes: async function(){
 						verPlanes.alumno = this.alumnoSeleccionado
 						await verPlanes.cargarPlanes()
-							mui.viewport.showPage("visualizarPlanes-page", 'DEF')
+							mui.viewport.showPage("visualizarPlanes-page", 'SLIDE_LEFT')
 
 					},
 					abrirPlanNuevo: function(value) {
 						this.alumnos[value]._id = planNuevo.alumnoId
-						mui.viewport.showPage("planNuevo-page", 'DEF')
+						mui.viewport.showPage("planNuevo-page", 'SLIDE_LEFT')
 					},
 					abrirNuevaSesion: function(value) {
 						this.alumnos[value]._id = sesionNueva.alumnoId
-						mui.viewport.showPage("nuevaSesion-page", 'DEF')
+						mui.viewport.showPage("nuevaSesion-page", 'SLIDE_LEFT')
 					},
 					asignacionPlan: function() {
 						asignarPlan.alumno = this.alumnoSeleccionado
@@ -147,7 +147,7 @@
 						this.alumno.fechaDeNac = ""
 						this.alumno.nroContacto = ""
 						this.alumno.email = ""
-						mui.viewport.showPage("home-page", "DEF")
+						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -204,14 +204,14 @@
 					diaNuevo: function (value) {
 						diaNuevo.ejercicios = this.dias[value].ejercicios
 						diaNuevo.indiceDia = value
-						mui.viewport.showPage("diaNuevo-page", "DEF")
+						mui.viewport.showPage("diaNuevo-page", "SLIDE_LEFT")
 					},
 					confirmarPlan: function() {
 						var planAux = {
 							nombreAux: this.nombrePlan,
 							diasAux: this.dias
 						}
-						mui.viewport.showPage("home-page", "DEF")
+						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -232,7 +232,7 @@
 						})
 					},
 					irachangepassword: function(){
-						mui.viewport.showPage("changepassword-page", "DEF");
+						mui.viewport.showPage("changepassword-page", "SLIDE_LEFT");
 					}
 				}
 			})
@@ -259,7 +259,7 @@
 					confirmarEjercicio: function() {
 						planNuevo.dias[this.indiceDia].ejercicios = this.ejercicios
 						this.ejercicios = []
-						mui.viewport.showPage("planNuevo-page", "DEF")
+						mui.viewport.showPage("planNuevo-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -302,11 +302,11 @@
 						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
 						ejerciciosSesion.planSerial = value1
 						ejerciciosSesion.diaSerial = value2
-						mui.viewport.showPage("nuevaSesionEjercicios-page", "DEF")
+						mui.viewport.showPage("nuevaSesionEjercicios-page", "SLIDE_LEFT")
 					},
 					confirmarSesion: function() {
 
-						mui.viewport.showPage("home-page", "DEF")
+						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -342,7 +342,7 @@
 							//sesionNueva.planes[this.planSerial].dias[this.diaSerial].ejercicios[i].sesiones.push(sesionAux)
 						}
 						this.ejercicios = []
-						mui.viewport.showPage("nuevaSesion-page", "DEF")
+						mui.viewport.showPage("nuevaSesion-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -356,7 +356,7 @@
 				methods: {
 					abrirEjerciciosVisualizar: function( dia ) {
 						verEjercicios.ejercicios = dia.ejercicios
-						mui.viewport.showPage("visualizarEjercicios-page", "DEF")
+						mui.viewport.showPage("visualizarEjercicios-page", "SLIDE_LEFT")
 					},
 					async cargarPlanes(){
 						URL =  'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/planes'
@@ -457,6 +457,7 @@
 									<input type="text" class="filtro_alumnos_input" onkeyup="filtro('.filtro_alumnos_input', '.lista_alumnos')" placeholder="Buscar por nombre">
 									<button class="agregar_alumno_boton" @click="nuevoAlumno">＋</button>
 								</span>
+								<p class="titulo">ALUMNOS</p>
 								<ul class="lista_alumnos"><br>
 									<li v-for="(alumno, index) in alumnos">
 										<a @click="seleccionarAlumno(alumno)" onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
@@ -474,7 +475,7 @@
 				<div id='nuevoAlumno-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Nuevo Alumno</div>
+						<div class='mui-page-title'>CARGA DE DATOS - NUEVO ALUMNO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -497,7 +498,7 @@
 				<div id='visualizarAlumno-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Alumno</div>
+						<div class='mui-page-title'>DATOS ALUMNO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -606,7 +607,7 @@
 				<div id="nuevaSesion-page" class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Nueva Sesión</div>
+						<div class='mui-page-title'>CARGA DE DATOS - NUEVA SESIÓN</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -637,7 +638,7 @@
 				<div id='nuevaSesionEjercicios-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Nueva Sesión</div>
+						<div class='mui-page-title'>CARGA DE DATOS - NUEVA SESIÓN</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -675,7 +676,7 @@
 				<div id="visualizarPlanes-page" class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Planes</div>
+						<div class='mui-page-title'>PLANES</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -784,9 +785,7 @@
 			<div class="mui-panel-body">
 				<div>
 					<ul id='menuoptions' class='mui-list'>
-						<li><a id='option1' href="#">Go Home Page</a></li>
-						<li><a id='option2' href="#">Go Page 2</a></li>
-						<li><a @click="logout">Cerrar sesión</a></li>
+						<li><a @click="logout">Cerrar Sesión</a></li>
 					</ul>
 				</div>
 			</div>

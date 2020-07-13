@@ -281,6 +281,8 @@ function desplegarDiasVisualizarOnclick(event) {
 	$(".dias_desplegados_visualizar", event).slideToggle()
 }
 
+
+
 $(document).ready(() => {
 	desplegarOpciones()
 	desplegarDias()
