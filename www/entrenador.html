@@ -78,7 +78,8 @@
 						this.alumnos[value]._id = planNuevo.alumnoId
 						mui.viewport.showPage("planNuevo-page", 'DEF')
 					},
-					abrirNuevaSesion: function() {
+					abrirNuevaSesion: function(value) {
+						this.alumnos[value]._id = sesionNueva.alumnoId
 						mui.viewport.showPage("nuevaSesion-page", 'DEF')
 					},
 					asignacionPlan: function() {
@@ -266,6 +267,7 @@
 			const sesionNueva = new Vue({
 				el: '#nuevaSesion-app',
 				data: {
+					alumnoId: "",
 					planes:[
 						{
 							nombre: 'Prueba',
@@ -280,6 +282,14 @@
 											intensidad: 10,
 											tiempo: 60,
 											sesiones:[]
+										},
+										{
+											nombre: "Tren Inferior",
+											series: 4,
+											reps: 1,
+											intensidad: 70,
+											tiempo: 60,
+											sesiones:[]
 										}
 									]
 								}
@@ -290,11 +300,12 @@
 				methods: {
 					abrirDiaSesionNueva: function(value1, value2) {
 						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
-						ejerciciosSesion.planId = value1
-						ejerciciosSesion.diaId = value2
+						ejerciciosSesion.planSerial = value1
+						ejerciciosSesion.diaSerial = value2
 						mui.viewport.showPage("nuevaSesionEjercicios-page", "DEF")
 					},
 					confirmarSesion: function() {
+
 						mui.viewport.showPage("home-page", "DEF")
 					}
 				}
@@ -303,23 +314,32 @@
 			const ejerciciosSesion = new Vue({
 				el: '#nuevaSesionEjercicios-app',
 				data: {
-					planId: 0,
-					diaId: 0,
+					planSerial: 0,
+					diaSerial: 0,
 					ejercicios: []
 				},
 				methods: {
 					confirmarSesionEjercicios: function() {
-						var i = 0
-						for (const ejercicioAux in this.ejercicios) {
-							const sesionAux = {
-								nombre: ejercicioAux.nombre,
-								series: ejercicioAux.series,
-								reps: ejercicioAux.reps,
-								intesidad: ejercicioAux.intensidad,
-								tiempo: ejercicioAux.tiempo
+						for (i in this.ejercicios) {
+							var sesionAux = {
+								nombre: "",
+								series: "",
+								reps: "",
+								intensidad: "",
+								tiempo: ""
 							}
-							sesionNueva.planes[this.planId].dias[diasId].ejercicios[i].sesiones.push(sesionAux)
-							i = i + 1
+							var ejercicioAux = this.ejercicios[i]
+
+							sesionAux.nombre = ejercicioAux.nombre,
+							sesionAux.series = ejercicioAux.series,
+							sesionAux.reps = ejercicioAux.reps,
+							sesionAux.intensidad = ejercicioAux.intensidad,
+							sesionAux.tiempo = ejercicioAux.tiempo
+							
+							var planId = planes[this.planSerial]._id
+							var diaId = dias[this.diaSerial]._id
+							var ejercicioId = ejercicios[i]._id
+							//sesionNueva.planes[this.planSerial].dias[this.diaSerial].ejercicios[i].sesiones.push(sesionAux)
 						}
 						this.ejercicios = []
 						mui.viewport.showPage("nuevaSesion-page", "DEF")
@@ -616,11 +636,11 @@
 										<br>
 										<p>Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="ejercicio.tiempo">
 										<br>
+										<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 									</div>
 									<br>
 								</li>
 							</ul>
-							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<br>
 							<button class="confirmar_boton" @click="confirmarSesionEjercicios">Confirmar</button>
 						</div>
