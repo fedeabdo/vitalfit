@@ -267,6 +267,17 @@ button{
 	padding-top: 10px;
 	border-top:	solid 1px lightgrey;
 }
+#menuoptions {
+	list-style: none;
+	padding: 0 10px 0 10px;
+}
+#menuoptions li {
+	padding: 5px 0 5px 0;
+	margin: 8px 0 8px 0;
+	border-bottom-style: solid;
+	border-bottom-color: rgb(212, 212, 212);
+	border-bottom-width: 1px;
+}
 
 /* ---------- BOTONES ----------- */
 
@@ -282,7 +293,8 @@ button{
 }
 .col-80 .agregar_alumno_boton{
 	width : 10%;
-	padding: 5px;
+	padding: 2px;
+	font-size: 15px;
 	font-weight: bold;
 }
 .confirmar_boton{
@@ -395,4 +407,9 @@ button.plan_dia_boton {
 	font-size: 14;
 	width: 100%;
 	font-weight: bold;
+}
+.titulo {
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
 }
