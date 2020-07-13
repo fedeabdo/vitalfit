@@ -249,7 +249,7 @@ function desplegarSesionesOnclick(event) {
 }
 
 function desplegarOpciones() {
-	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo(index)">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva sesion</button><br><button v-on:click="asignacionPlan">Asignar Plan</button><br><button v-on:click="eliminarAlumno">Eliminar Alumno</button><br></div>')
+	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo(index)">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion(index)">Nueva sesion</button><br><button v-on:click="asignacionPlan">Asignar Plan</button><br></div>')
 	$('li a', ".lista_alumnos").append(desplegarOpcionesHtml)
 	$('.desplegar_opciones').hide()
 }
@@ -260,7 +260,7 @@ function desplegarOpcionesOnclick(event) {
 }
 
 function desplegarDias() {
-	let diasHtml = $('<div class="dias_desplegados"><div v-for="(dia, index2) in plan.dias"><button class="sesion_dia_boton" v-on:click="abrirDiaSesionNueva(index1, index2)">{{dia}}</button><br></div></div>')
+	let diasHtml = $('<div class="dias_desplegados"><div v-for="(dia, index2) in plan.dias"><button class="sesion_dia_boton" v-on:click="abrirDiaSesionNueva(index1, index2)">{{dia.nombre}}</button><br></div></div>')
 	$('li a', ".lista_planes").append(diasHtml)
 	$('.dias_desplegados').hide()
 }
@@ -280,6 +280,8 @@ function desplegarDiasVisualizarOnclick(event) {
 	$(".dias_desplegados_visualizar").not($(".dias_desplegados_visualizar", event)).slideUp()
 	$(".dias_desplegados_visualizar", event).slideToggle()
 }
+
+
 
 $(document).ready(() => {
 	desplegarOpciones()

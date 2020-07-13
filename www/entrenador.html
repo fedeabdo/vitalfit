@@ -55,46 +55,39 @@
 				},
 				methods: {
 					nuevoAlumno: function() {
-						mui.viewport.showPage("nuevoAlumno-page", 'DEF')
+						mui.viewport.showPage("nuevoAlumno-page", 'SLIDE_LEFT')
 					},
 					verAlumno: function() {
 						verAlumno.alumno.nombre =this.alumnoSeleccionado.nombre.split(" ")[0]
 						verAlumno.alumno.apellido = this.alumnoSeleccionado.nombre.split(" ")[1]
+						verAlumno.alumno.username = this.alumnoSeleccionado.username
 						if(this.alumnoSeleccionado.fecha_nacimiento != undefined){
 							verAlumno.alumno.fecha_nacimiento = this.alumnoSeleccionado.fecha_nacimiento.split("T")[0]
 						}
 						verAlumno.alumno.nro_contacto = this.alumnoSeleccionado.nro_contacto
 						verAlumno.alumno.mail = this.alumnoSeleccionado.mail
-						mui.viewport.showPage("visualizarAlumno-page", 'DEF')
+						mui.viewport.showPage("visualizarAlumno-page", 'SLIDE_LEFT')
 					},
 					verPlanes: async function(){
 						verPlanes.alumno = this.alumnoSeleccionado
 						await verPlanes.cargarPlanes()
-							mui.viewport.showPage("visualizarPlanes-page", 'DEF')
+							mui.viewport.showPage("visualizarPlanes-page", 'SLIDE_LEFT')
 
 					},
 					abrirPlanNuevo: function(value) {
 						this.alumnos[value]._id = planNuevo.alumnoId
-						mui.viewport.showPage("planNuevo-page", 'DEF')
+						mui.viewport.showPage("planNuevo-page", 'SLIDE_LEFT')
 					},
-					abrirNuevaSesion: function() {
-						mui.viewport.showPage("nuevaSesion-page", 'DEF')
+					abrirNuevaSesion: function(value) {
+						this.alumnos[value]._id = sesionNueva.alumnoId
+						mui.viewport.showPage("nuevaSesion-page", 'SLIDE_LEFT')
 					},
 					asignacionPlan: function() {
+						asignarPlan.alumno = this.alumnoSeleccionado
+						asignarPlan.cargarPlanes()
 						mui.viewport.showPage("asignarPlan-page", 'DEF')
 					},
-					eliminarAlumno: function() {
-						username = this.alumnoSeleccionado.username
-						$.ajax({
-							type: 'DELETE',
-							url: 'https://app-personal-trainer.herokuapp.com/clientes/' + username,
-							xhrFields: { withCredentials: true },
-							crossDomain: true,
-							success: function(data){
-								alert("Eliminado")
-							}
-						})
-					},
+					
 					
 					logout: function(){
 						$.ajax({
@@ -154,7 +147,7 @@
 						this.alumno.fechaDeNac = ""
 						this.alumno.nroContacto = ""
 						this.alumno.email = ""
-						mui.viewport.showPage("home-page", "DEF")
+						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -167,7 +160,23 @@
 						apellido: "",
 						fecha_nacimiento: "",
 						nro_contacto: "",
-						mail: ""
+						mail: "",
+						username: ""
+					}
+				},
+				methods: {
+					eliminarAlumno: function() {
+						username = this.alumno.username
+						$.ajax({
+							type: 'POST',
+							url: 'https://app-personal-trainer.herokuapp.com/clientes/' + username + "/borrar",
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								alert("Eliminado")
+							}
+						})
+						return false
 					}
 				}
 			})
@@ -186,7 +195,9 @@
 							nombre: this.nombreDia,
 							ejercicios:[]
 						}
-						this.dias.push(diaAux)
+						if (this.nombreDia != "") {
+							this.dias.push(diaAux)
+						}
 						
 					},
 					quitarDia: function () {
@@ -195,62 +206,43 @@
 					diaNuevo: function (value) {
 						diaNuevo.ejercicios = this.dias[value].ejercicios
 						diaNuevo.indiceDia = value
-						mui.viewport.showPage("diaNuevo-page", "DEF")
+						mui.viewport.showPage("diaNuevo-page", "SLIDE_LEFT")
 					},
 					confirmarPlan: function() {
 						var planAux = {
 							nombreAux: this.nombrePlan,
 							diasAux: this.dias
 						}
-						mui.viewport.showPage("home-page", "DEF")
+						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
 			
 
-			const menuPanel = new Vue({
-				el: "#menu-panel",
-				methods:{
-					logout: function(){
-						$.ajax({
-							type: 'GET',
-							url: 'https://app-personal-trainer.herokuapp.com/logout',
-							xhrFields: { withCredentials: true },
-							crossDomain: true,
-							success: function(data){
-								document.location.href = "index.html"
-							}
-						})
-					},
-					irachangepassword: function(){
-						mui.viewport.showPage("changepassword-page", "DEF");
-					}
-				}
-			})
-
 			const diaNuevo = new Vue({
 				el: '#diaNuevo-app',
 				data: {
 					indiceDia: 0,
-					ejercicios: [],
-					ejercicio: {
-						nombre: "",
-						series: "",
-						reps: "",
-						intensidad: "",
-						tiempo: ""
-					}
+					ejercicios: []
 				},
 				methods: {
 					agregarEjercicio: function () {
-						nro = this.ejercicios.length + 1
-						this.ejercicios.push(this.ejercicio)
-						this.ejerciciosHtml.push('<div class= "col-80"><span><p>Ejercicio' + nro + '</p></span><p>Nombre:</p><input type="Text" v-model="ejercicios[' + nro + '].nombre"><br><p>Series:</p><input type="Number" v-model="ejercicios[' + nro + '].series"><br><p>Reps:</p><input type="Number" v-model="ejercicios[' + nro + '].reps"><br><p>Intensidad:</p><input type="Number" v-model="ejercicios[' + nro + '].intensidad"><br><p>Tiempo:</p><input type="Number" v-model="ejercicios[' + nro + '].tiempo"><br></div><br><hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">')
+						var ejercicio = {
+							nombre: "",
+							series: "",
+							reps: "",
+							intensidad: "",
+							tiempo: ""
+						}
+						this.ejercicios.push(ejercicio)
+					},
+					quitarEjercicio: function () {
+						this.ejercicios.pop()
 					},
 					confirmarEjercicio: function() {
 						planNuevo.dias[this.indiceDia].ejercicios = this.ejercicios
 						this.ejercicios = []
-						mui.viewport.showPage("planNuevo-page", "DEF")
+						mui.viewport.showPage("planNuevo-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -258,6 +250,7 @@
 			const sesionNueva = new Vue({
 				el: '#nuevaSesion-app',
 				data: {
+					alumnoId: "",
 					planes:[
 						{
 							nombre: 'Prueba',
@@ -272,6 +265,14 @@
 											intensidad: 10,
 											tiempo: 60,
 											sesiones:[]
+										},
+										{
+											nombre: "Tren Inferior",
+											series: 4,
+											reps: 1,
+											intensidad: 70,
+											tiempo: 60,
+											sesiones:[]
 										}
 									]
 								}
@@ -282,12 +283,13 @@
 				methods: {
 					abrirDiaSesionNueva: function(value1, value2) {
 						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
-						ejerciciosSesion.planId = value1
-						ejerciciosSesion.diaId = value2
-						mui.viewport.showPage("nuevaSesionEjercicios-page", "DEF")
+						ejerciciosSesion.planSerial = value1
+						ejerciciosSesion.diaSerial = value2
+						mui.viewport.showPage("nuevaSesionEjercicios-page", "SLIDE_LEFT")
 					},
 					confirmarSesion: function() {
-						mui.viewport.showPage("home-page", "DEF")
+
+						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -295,26 +297,35 @@
 			const ejerciciosSesion = new Vue({
 				el: '#nuevaSesionEjercicios-app',
 				data: {
-					planId: 0,
-					diaId: 0,
+					planSerial: 0,
+					diaSerial: 0,
 					ejercicios: []
 				},
 				methods: {
 					confirmarSesionEjercicios: function() {
-						var i = 0
-						for (const ejercicioAux in this.ejercicios) {
-							const sesionAux = {
-								nombre: ejercicioAux.nombre,
-								series: ejercicioAux.series,
-								reps: ejercicioAux.reps,
-								intesidad: ejercicioAux.intensidad,
-								tiempo: ejercicioAux.tiempo
+						for (i in this.ejercicios) {
+							var sesionAux = {
+								nombre: "",
+								series: "",
+								reps: "",
+								intensidad: "",
+								tiempo: ""
 							}
-							sesionNueva.planes[this.planId].dias[diasId].ejercicios[i].sesiones.push(sesionAux)
-							i = i + 1
+							var ejercicioAux = this.ejercicios[i]
+
+							sesionAux.nombre = ejercicioAux.nombre,
+							sesionAux.series = ejercicioAux.series,
+							sesionAux.reps = ejercicioAux.reps,
+							sesionAux.intensidad = ejercicioAux.intensidad,
+							sesionAux.tiempo = ejercicioAux.tiempo
+							
+							var planId = planes[this.planSerial]._id
+							var diaId = dias[this.diaSerial]._id
+							var ejercicioId = ejercicios[i]._id
+							//sesionNueva.planes[this.planSerial].dias[this.diaSerial].ejercicios[i].sesiones.push(sesionAux)
 						}
 						this.ejercicios = []
-						mui.viewport.showPage("nuevaSesion-page", "DEF")
+						mui.viewport.showPage("nuevaSesion-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -328,7 +339,7 @@
 				methods: {
 					abrirEjerciciosVisualizar: function( dia ) {
 						verEjercicios.ejercicios = dia.ejercicios
-						mui.viewport.showPage("visualizarEjercicios-page", "DEF")
+						mui.viewport.showPage("visualizarEjercicios-page", "SLIDE_LEFT")
 					},
 					async cargarPlanes(){
 						URL =  'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/planes'
@@ -358,12 +369,86 @@
 			const asignarPlan = new Vue({
 				el: '#asignarPlan-page',
 				data: {
-					planes: [
-						{nombre: "Pecho"},
-						{nombre: "torso"}
-					]
+					alumno: '',
+					planes: [],
+					id_planSeleccionado: '',
+					plan_actual: ''
 				},
-				methods: {}
+				methods: {
+					async cargarPlanes(){
+						URL =  'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/planes'
+						await $.ajax({
+							type: 'GET',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							dataType: 'json',
+							success: (responseData)=>{
+								this.planes = responseData
+							}
+
+						})
+						
+						URL =  'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/plan_asignado'
+						await $.ajax({
+							type: 'GET',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							dataType: 'json',
+							success: (responseData)=>{
+								this.plan_actual = responseData
+							},
+							error: (responseData)=>{
+								this.plan_actual = "No hay plan actual";
+							}
+
+						})
+
+						console.log(this.plan_actual)
+					},
+
+					asignarPlanSeleccionado: function(){
+
+						URL = 'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username +"/plan_asignado"
+
+						$.ajax({
+							type: 'POST',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							data: {
+								plan_asignado: this.id_planSeleccionado
+							},
+							dataType: 'json',
+							success: (responseData)=>{
+								
+							}
+						})
+						
+					}
+				}
+			})
+
+			
+			const menuPanel = new Vue({
+				el: "#menu-panel",
+				methods:{
+					logout: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/logout',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								document.location.href = "index.html"
+							}
+						})
+					},
+					irachangepassword: function(){
+						mui.viewport.showPage("changepassword-page", "SLIDE_LEFT");
+					}
+				}
 			})
 		})
 	</script>
@@ -395,6 +480,7 @@
 									<input type="text" class="filtro_alumnos_input" onkeyup="filtro('.filtro_alumnos_input', '.lista_alumnos')" placeholder="Buscar por nombre">
 									<button class="agregar_alumno_boton" @click="nuevoAlumno">＋</button>
 								</span>
+								<p class="titulo">ALUMNOS</p>
 								<ul class="lista_alumnos"><br>
 									<li v-for="(alumno, index) in alumnos">
 										<a @click="seleccionarAlumno(alumno)" onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
@@ -412,7 +498,7 @@
 				<div id='nuevoAlumno-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Nuevo Alumno</div>
+						<div class='mui-page-title'>CARGA DE DATOS - NUEVO ALUMNO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -435,7 +521,7 @@
 				<div id='visualizarAlumno-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Alumno</div>
+						<div class='mui-page-title'>DATOS ALUMNO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -447,6 +533,8 @@
 							<p class="propiedad">Nro. de Contacto:</p><p v-text="alumno.nro_contacto"></p>
 							<p class="propiedad">Email:</p><p v-text="alumno.mail"></p><br>
 						</div>
+
+							<button class="confirmar_boton" @click="eliminarAlumno"> Eliminar usuario </button>
 					</div>
 				</div>
 
@@ -457,7 +545,7 @@
 				<div id='planNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Plan Nuevo</div>
+						<div class='mui-page-title'>CARGA DE DATOS - PLAN NUEVO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -470,17 +558,19 @@
 								</div>
 							</div>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-							<br>
 							<div class= "col-80">
-								<span>
-									<input type="text" class="filtro_dias_input" onkeyup="filtro('.filtro_dias_input', '.lista_dias')" placeholder="Buscar día">
-								</span>
+								<p class="titulo">DÍAS</p>
 								<span>
 									<button id="nuevoDia" class="agregar_boton" v-on:click="agregarDia">＋</button>
 									<button id="quitarDia" class="quitar_boton" v-on:click="quitarDia">&minus;</button>
 									<input type="text" class="nombre_dia_input" v-model="nombreDia" placeholder="Ingrese Nombre Dia">
 								</span>
+							</div>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<div class= "col-80">
+								<span>
+									<input type="text" class="filtro_dias_input" onkeyup="filtro('.filtro_dias_input', '.lista_dias')" placeholder="Buscar día">
+								</span>
 								<ul class="lista_dias">
 									<li  v-for="(dia, index) in dias">
 										<a v-on:click="diaNuevo(index)" v-text="dia.nombre"></a>
@@ -500,7 +590,7 @@
 				<div id='diaNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Día Nuevo</div>
+						<div class='mui-page-title'>CARGA DE DATOS - DÍA NUEVO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -508,6 +598,7 @@
 							<br>
 							<div class= "col-80">
 								<button id="nuevoEjercicio" class="agregar_ejercicio_boton" v-on:click="agregarEjercicio">Agregar Ejercicio</button>
+								<button id="quitarEjercicio" class="quitar_boton" v-on:click="quitarEjercicio">&minus;</button>
 							</div>
 							<ul class="lista_ejercicios">
 								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
@@ -542,25 +633,23 @@
 				<div id="nuevaSesion-page" class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Nueva Sesión</div>
+						<div class='mui-page-title'>CARGA DE DATOS - NUEVA SESIÓN</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div>
 							<div id="nuevaSesion-app">
+								<p class="titulo">PLANES</p>
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+								<br>
 								<div class="col-80">
-									<br>
 									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
-									<br>
-									<ul class="lista_planes"><br>
+									<ul class="lista_planes">
 										<li v-for='(plan, index1) in planes'>
 											<a onclick="desplegarDiasOnclick(this)">{{plan.nombre}}</a>
 										</li>
 									</ul>
 								</div>
-								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-								<br>
-								<button class="confirmar_boton" @click="confirmarSesion">Confirmar</button>
 							</div>
 						</div>
 					</div>
@@ -573,31 +662,33 @@
 				<div id='nuevaSesionEjercicios-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Nueva Sesión</div>
+						<div class='mui-page-title'>CARGA DE DATOS - NUEVA SESIÓN</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div id="nuevaSesionEjercicios-app">
-							<br>
+							<p class="titulo">INGRESAR SESIÓN</p>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<div class= "col-80">
 							</div>
 							<ul class="lista_sesion_ejercicios">
 								<li v-for="ejercicio in ejercicios">
 									<div class= "col-80">
 										<span><p>{{ejercicio.nombre}}</p></span>
-										<p>Series:</p><input type="Number" placeholder="Número de Series" v-model="ejercicio.series">
+										<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+										<p class="lista_ejercicio_elemento">Series:</p><input type="Number" placeholder="Número de Series" v-model="ejercicio.series">
 										<br>
-										<p>Reps:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.reps">
+										<p class="lista_ejercicio_elemento">Reps:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.reps">
 										<br>
-										<p>Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="ejercicio.intensidad">
+										<p class="lista_ejercicio_elemento">Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="ejercicio.intensidad">
 										<br>
-										<p>Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="ejercicio.tiempo">
+										<p class="lista_ejercicio_elemento">Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="ejercicio.tiempo">										
+										<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 										<br>
 									</div>
-									<br>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								</li>
 							</ul>
-							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<br>
 							<button class="confirmar_boton" @click="confirmarSesionEjercicios">Confirmar</button>
 						</div>
@@ -611,14 +702,16 @@
 				<div id="visualizarPlanes-page" class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Planes</div>
+						<div class='mui-page-title'>PLANES</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div>
 							<div id="visualizarPlanes-app">
+							<p class="titulo">PLANES</p>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<br>
 								<div class="col-80">
-									<br>
 									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
 									<br>
 									<ul class="lista_planes_visualizar"><br>
@@ -639,29 +732,28 @@
 				<div id='visualizarEjercicios-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Ejercicios</div>
+						<div class='mui-page-title'>EJERCICIOS</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
-						<br>
-						<div class= "col-80">
-						</div>
+						<p class="titulo">EJERCICIOS</p>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						<ul class="lista_sesion_ejercicios">
 							<li v-for="ejercicio in ejercicios">
 								<div class= "col-80">
 									<p class="nombre_ejercicio">{{ejercicio.nombre}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<p class="lista_ejercicio_elemento">Series: {{ejercicio.series}}</p>
 									<br>
-									<p>Series: {{ejercicio.series}}</p>
+									<p class="lista_ejercicio_elemento">Reps: {{ejercicio.reps}}</p>
 									<br>
-									<p>Reps: {{ejercicio.reps}}</p>
+									<p class="lista_ejercicio_elemento">Intensidad: {{ejercicio.intensidad}}</p>
 									<br>
-									<p>Intensidad: {{ejercicio.intensidad}}</p>
-									<br>
-									<p>Tiempo: {{ejercicio.tiempo}}</p>
-									<br>
+									<p class="lista_ejercicio_elemento">Tiempo: {{ejercicio.tiempo}}</p>
 									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 									<br>
 								</div>
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<br>
 							</li>
 						</ul>
@@ -674,7 +766,7 @@
 				<div id="asignarPlan-page" class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Asignar Plan</div>
+						<div class='mui-page-title'>ASIGNAR PLAN</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -682,9 +774,12 @@
 							<div class="col-80">
 								<p class="seleccionar_plan">Seleccionar Plan:</p>
 								<br>
-								<select class="col-80 planes_selector">
-									<option v-for="plan in planes">{{plan.nombre}}</option>
+								<select class="col-80 planes_selector" v-model="id_planSeleccionado">
+									<option disabled value="">Seleccione un plan</option>
+									<option v-for="plan in planes" v-bind:value="plan._id">{{plan.nombre}}</option>
 								</select>
+								<button @click="asignarPlanSeleccionado">Agregar/cambiar plan asignado</button>
+								<div>Plan asignado: {{plan_actual.nombre}}</div>
 							</div>
 						</div>
 					</div>
@@ -718,9 +813,7 @@
 			<div class="mui-panel-body">
 				<div>
 					<ul id='menuoptions' class='mui-list'>
-						<li><a id='option1' href="#">Go Home Page</a></li>
-						<li><a id='option2' href="#">Go Page 2</a></li>
-						<li><a @click="logout">Cerrar sesión</a></li>
+						<li><a @click="logout">Cerrar Sesión</a></li>
 					</ul>
 				</div>
 			</div>
