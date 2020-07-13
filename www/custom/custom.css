@@ -187,7 +187,7 @@ button{
 
 			/*  ---------------------------ESTILOS PERSONALIZADOS------------------------------ */
 
-/* ---------- LISTAS ----------- */
+/* ------------------------------------------- LISTAS ----------------------------------------- */
 
 .lista_alumnos{
 	text-align: center;
@@ -204,6 +204,7 @@ button{
 	text-align: center;
 	list-style: none;
 	padding-left: 0px;
+	margin: 0;
 }
 .lista_dias li{
 	padding-bottom: 10px;
@@ -244,11 +245,19 @@ button{
 	margin: 5px 0 5px 0;
 }
 .lista_sesion_ejercicios span>p{
-	font-size: 15px;
+	font-size: 20px;
 	font-weight: bold;
-	margin: 8px 0 8px 0;
+	margin: 15px 0 5px 0;
 	text-align: center;
 }
+.lista_sesion_ejercicios input{
+	margin: 0 10% 0 10%;
+	width: 80%;
+}
+.lista_ejercicio_elemento {
+	padding-left: 15px;
+}
+
 #vistaAlumno p{
 	margin: 5px 0px 5px 0px;
 }
@@ -267,8 +276,19 @@ button{
 	padding-top: 10px;
 	border-top:	solid 1px lightgrey;
 }
+#menuoptions {
+	list-style: none;
+	padding: 0 10px 0 10px;
+}
+#menuoptions li {
+	padding: 5px 0 5px 0;
+	margin: 8px 0 8px 0;
+	border-bottom-style: solid;
+	border-bottom-color: rgb(212, 212, 212);
+	border-bottom-width: 1px;
+}
 
-/* ---------- BOTONES ----------- */
+/* ------------------------------------------ BOTONES --------------------------------------------- */
 
 .desplegar_opciones button{
 	padding: 5px;
@@ -282,13 +302,14 @@ button{
 }
 .col-80 .agregar_alumno_boton{
 	width : 10%;
-	padding: 5px;
+	padding: 2px;
+	font-size: 15px;
 	font-weight: bold;
 }
 .confirmar_boton{
 	width: 50%;
 	padding: 5px;
-	margin: 15px 25% 0 25%;
+	margin: 15px 25% 60px 25%;
 	font-weight: bold;
 }
 .col-80 .agregar_boton{
@@ -303,7 +324,7 @@ button{
 }
 .agregar_ejercicio_boton{
 	width: 60%;
-	margin: 0 20% 0 20%;
+	margin: 0 0 0 15%;
 	padding: 5px;
 	font-weight: bold;
 }
@@ -323,7 +344,7 @@ button.plan_dia_boton {
 	margin-top: 5px;
 }
 
-/*-----------INPUTS------------*/
+/*----------------------------------------------------INPUTS-------------------------------------------------*/
 
 .iniciar-sesion-ventana input{
 	border-color: lightgrey;
@@ -358,7 +379,7 @@ button.plan_dia_boton {
 	width: 100%; /* Full-width */
 	font-size: 16px; /* Increase font-size */
 	border: 1px solid #ddd; /* Add a grey border */
-	margin-bottom: 12px; /* Add some space below the input */
+	margin: 10px 0 10px 0; /* Add some space below the input */
 }
 .col-80 .filtro_planes_input{
 	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
@@ -395,4 +416,9 @@ button.plan_dia_boton {
 	font-size: 14;
 	width: 100%;
 	font-weight: bold;
+}
+.titulo {
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
 }
