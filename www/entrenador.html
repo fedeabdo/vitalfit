@@ -757,7 +757,7 @@
 								<div class="col-80">
 									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
 									<ul class="lista_planes">
-										<li v-for='plan in planes'>
+										<li v-for='(plan, index1) in planes'>
 											<a onclick="desplegarDiasOnclick(this)">{{plan.nombre}}</a>
 										</li>
 									</ul>
