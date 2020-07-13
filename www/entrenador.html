@@ -273,59 +273,60 @@
 						mui.viewport.showPage("diaNuevo-page", "SLIDE_LEFT")
 					},
 					confirmarPlan: function () {
-						var planAux = {
-							nombre: this.nombrePlan,
-							dias: this.dias
-						}
-						console.log(planAux)
-						$.ajax({
-							type: 'POST',
-							url: 'https://app-personal-trainer.herokuapp.com/clientes/' + this.alumno.username + '/planes',
-							xhrFields: { withCredentials: true },
-							crossDomain: true,
-							data: {
-								'nombre': this.nombrePlan,
-							},
-							dataType: 'json',
-							success: (responseData) => {
-								for (let i = 0; i < this.dias.length; i++) {
-									$.ajax({
-										type: 'POST',
-										url: 'https://app-personal-trainer.herokuapp.com/clientes/' + this.alumno.username + '/planes/' + responseData._id + '/dias',
-										xhrFields: { withCredentials: true },
-										crossDomain: true,
-										data: {
-											'nombre': this.dias[i].nombre,
-											'ejercicios': this.dias[i].ejercicios
-										},
-										dataType: 'json',
-										success: (responseData2) => {
-											for (let j = 0; this.dias[i].ejercicios.length; i++) {
-												$.ajax({
-													type: 'POST',
-													url: 'https://app-personal-trainer.herokuapp.com/clientes/' + this.alumno.username + '/planes/' + responseData._id + '/dias/' + responseData2._id + '/ejercicios',
-													xhrFields: { withCredentials: true },
-													crossDomain: true,
-													data: {
-														'nombre': this.dias[i].ejercicios[i].nombre,
-														'intensidad': this.dias[i].ejercicios[i].intensidad,
-														'repeticiones': this.dias[i].ejercicios[i].repeticiones,
-														'series': this.dias[i].ejercicios[i].series,
-														'tiempo': this.dias[i].ejercicios[i].tiempo
-													},
-													dataType: 'json',
-													success: (r) => {
-														console.log(r)
-													}
-												})
-											}
-										}
-									})
-								}
+						if (this.nombrePlan != "" && this.dias.length > 0) {
+							var planAux = {
+								nombre: this.nombrePlan,
+								dias: this.dias
 							}
-						})
-
-						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
+							console.log(planAux)
+							$.ajax({
+								type: 'POST',
+								url: 'https://app-personal-trainer.herokuapp.com/clientes/' + this.alumno.username + '/planes',
+								xhrFields: { withCredentials: true },
+								crossDomain: true,
+								data: {
+									'nombre': this.nombrePlan,
+								},
+								dataType: 'json',
+								success: (responseData) => {
+									for (let i = 0; i < this.dias.length; i++) {
+										$.ajax({
+											type: 'POST',
+											url: 'https://app-personal-trainer.herokuapp.com/clientes/' + this.alumno.username + '/planes/' + responseData._id + '/dias',
+											xhrFields: { withCredentials: true },
+											crossDomain: true,
+											data: {
+												'nombre': this.dias[i].nombre,
+												'ejercicios': this.dias[i].ejercicios
+											},
+											dataType: 'json',
+											success: (responseData2) => {
+												for (let j = 0; j < this.dias[i].ejercicios.length; j++) {
+													$.ajax({
+														type: 'POST',
+														url: 'https://app-personal-trainer.herokuapp.com/clientes/' + this.alumno.username + '/planes/' + responseData._id + '/dias/' + responseData2._id + '/ejercicios',
+														xhrFields: { withCredentials: true },
+														crossDomain: true,
+														data: {
+															'nombre': this.dias[i].ejercicios[j].nombre,
+															'intensidad': this.dias[i].ejercicios[j].intensidad,
+															'repeticiones': this.dias[i].ejercicios[j].repeticiones,
+															'series': this.dias[i].ejercicios[j].series,
+															'tiempo': this.dias[i].ejercicios[j].tiempo
+														},
+														dataType: 'json',
+														success: (r) => {
+															console.log(r)
+														}
+													})
+												}
+											}
+										})
+									}
+								}
+							})
+							mui.viewport.showPage("home-page", "SLIDE_RIGHT")
+						}
 					}
 				}
 			})
@@ -358,54 +359,7 @@
 					}
 				}
 			})
-			/*
-			const sesionNueva = new Vue({
-				el: '#nuevaSesion-appPEPO',
-				data: {
-					alumnoId: "",
-					planes:[
-						{
-							nombre: 'Prueba',
-							dias: [
-								{
-									nombre: "Dia de Pecho",
-									ejercicios: [
-										{
-											nombre: "pecho plano",
-											series: 3,
-											repeticiones: 2,
-											intensidad: 10,
-											tiempo: 60,
-											sesiones:[]
-										},
-										{
-											nombre: "Tren Inferior",
-											series: 4,
-											repeticiones: 1,
-											intensidad: 70,
-											tiempo: 60,
-											sesiones:[]
-										}
-									]
-								}
-							]
-						}
-					]
-				},
-				methods: {
-					abrirDiaSesionNueva: function (value1, value2) {
-						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
-						ejerciciosSesion.planSerial = value1
-						ejerciciosSesion.diaSerial = value2
-						mui.viewport.showPage("nuevaSesionEjercicios-page", "SLIDE_LEFT")
-					},
-					confirmarSesion: function() {
-
-						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
-					}
-				}
-			})
-			*/
+			
 
 			const ejerciciosSesion = new Vue({
 				el: '#nuevaSesionEjercicios-app',
@@ -432,8 +386,8 @@
 							sesionAux.intensidad = ejercicioAux.intensidad,
 							sesionAux.tiempo = ejercicioAux.tiempo
 							
-							var planId = planes[this.planSerial]._id
-							var diaId = dias[this.diaSerial]._id
+							var planId = nuevaSesion.planes[this.planSerial]._id
+							var diaId = nuevaSesion.planes[this.planSerial].dias[this.diaSerial]._id
 							var ejercicioId = ejercicios[i]._id
 							//sesionNueva.planes[this.planSerial].dias[this.diaSerial].ejercicios[i].sesiones.push(sesionAux)
 						}
@@ -886,7 +840,7 @@
 					</div>
 				</div>
 
-				<!-- ASIGNAR PLAN -->
+<!-- ASIGNAR PLAN -->
 
 
 				<div id="asignarPlan-page" class="mui-page">
