@@ -532,6 +532,10 @@
 					<div class="mui-page-body" id="home-body" style="overflow:scroll">
 						<div>
 							<div class="col-80">
+								<p class="titulo">ALUMNOS</p>
+							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<div class="col-80">
 								<br>
 								<span>
 									<input type="text" class="filtro_alumnos_input"
@@ -539,8 +543,7 @@
 										placeholder="Buscar por nombre">
 									<button class="agregar_alumno_boton" @click="nuevoAlumno">＋</button>
 								</span>
-								<p class="titulo">ALUMNOS</p>
-								<ul class="lista_alumnos"><br>
+								<ul class="lista_alumnos">
 									<li v-for="(alumno, index) in alumnos">
 										<a @click="seleccionarAlumno(alumno)"
 											onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
@@ -600,7 +603,6 @@
 							<p class="propiedad">Email:</p>
 							<p v-text="alumno.mail"></p><br>
 						</div>
-
 							<button class="confirmar_boton" @click="eliminarAlumno"> Eliminar usuario </button>
 					</div>
 				</div>
@@ -844,13 +846,13 @@
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div>
 							<div class="col-80">
-								<p class="seleccionar_plan">Seleccionar Plan:</p>
-								<br>
+								<p class="seleccionar_plan_label">Seleccionar Plan:</p>
 								<select class="col-80 planes_selector" v-model="id_planSeleccionado">
 									<option disabled value="">Seleccione un plan</option>
 									<option v-for="plan in planes" v-bind:value="plan._id">{{plan.nombre}}</option>
 								</select>
-								<button @click="asignarPlanSeleccionado">Agregar/cambiar plan asignado</button>
+								<br>
+								<button class="confirmar_selector_boton" @click="asignarPlanSeleccionado">Agregar/cambiar plan asignado</button>
 								<div>Plan asignado: {{plan_actual.nombre}}</div>
 							</div>
 						</div>
