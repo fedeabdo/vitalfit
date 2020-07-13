@@ -639,9 +639,6 @@
 							</div>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<div class= "col-80">
-								<span>
-									<input type="text" class="filtro_dias_input" onkeyup="filtro('.filtro_dias_input', '.lista_dias')" placeholder="Buscar día">
-								</span>
 								<ul class="lista_dias">
 									<li v-for="(dia, index) in dias">
 										<a v-on:click="diaNuevo(index)" v-text="dia.nombre"></a>

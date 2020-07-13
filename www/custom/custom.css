@@ -353,6 +353,11 @@ button.plan_dia_boton {
 	margin: 60px 10% 60px 10%;
 	font-weight: bold;
 }
+.inicio_sesion_boton{
+	border-radius: 5%;
+	width: 50%;
+	margin: 0 25% 0 25%;
+}
 
 /*----------------------------------------------------INPUTS-------------------------------------------------*/
 
@@ -365,7 +370,6 @@ button.plan_dia_boton {
 .col-80 .filtro_alumnos_input{
 	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
 	background-position: 10px 12px; /* Position the search icon */
-	background-repeat: no-repeat; /* Do not repeat the icon image */
 	width: 87%; /* Full-width */
 	font-size: 16px; /* Increase font-size */
 	border: 1px solid #ddd; /* Add a grey border */
@@ -382,19 +386,9 @@ button.plan_dia_boton {
 	margin: 5px 0 20px 0;
 	width: 75%;
 }
-.col-80 .filtro_dias_input{
-	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
-	background-position: 10px 12px; /* Position the search icon */
-	background-repeat: no-repeat; /* Do not repeat the icon image */
-	width: 100%; /* Full-width */
-	font-size: 16px; /* Increase font-size */
-	border: 1px solid #ddd; /* Add a grey border */
-	margin: 10px 0 10px 0; /* Add some space below the input */
-}
 .col-80 .filtro_planes_input{
 	/* background-image: url('/css/searchicon.png'); Add a search icon to input */
 	background-position: 10px 12px; /* Position the search icon */
-	background-repeat: no-repeat; /* Do not repeat the icon image */
 	width: 100%; /* Full-width */
 	font-size: 16px; /* Increase font-size */
 	border: 1px solid #ddd; /* Add a grey border */
