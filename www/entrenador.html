@@ -71,20 +71,20 @@
 					verPlanes: async function () {
 						verPlanes.alumno = this.alumnoSeleccionado
 						await verPlanes.cargarPlanes()
-						mui.viewport.showPage("visualizarPlanes-page", 'DEF')
+						mui.viewport.showPage("visualizarPlanes-page", 'SLIDE_LEFT')
 
 					},
 					abrirPlanNuevo: function (alumno) {
 						planNuevo.alumno = alumno
-						mui.viewport.showPage("planNuevo-page", 'DEF')
+						mui.viewport.showPage("planNuevo-page", 'SLIDE_LEFT')
 					},
 					abrirNuevaSesion: function () {
 						nuevaSesion.alumno = this.alumnoSeleccionado
 						nuevaSesion.cargarDatos()
-						mui.viewport.showPage("nuevaSesion-page", 'DEF')
+						mui.viewport.showPage("nuevaSesion-page", 'SLIDE_LEFT')
 					},
 					asignacionPlan: function () {
-						mui.viewport.showPage("asignarPlan-page", 'DEF')
+						mui.viewport.showPage("asignarPlan-page", 'SLIDE_LEFT')
 					},
 					eliminarAlumno: function () {
 						username = this.alumnoSeleccionado.username
@@ -164,8 +164,7 @@
 						ejerciciosSesion.alumno = this.alumno
 						mui.viewport.showPage("nuevaSesionEjercicios-page", "SLIDE_LEFT")
 					},
-					confirmarSesion: function() {
-
+					volverHome: function() {
 						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
