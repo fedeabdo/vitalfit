@@ -84,6 +84,20 @@ button {
 	font-size: 35px;
 	color: #f5b41b;
 }
+
+.mui-backarrow-home {
+	position: absolute;
+	top: 4px;
+	left: 5px;
+	width: 40px;
+	height: 37px;
+}
+.mui-backarrow-home:after {
+	font-family: FontAwesome;
+	content: '\f104';
+	font-size: 35px;
+	color: #f5b41b;
+}
 /* Menu button ------------------------------------------------------------------ */
 .mui-headmenu {
 	position: absolute;
@@ -240,6 +254,16 @@ button{
 	padding-top: 10px;
 	border-top:	solid 1px lightgrey;
 }
+.lista_planes_cliente{
+	text-align: center;
+	list-style: none;
+	padding-left: 0px;
+}
+.lista_planes_cliente li{
+	padding-bottom: 10px;
+	padding-top: 10px;
+	border-bottom:	solid 1px lightgrey;
+}
 
 .lista_sesion_ejercicios{
 	list-style: none;
@@ -268,6 +292,7 @@ button{
 #vistaAlumno p.propiedad{
 	margin: 20px 0px 5px 0px;
 	font-weight: bold;
+	font-size: 15px;
 }
 
 .lista_planes_visualizar{
@@ -297,7 +322,7 @@ button{
 .desplegar_opciones button{
 	padding: 5px;
 	margin-bottom: 5px;
-	width: 50%;
+	width: 65%;
 }
 .iniciar-sesion-ventana button{
 	border: none;
@@ -317,9 +342,9 @@ button{
 	font-weight: bold;
 }
 .ver_sesiones_boton{
-	width: 50%;
+	width: 60%;
 	padding: 5px;
-	margin: 15px 25% 20px 25%;
+	margin: 15px 20% 20px 20%;
 	font-weight: bold;
 }
 .col-80 .agregar_boton{
@@ -334,7 +359,7 @@ button{
 }
 .agregar_ejercicio_boton{
 	width: 60%;
-	margin: 0 0 0 15%;
+	margin: 10px 0 0 15%;
 	padding: 5px;
 	font-weight: bold;
 }
@@ -353,16 +378,33 @@ button.plan_dia_boton {
 	padding: 5px;
 	margin-top: 5px;
 }
+button.plan_cliente_dia_boton {
+	width: 50%;
+	padding: 5px;
+	margin-top: 5px;
+}
 .confirmar_selector_boton{
 	width: 80%;
 	padding: 5px;
-	margin: 60px 10% 60px 10%;
+	margin: 30px 10% 30px 10%;
 	font-weight: bold;
 }
 .inicio_sesion_boton{
 	border-radius: 5%;
+	width: 70%;
+	margin: 0 15% 0 15%;
+}
+.planes_alumno_boton{
+	width: 80%;
+	padding: 5px;
+	margin: 5px 10% 5px 10%;
+	font-weight: bold;
+}
+.dia_boton{
 	width: 50%;
-	margin: 0 25% 0 25%;
+	padding: 5px;
+	margin: 5px 25% 5px 25%;
+	font-weight: bold;
 }
 
 /*----------------------------------------------------INPUTS-------------------------------------------------*/
@@ -401,7 +443,7 @@ button.plan_dia_boton {
 	margin-bottom: 12px; /* Add some space below the input */
 }
 
-/*-----------OTROS------------*/
+/*---------------------------------------------OTROS---------------------------------------*/
 
 .iniciar-sesion-ventana{
 	padding: 10%;
@@ -409,7 +451,7 @@ button.plan_dia_boton {
 	background-color: rgba(189, 195, 199, 0.5);
 	border-radius: 3px;
 }
-.nombre_plan_label{
+.plan_nuevo_label{
 	margin: 0px 0px 5px 0px;
 	font-size: 15px;
 	font-weight: bold;
@@ -436,4 +478,23 @@ button.plan_dia_boton {
 	font-size: 20px;
 	font-weight: bold;
 	text-align: center;
+}
+.titulo_secundario {
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	margin: 5px 0 10px 0;
+}
+.plan_asignado_label{
+	
+	font-size: 17px;
+	font-weight: bold;
+	text-align: right;
+}
+.sesion_elemento{
+	margin: 10px 0px 5px 0px;
+	font-weight: bold;
+}
+#elementos_sesion input{
+	margin: 0px 0px 10px 0px;
 }

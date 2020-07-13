@@ -55,7 +55,7 @@
                         nro_contacto: Number,
                         mail: String,
                         planes: Array
-                    },
+					}
 					
 				},
 				methods: {
@@ -69,7 +69,7 @@
 								planesPage.planes = data
 							}
 						})
-						mui.viewport.showPage("planes-page", 'DEF')
+						mui.viewport.showPage("planes-page", 'SLIDE_LEFT')
 					},
 					verPlanActual: function(){
 						$.ajax({
@@ -81,7 +81,7 @@
 								planPageAsignado.plan = data
 							}
 						})
-						mui.viewport.showPage("plan-page-asignado", 'DEF')
+						mui.viewport.showPage("plan-page-asignado", 'SLIDE_LEFT')
 					},
 					logout: function(){
 						$.ajax({
@@ -104,13 +104,11 @@
 					planes: []
 				},
                 methods: {
-					showPagePlan: function () {
-						mui.viewport.showPage("plan-page", "DEF");
-                    },
-                    handleSelectPlan: function(plan){
-						planPage.plan = plan;
-						mui.viewport.showPage("plan-page", "DEF");
-                    }
+					handleSelectDia: function(dia){
+						diaPage.dia = dia;
+						diaPage.plan = this.plan;
+						mui.viewport.showPage("dia-page", "SLIDE_LEFT");
+					}
 				}
 			})
 
@@ -129,23 +127,9 @@
 						})
 					},
 					irachangepassword: function(){
-						mui.viewport.showPage("changepassword-page", "DEF");
+						mui.viewport.showPage("changepassword-page", "SLIDE_LEFT");
 					}
 				}
-			})
-
-			const planPage = new Vue({
-				el:"#plan-page",
-				data: {
-					plan: Object
-				},
-                methods: {
-					handleSelectDia: function(dia){
-						diaPage.dia = dia;
-						mui.viewport.showPage("dia-page", "DEF");
-					}
-				}
-				
 			})
 
 			const planPageAsignado = new Vue({
@@ -156,7 +140,8 @@
                 methods: {
 					handleSelectDia: function(dia){
 						diaPageAsignado.dia = dia;
-						mui.viewport.showPage("dia-page-asignado", "DEF");
+						diaPageAsignado.plan = this.plan;
+						mui.viewport.showPage("dia-page-asignado", "SLIDE_LEFT");
 					}
 				}
 				
@@ -165,9 +150,32 @@
 			const diaPage = new Vue({
 				el:"#dia-page",
 				data: {
-					dia: Object
+					dia: Object,
+					plan: Object
 				},
                 methods: {
+					borrar: function(ejercicio1, sesion1){
+						urlSesiones = `https://app-personal-trainer.herokuapp.com/myinfo/planes/${this.plan._id}/dias/${this.dia._id}/ejercicios/${ejercicio1._id}/sesiones/${sesion1._id}`
+						console.log(urlSesiones);
+						POSTData = "Te amo"
+						$.ajax({
+							type: 'POST',
+							dataType: "json",
+							data: POSTData,
+							url: urlSesiones,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								mui.viewport.showPage("dia-page-asignado", "SLIDE_LEFT");
+							}
+						})
+
+					},
+					verSesiones: function(value) {
+						verSesiones.sesiones = value.sesiones
+						verSesiones.nombreEjercicio = value.nombre
+						mui.viewport.showPage("visualizarSesiones-page", "SLIDE_LEFT")
+					},
 					graph: function (ejercicio){
 						valores = []
 						numeros = []
@@ -192,44 +200,78 @@
 				}
 				
 			})
-			
+
+			const verSesiones = new Vue({
+				el: '#visualizarSesiones-page',
+				data: {
+					nombreEjercicio: "",
+					sesiones: []
+				},
+				methods: {}
+			})
+
 			const diaPageAsignado = new Vue({
 				el:"#dia-page-asignado",
 				data: {
 					dia: Object,
-					sesion: String
+					sesion: String,
+					plan: Object
 				},
                 methods: {
 					handleSelectEjercicio: function(ejercicio){
 						ejercicioPage.idDia = diaPageAsignado.dia._id;
 						ejercicioPage.ejercicio = ejercicio;
-						mui.viewport.showPage("ejercicio-page", "DEF");
+						ejercicioPage.sesion = {							
+							nombre:"",
+							series:"",
+							repeticiones:"",
+							intensidad:"",
+							tiempo:""
+						}
+						mui.viewport.showPage("ejercicio-page", "SLIDE_LEFT");
 					},
 					seleccionarSesion: function(sesionSelected){
 						this.sesion=sesionSelected;
+					},
+					borrar: function(ejercicio1, sesion1){
+						urlSesiones = `https://app-personal-trainer.herokuapp.com/myinfo/planes/${this.plan._id}/dias/${this.dia._id}/ejercicios/${ejercicio1._id}/sesiones/${sesion1._id}`
+						console.log(urlSesiones);
+						POSTData = "Te amo"
+						$.ajax({
+							type: 'POST',
+							dataType: "json",
+							data: POSTData,
+							url: urlSesiones,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								mui.viewport.showPage("dia-page-asignado", "SLIDE_LEFT");
+							}
+						})
+
 					}
 				},
-				mounted(){
-						valores = []
-						numeros = []
-						i = 0
-						for(const sesion in ejercicio.sesiones) {
-							if(sesion.intensidad)
-							i++;
-							valores.push(sesion.intensidad);
-							numeros.push(i);
-						}
-						zingchart.render({
-						id: 'myChart',
-						data: {
-							type: 'line',
-							series: [
-							{ values: valores},
-							{ values: numeros}
-							]
-						}
-						});
-					}
+				// mounted(){
+				// 		valores = []
+				// 		numeros = []
+				// 		i = 0
+				// 		for(const sesion in ejercicio.sesiones) {
+				// 			if(sesion.intensidad)
+				// 			i++;
+				// 			valores.push(sesion.intensidad);
+				// 			numeros.push(i);
+				// 		}
+				// 		zingchart.render({
+				// 		id: 'myChart',
+				// 		data: {
+				// 			type: 'line',
+				// 			series: [
+				// 			{ values: valores},
+				// 			{ values: numeros}
+				// 			]
+				// 		}
+				// 		});
+				// 	}
 					
 					
 				
@@ -242,24 +284,32 @@
 					plan: Object,
 					ejercicio: Object,
 					idDia: String,
-					sesion: Object
+					sesion: {
+						nombre:"",
+						series:"",
+						repeticiones:"",
+						intensidad:"",
+						tiempo:""
+					}
 				},
                 methods: {
 					confirmarSesionEjercicios: function(){
-						idEjercicio= ejercicioPage.ejercicio._id;
-						POSTData = ejercicioPage.sesion;
-						urlSesiones = 'https://app-personal-trainer.herokuapp.com/myinfo/plan_asignado/dias/'+ejercicioPage.idDia+'/ejercicios/'+idEjercicio+'/sesiones'
-						$.ajax({
-							type: 'POST',
-							dataType: "json",
-							data: POSTData,
-							url: urlSesiones,
-							xhrFields: { withCredentials: true },
-							crossDomain: true,
-							success: function(data){
-								mui.viewport.showPage("dia-page-asignado", "DEF");
-							}
-						})
+						if(this.sesion.nombre != "" && this.sesion.series != "" && this.sesion.repeticiones != "" && this.sesion.intensidad != "" && this.sesion.tiempo != ""){
+							idEjercicio = this.ejercicio._id;
+							POSTData = this.sesion;
+							urlSesiones = 'https://app-personal-trainer.herokuapp.com/myinfo/plan_asignado/dias/'+this.idDia+'/ejercicios/'+idEjercicio+'/sesiones'
+							$.ajax({
+								type: 'POST',
+								dataType: "json",
+								data: POSTData,
+								url: urlSesiones,
+								xhrFields: { withCredentials: true },
+								crossDomain: true,
+								success: function(data){
+									mui.viewport.showPage("dia-page-asignado", "SLIDE_RIGHT");
+								}
+							})
+						}
 						
 					}
 				}
@@ -278,7 +328,7 @@
 							type: 'POST',
 							dataType: "json",
 							data: {
-								'password': this.password.password
+								'newPassword': this.password.password
 							},
 							url: "https://app-personal-trainer.herokuapp.com/myinfo/changepassword",
 							xhrFields: { withCredentials: true },
@@ -304,6 +354,11 @@
 			<!-- Ddefault viewport. Do not remove. It will make your life simpler and happy. -->
 			<!-- ViewPort por defecto. No lo elimines. Hará tu vida más simple y feliz. -->
 			<div id="mui-viewport" class="mui-viewport">
+
+
+<!--PAGINA INICIO-->
+
+
 				<div id="home-page" class="mui-page">
 					<div class="mui-page-header">
 						<div class="mui-page-logo"></div>
@@ -312,63 +367,71 @@
 					<div class="mui-page-body" id="home-body">
 						<div>
 							<div class="col-80">
-                                <p> Bienvenido {{alumno.nombre}} </p>
+								<p class="titulo">Bienvenido</p>
+								<p class="titulo_secundario">{{alumno.nombre}}</p>
+							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<div class="col-80">
                                 <span>
-									<button class="col-80" @click="verPlanes"> Mostrar todos los planes </button>
+									<button class="planes_alumno_boton" @click="verPlanes"> Mostrar todos los planes </button>
 								</span>
 								<span>
-									<button class="col-80" @click="verPlanActual"> Mostrar plan actual </button>
+									<button class="planes_alumno_boton" @click="verPlanActual"> Mostrar plan actual </button>
 								</span>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<!-- CARGA DE DATOS PLAN ANTERIOR -->
+
+<!-- TODOS LOS PLANES -->
+
+
 				<div id='planes-page' class="mui-page">
                     <div class="mui-page-header">
                         <a class="mui-backarrow" href="#"></a>
-                        <div class='mui-page-title'> Planes </div>
-						<div class="mui-page-logo"></div>
+                        <div class='mui-page-title'> PLANES </div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<div class="mui-page-body" id="home-body" style="overflow:scroll">
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div>
 							<div class="col-80">
-                                <p> Lista de planes</p>
-                                <span>
-									<button class="col-80" v-for="plan in planes" @click="handleSelectPlan(plan)">{{plan.nombre}}</button>
-								</span>
+								<p class="titulo">PLANES</p>
+							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<div class="col-80">
+								<ul class="lista_planes_cliente">
+									<li v-for="plan in planes">
+										<a onclick="desplegarDiasClienteOnclick(this)">{{plan.nombre}}</a>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
                 </div>
 
-                <div id='plan-page' class="mui-page">
+<!-- PLAN ASIGNADO -->
+
+                <div id='plan-page-asignado' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
 						<div class='mui-page-title'>{{plan.nombre}}</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div id="plan-inside">
-							<button class="col-80" v-for="dia in plan.dias" @click="handleSelectDia(dia)">{{dia.nombre}}</button>
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
+						<div class="col-80">
+							<p class="titulo">{{plan.nombre}}</p>
+						</div>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+						<div class="col-80">
+							<button class="planes_alumno_boton" v-for="dia in plan.dias" @click="handleSelectDia(dia)">{{dia.nombre}}</button>
 						</div>
 					</div>
 				</div>
 
-				<div id='plan-page-asignado' class="mui-page">
-					<div class="mui-page-header">
-						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>{{plan.nombre}}</div>
-						<a class="mui-headmenu" href="#"></a>
-					</div>
-					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div id="plan-inside">
-							<button class="col-80" v-for="dia in plan.dias" @click="handleSelectDia(dia)">{{dia.nombre}}</button>
-						</div>
-					</div>
-				</div>
+
+<!-- PLAN ASIGNADO - DIA SELECCIONADO -->
+
 
 				<div id='dia-page-asignado' class="mui-page">
 					<div class="mui-page-header">
@@ -377,33 +440,68 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body"  style="overflow:scroll">
-						<div class="col-80" style="overflow:scroll">
-							<div class="iniciar-sesion-ventana" style="overflow:scroll" v-for="ejercicio in dia.ejercicios">
-								<!-- <img src="img1.jpg" style="width:100%"> -->
-								<button class="col-80" style="overflow:scroll" @click="handleSelectEjercicio(ejercicio)">
-									{{ejercicio.nombre}}
-									<li>
-										<a> Nombre de ejercicio: {{ ejercicio.nombre }}</a>
-										<a> Series: {{ ejercicio.series }}</a>
-										<a> Intensidad: {{ ejercicio.intensidad }}</a>
-										<a> Tiempo: {{ ejercicio.tiempo }}</a>
-									</li>
-								</button>
-								<div id="myChart"></div>
-								<li class="lista_sesiones"><br>
-									<li v-for="sesion in ejercicio.sesiones">
-										<a> Nombre: {{ sesion.nombre }}</a>
-										<a> Series: {{ sesion.series }}</a>
-										<a> Intensidad: {{ sesion.intensidad }}</a>
-										<a> Tiempo: {{ sesion.tiempo }}</a>
-									</li>
-								</li>
-							</div>
-						</div>
+						<p class="titulo">EJERCICIOS</p>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+						<ul class="lista_sesion_ejercicios">
+							<li v-for="ejercicio in dia.ejercicios">
+								<div class="col-80">
+									<p class="nombre_ejercicio">{{ejercicio.nombre}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<p class="lista_ejercicio_elemento">Series: {{ejercicio.series}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">repeticiones: {{ejercicio.repeticiones}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">Intensidad: {{ejercicio.intensidad}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">Tiempo: {{ejercicio.tiempo}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<button class="ver_sesiones_boton" @click="handleSelectEjercicio(ejercicio)">Agregar Sesion</button>
+								</div>
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+								<br>
+							</li>
+						</ul>
 					</div>
 					<br>
 				</div>
-				
+
+
+<!-- PLAN ASIGNADO - DIA SELECCIONADO - AGREGAR SESION -->
+
+
+<div id='ejercicio-page' class="mui-page">
+	<div class="mui-page-header">
+		<a class="mui-backarrow" href="#"></a>
+		<div class='mui-page-title'>AGREGAR SESIÓN</div>
+		<a class="mui-headmenu" href="#"></a>
+	</div>
+	<div class="mui-page-body" id="second-body" style="overflow:scroll">
+		<p class="titulo">NUEVA SESIÓN DE</p>
+		<p class="titulo">{{ejercicio.nombre}}</p>
+		<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+		<div class= "col-80" id="elementos_sesion">
+			<p class="sesion_elemento">Nombre:</p><input type="String" placeholder="Nombre de sesion" v-model="sesion.nombre">
+			<br>
+			<p class="sesion_elemento">Series:</p><input type="Number" placeholder="Series realizadas" v-model="sesion.series">
+			<br>
+			<p class="sesion_elemento">Repeticiones:</p><input type="Number" placeholder="Repeticiones realizadas" v-model="sesion.repeticiones">
+			<br>
+			<p class="sesion_elemento">Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="sesion.intensidad">
+			<br>
+			<p class="sesion_elemento">Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="sesion.tiempo">
+			<br>
+		</div>
+		<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+		<br>
+		<button class="confirmar_boton" @click="confirmarSesionEjercicios">Confirmar</button>
+	</div>
+</div>
+
+
+
+<!-- PLAN SELECCIONADO - DIA SELECCIONADO -->				
+
+
 				<div id='dia-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
@@ -411,80 +509,92 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body"  style="overflow:scroll">
-						<div class="col-80" style="overflow:scroll">
-							<div class="iniciar-sesion-ventana" style="overflow:scroll" v-for="ejercicio in dia.ejercicios">
-								<!-- <img src="img1.jpg" style="width:100%"> -->
-								<button class="col-80" style="overflow:scroll">
-									{{ejercicio.nombre}}
-									<li>
-										<a> Nombre de ejercicio: {{ ejercicio.nombre }}</a>
-										<a> Series: {{ ejercicio.series }}</a>
-										<a> Intensidad: {{ ejercicio.intensidad }}</a>
-										<a> Tiempo: {{ ejercicio.tiempo }}</a>
-									</li>
-								</button>
-								<div id="myChart"></div>
-								<li class="lista_sesiones"><br>
-									<li v-for="sesion in ejercicio.sesiones">
-										<a> Nombre: {{ sesion.nombre }}</a>
-										<a> Series: {{ sesion.series }}</a>
-										<a> Intensidad: {{ sesion.intensidad }}</a>
-										<a> Tiempo: {{ sesion.tiempo }}</a>
-									</li>
-								</li>
-							</div>
-						</div>
+						<p class="titulo">EJERCICIOS</p>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+						<ul class="lista_sesion_ejercicios">
+							<li v-for="ejercicio in dia.ejercicios">
+								<div class="col-80">
+									<p class="nombre_ejercicio">{{ejercicio.nombre}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<p class="lista_ejercicio_elemento">Series: {{ejercicio.series}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">repeticiones: {{ejercicio.repeticiones}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">Intensidad: {{ejercicio.intensidad}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">Tiempo: {{ejercicio.tiempo}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<button class="ver_sesiones_boton" @click="verSesiones(ejercicio)">Ver Sesiones</button>
+								</div>
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+								<br>
+							</li>
+						</ul>
 					</div>
-					<br>
 				</div>
 
-				<div id='ejercicio-page' class="mui-page">
+
+<!-- PLAN SELECCIONADO - DIA SELECCIONADO - VISUALIZAR SESIONES -->
+
+
+				<div id='visualizarSesiones-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'> Agregar sesion a {{ejercicio.nombre}}</div>
+						<div class='mui-page-title'>SESIONES</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<div class="mui-page-body" id="second-body">
-						<div class= "col-80" style="overflow:scroll">
-
-							<p>Nombre:</p><input type="String" placeholder="Nombre de sesion" v-model="sesion.nombre">
-							<br>
-							<p>Series:</p><input type="Number" placeholder="Series realizadas" v-model="sesion.series">
-							<br>
-							<p>Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="sesion.intensidad">
-							<br>
-							<p>Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="sesion.tiempo">
-							<br>
-						</div>
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
+						<p class="titulo">{{nombreEjercicio}}</p>
 						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-							<br>
-							<button class="confirmar_boton" @click="confirmarSesionEjercicios">Confirmar</button>
+						<ul class="lista_sesion_ejercicios">
+							<li v-for="(sesion, i) in sesiones">
+								<div class="col-80">
+									<p class="nombre_ejercicio">Sesión - {{i + 1}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<p class="lista_ejercicio_elemento">Series: {{sesion.series}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">repeticiones: {{sesion.repeticiones}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">Intensidad: {{sesion.intensidad}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">Tiempo: {{sesion.tiempo}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<br>
+								</div>
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+								<br>
+							</li>
+						</ul>
 					</div>
 				</div>
+
+<!-- CAMBIO CONTRASEÑA -->
+
 
 				<div id='changepassword-page' class="mui-page">
 					<div class="mui-page-header">
-						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Cambiar contraseña</div>
+						<a class="mui-backarrow-home" href="#"></a>
+						<div class='mui-page-title'>CAMBIAR CONTRASEÑA</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body mui-scrollable" id="second-body">
+						<p class="titulo">CAMBIO CONTRASEÑA</p>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						<div class= "col-80">
-	
-							<p>Contraseña anterior:</p><input type="password" placeholder="Nombre de sesion" v-model="password.oldPassword">
+							<p class="sesion_elemento">Contraseña anterior:</p><input type="password" placeholder="Nombre de sesion" v-model="password.oldPassword">
 							<br>
-							<p>Nueva contraseña:</p><input type="password" placeholder="Series realizadas" v-model="password.password">
+							<p class="sesion_elemento">Nueva contraseña:</p><input type="password" placeholder="Series realizadas" v-model="password.password">
 							<br>
-							
 						</div>
 						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-							<br>
-							<button class="confirmar_boton" @click="changepassword">Confirmar cambio de contraseña</button>
+						<br>
+						<button class="confirmar_boton" @click="changepassword">Confirmar</button>
 					</div>
 				</div>
                 
-				<!-- Optional.Toolbar out of mui-viewport to be omnipresent. Remove if not needed. -->
-				<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->
+<!-- Optional.Toolbar out of mui-viewport to be omnipresent. Remove if not needed. -->
+<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->
+				
 				<div class="mui-tabbar" id="footer">
 					<ul class="mui-tabbar-list">
 						<li class="mui-tabbar-button"><a href="#" id="tabbar-button1"></a></li>
@@ -494,11 +604,9 @@
 				</div>
 			</div>
 
-			<!-- mui-screen level panel -->
-			<!-- Panel a nivel de mui-screen -->
+<!-- mui-screen level panel -->
+<!-- Panel a nivel de mui-screen -->
 			
-			
-
 
 		</div>
 		<div id="menu-panel" class="mui-panel">
@@ -510,8 +618,6 @@
 					<ul id='menuoptions' class='mui-list'>
 						<li><a @click="logout">Cerrar sesión</li></a>
 						<li><a @click="irachangepassword">Cambiar contraseña</li></a>
-						<li><a id='option1' href="#">Go Home Page</a></li>
-						<li><a id='option2' href="#">Go Page 2</a></li>
 					</ul>
 				</div>
 			</div>

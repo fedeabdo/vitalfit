@@ -42,6 +42,13 @@ function installEvents() {
 			}
 		},
 		{
+			id: '.mui-backarrow-home',
+			fn: () => {
+				mui.viewport.showPage("home-page", "SLIDE_RIGHT");
+				return false;
+			}
+		},
+		{
 			id: '.mui-headmenu',
 			ev: 'click',	//If not, it assumes click
 			fn: () => {
@@ -249,7 +256,7 @@ function desplegarSesionesOnclick(event) {
 }
 
 function desplegarOpciones() {
-	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo(alumno)">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva sesion</button><br><button v-on:click="asignacionPlan">Asignar Plan</button><br></div>')
+	let desplegarOpcionesHtml = $('<div class="desplegar_opciones"><br><button v-on:click="verAlumno">Visualizar Alumno</button><br><button v-on:click="verPlanes">Visualizar Planes</button><br><button v-on:click="abrirPlanNuevo(alumno)">Nuevo Plan</button><br><button v-on:click="abrirNuevaSesion">Nueva Sesión</button><br><button v-on:click="asignacionPlan">Asignar Plan</button><br></div>')
 	$('li a', ".lista_alumnos").append(desplegarOpcionesHtml)
 	$('.desplegar_opciones').hide()
 }
@@ -281,12 +288,24 @@ function desplegarDiasVisualizarOnclick(event) {
 	$(".dias_desplegados_visualizar", event).slideToggle()
 }
 
+function desplegarDiasCliente() {
+	let diasHtml = $('<div class="dias_desplegados_cliente"><div v-for="dia in plan.dias"><button class="plan_cliente_dia_boton" @click="handleSelectDia(dia)">{{dia.nombre}}</button><br></div></div>')
+	$('li a', ".lista_planes_cliente").append(diasHtml)
+	$('.dias_desplegados_cliente').hide()
+}
+
+function desplegarDiasClienteOnclick(event) {
+	$(".dias_desplegados_cliente").not($(".dias_desplegados_cliente", event)).slideUp()
+	$(".dias_desplegados_cliente", event).slideToggle()
+}
+
 
 
 $(document).ready(() => {
 	desplegarOpciones()
 	desplegarDias()
 	desplegarDiasVisualizar()
+	desplegarDiasCliente()
 });
 
 
