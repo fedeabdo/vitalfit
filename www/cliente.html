@@ -142,6 +142,7 @@
                 methods: {
 					handleSelectDia: function(dia){
 						diaPage.dia = dia;
+						diaPage.plan = this.plan;
 						mui.viewport.showPage("dia-page", "DEF");
 					}
 				}
@@ -156,6 +157,7 @@
                 methods: {
 					handleSelectDia: function(dia){
 						diaPageAsignado.dia = dia;
+						diaPageAsignado.plan = this.plan;
 						mui.viewport.showPage("dia-page-asignado", "DEF");
 					}
 				}
@@ -165,9 +167,28 @@
 			const diaPage = new Vue({
 				el:"#dia-page",
 				data: {
-					dia: Object
+					dia: Object,
+					plan: Object
 				},
                 methods: {
+					borrar: function(ejercicio1, sesion1){
+						urlSesiones = `https://app-personal-trainer.herokuapp.com/myinfo/planes/${this.plan._id}/dias/${this.dia._id}/ejercicios/${ejercicio1._id}/sesiones/${sesion1._id}`
+						console.log(urlSesiones);
+						POSTData = "Te amo"
+						$.ajax({
+							type: 'POST',
+							dataType: "json",
+							data: POSTData,
+							url: urlSesiones,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								mui.viewport.showPage("dia-page-asignado", "DEF");
+							}
+						})
+
+					},
+
 					graph: function (ejercicio){
 						valores = []
 						numeros = []
@@ -197,7 +218,8 @@
 				el:"#dia-page-asignado",
 				data: {
 					dia: Object,
-					sesion: String
+					sesion: String,
+					plan: Object
 				},
                 methods: {
 					handleSelectEjercicio: function(ejercicio){
@@ -207,29 +229,46 @@
 					},
 					seleccionarSesion: function(sesionSelected){
 						this.sesion=sesionSelected;
+					},
+					borrar: function(ejercicio1, sesion1){
+						urlSesiones = `https://app-personal-trainer.herokuapp.com/myinfo/planes/${this.plan._id}/dias/${this.dia._id}/ejercicios/${ejercicio1._id}/sesiones/${sesion1._id}`
+						console.log(urlSesiones);
+						POSTData = "Te amo"
+						$.ajax({
+							type: 'POST',
+							dataType: "json",
+							data: POSTData,
+							url: urlSesiones,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								mui.viewport.showPage("dia-page-asignado", "DEF");
+							}
+						})
+
 					}
 				},
-				mounted(){
-						valores = []
-						numeros = []
-						i = 0
-						for(const sesion in ejercicio.sesiones) {
-							if(sesion.intensidad)
-							i++;
-							valores.push(sesion.intensidad);
-							numeros.push(i);
-						}
-						zingchart.render({
-						id: 'myChart',
-						data: {
-							type: 'line',
-							series: [
-							{ values: valores},
-							{ values: numeros}
-							]
-						}
-						});
-					}
+				// mounted(){
+				// 		valores = []
+				// 		numeros = []
+				// 		i = 0
+				// 		for(const sesion in ejercicio.sesiones) {
+				// 			if(sesion.intensidad)
+				// 			i++;
+				// 			valores.push(sesion.intensidad);
+				// 			numeros.push(i);
+				// 		}
+				// 		zingchart.render({
+				// 		id: 'myChart',
+				// 		data: {
+				// 			type: 'line',
+				// 			series: [
+				// 			{ values: valores},
+				// 			{ values: numeros}
+				// 			]
+				// 		}
+				// 		});
+				// 	}
 					
 					
 				
@@ -383,7 +422,6 @@
 								<button class="col-80" style="overflow:scroll" @click="handleSelectEjercicio(ejercicio)">
 									{{ejercicio.nombre}}
 									<li>
-										<a> Nombre de ejercicio: {{ ejercicio.nombre }}</a>
 										<a> Series: {{ ejercicio.series }}</a>
 										<a> Intensidad: {{ ejercicio.intensidad }}</a>
 										<a> Tiempo: {{ ejercicio.tiempo }}</a>
@@ -396,6 +434,7 @@
 										<a> Series: {{ sesion.series }}</a>
 										<a> Intensidad: {{ sesion.intensidad }}</a>
 										<a> Tiempo: {{ sesion.tiempo }}</a>
+										<button class="col-80" @click = "borrar(ejercicio,sesion)"> Borrar sesion </button>
 									</li>
 								</li>
 							</div>
@@ -417,7 +456,6 @@
 								<button class="col-80" style="overflow:scroll">
 									{{ejercicio.nombre}}
 									<li>
-										<a> Nombre de ejercicio: {{ ejercicio.nombre }}</a>
 										<a> Series: {{ ejercicio.series }}</a>
 										<a> Intensidad: {{ ejercicio.intensidad }}</a>
 										<a> Tiempo: {{ ejercicio.tiempo }}</a>
@@ -430,6 +468,7 @@
 										<a> Series: {{ sesion.series }}</a>
 										<a> Intensidad: {{ sesion.intensidad }}</a>
 										<a> Tiempo: {{ sesion.tiempo }}</a>
+										<button class="col-80" @click = "borrar(ejercicio,sesion)"> Borrar sesion </button>
 									</li>
 								</li>
 							</div>
