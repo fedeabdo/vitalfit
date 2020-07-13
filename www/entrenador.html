@@ -387,7 +387,8 @@
 				el: '#asignarPlan-page',
 				data: {
 					alumno: '',
-					planes: []
+					planes: [],
+					id_planSeleccionado: ''
 				},
 				methods: {
 					async cargarPlanes(){
@@ -403,6 +404,26 @@
 							}
 
 						})
+					},
+
+					asignarPlanSeleccionado: function(){
+
+						URL = 'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username +"/plan_asignado"
+
+						$.ajax({
+							type: 'POST',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							data: {
+								plan_asignado: this.id_planSeleccionado
+							},
+							dataType: 'json',
+							success: (responseData)=>{
+								
+							}
+						})
+						
 					}
 				}
 			})
@@ -725,10 +746,11 @@
 							<div class="col-80">
 								<p class="seleccionar_plan">Seleccionar Plan:</p>
 								<br>
-								<select class="col-80 planes_selector">
-									<option v-for="plan in planes">{{plan.nombre}}</option>
+								<select class="col-80 planes_selector" v-model="id_planSeleccionado">
+									<option disabled value="">Seleccione un plan</option>
+									<option v-for="plan in planes" v-bind:value="plan._id">{{plan.nombre}}</option>
 								</select>
-								<button v-if="1">Asignar plan</button>
+								<button @click="asignarPlanSeleccionado">Agregar/cambiar plan asignado</button>
 							</div>
 						</div>
 					</div>
