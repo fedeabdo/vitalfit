@@ -84,6 +84,8 @@
 						mui.viewport.showPage("nuevaSesion-page", 'SLIDE_LEFT')
 					},
 					asignacionPlan: function () {
+						asignarPlan.alumno = this.alumnoSeleccionado
+						asignarPlan.cargarPlanes()
 						mui.viewport.showPage("asignarPlan-page", 'SLIDE_LEFT')
 					},
 					eliminarAlumno: function () {
