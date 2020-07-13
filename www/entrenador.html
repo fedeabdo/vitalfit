@@ -55,7 +55,7 @@
 				},
 				methods: {
 					nuevoAlumno: function() {
-						mui.viewport.showPage("nuevoAlumno-page", 'DEF')
+						mui.viewport.showPage("nuevoAlumno-page", 'SLIDE_LEFT')
 					},
 					verAlumno: function() {
 						verAlumno.alumno.nombre =this.alumnoSeleccionado.nombre.split(" ")[0]
@@ -195,7 +195,9 @@
 							nombre: this.nombreDia,
 							ejercicios:[]
 						}
-						this.dias.push(diaAux)
+						if (this.nombreDia != "") {
+							this.dias.push(diaAux)
+						}
 						
 					},
 					quitarDia: function () {
@@ -217,44 +219,25 @@
 			})
 			
 
-			const menuPanel = new Vue({
-				el: "#menu-panel",
-				methods:{
-					logout: function(){
-						$.ajax({
-							type: 'GET',
-							url: 'https://app-personal-trainer.herokuapp.com/logout',
-							xhrFields: { withCredentials: true },
-							crossDomain: true,
-							success: function(data){
-								document.location.href = "index.html"
-							}
-						})
-					},
-					irachangepassword: function(){
-						mui.viewport.showPage("changepassword-page", "SLIDE_LEFT");
-					}
-				}
-			})
-
 			const diaNuevo = new Vue({
 				el: '#diaNuevo-app',
 				data: {
 					indiceDia: 0,
-					ejercicios: [],
-					ejercicio: {
-						nombre: "",
-						series: "",
-						reps: "",
-						intensidad: "",
-						tiempo: ""
-					}
+					ejercicios: []
 				},
 				methods: {
 					agregarEjercicio: function () {
-						nro = this.ejercicios.length + 1
-						this.ejercicios.push(this.ejercicio)
-						this.ejerciciosHtml.push('<div class= "col-80"><span><p>Ejercicio' + nro + '</p></span><p>Nombre:</p><input type="Text" v-model="ejercicios[' + nro + '].nombre"><br><p>Series:</p><input type="Number" v-model="ejercicios[' + nro + '].series"><br><p>Reps:</p><input type="Number" v-model="ejercicios[' + nro + '].reps"><br><p>Intensidad:</p><input type="Number" v-model="ejercicios[' + nro + '].intensidad"><br><p>Tiempo:</p><input type="Number" v-model="ejercicios[' + nro + '].tiempo"><br></div><br><hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">')
+						var ejercicio = {
+							nombre: "",
+							series: "",
+							reps: "",
+							intensidad: "",
+							tiempo: ""
+						}
+						this.ejercicios.push(ejercicio)
+					},
+					quitarEjercicio: function () {
+						this.ejercicios.pop()
 					},
 					confirmarEjercicio: function() {
 						planNuevo.dias[this.indiceDia].ejercicios = this.ejercicios
@@ -446,6 +429,27 @@
 					}
 				}
 			})
+
+			
+			const menuPanel = new Vue({
+				el: "#menu-panel",
+				methods:{
+					logout: function(){
+						$.ajax({
+							type: 'GET',
+							url: 'https://app-personal-trainer.herokuapp.com/logout',
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function(data){
+								document.location.href = "index.html"
+							}
+						})
+					},
+					irachangepassword: function(){
+						mui.viewport.showPage("changepassword-page", "SLIDE_LEFT");
+					}
+				}
+			})
 		})
 	</script>
 </head>
@@ -541,7 +545,7 @@
 				<div id='planNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Plan Nuevo</div>
+						<div class='mui-page-title'>CARGA DE DATOS - PLAN NUEVO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -554,17 +558,19 @@
 								</div>
 							</div>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-							<br>
 							<div class= "col-80">
-								<span>
-									<input type="text" class="filtro_dias_input" onkeyup="filtro('.filtro_dias_input', '.lista_dias')" placeholder="Buscar día">
-								</span>
+								<p class="titulo">DÍAS</p>
 								<span>
 									<button id="nuevoDia" class="agregar_boton" v-on:click="agregarDia">＋</button>
 									<button id="quitarDia" class="quitar_boton" v-on:click="quitarDia">&minus;</button>
 									<input type="text" class="nombre_dia_input" v-model="nombreDia" placeholder="Ingrese Nombre Dia">
 								</span>
+							</div>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<div class= "col-80">
+								<span>
+									<input type="text" class="filtro_dias_input" onkeyup="filtro('.filtro_dias_input', '.lista_dias')" placeholder="Buscar día">
+								</span>
 								<ul class="lista_dias">
 									<li  v-for="(dia, index) in dias">
 										<a v-on:click="diaNuevo(index)" v-text="dia.nombre"></a>
@@ -584,7 +590,7 @@
 				<div id='diaNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Carga de Datos - Día Nuevo</div>
+						<div class='mui-page-title'>CARGA DE DATOS - DÍA NUEVO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -592,6 +598,7 @@
 							<br>
 							<div class= "col-80">
 								<button id="nuevoEjercicio" class="agregar_ejercicio_boton" v-on:click="agregarEjercicio">Agregar Ejercicio</button>
+								<button id="quitarEjercicio" class="quitar_boton" v-on:click="quitarEjercicio">&minus;</button>
 							</div>
 							<ul class="lista_ejercicios">
 								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
@@ -632,19 +639,17 @@
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div>
 							<div id="nuevaSesion-app">
+								<p class="titulo">PLANES</p>
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+								<br>
 								<div class="col-80">
-									<br>
 									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
-									<br>
-									<ul class="lista_planes"><br>
+									<ul class="lista_planes">
 										<li v-for='(plan, index1) in planes'>
 											<a onclick="desplegarDiasOnclick(this)">{{plan.nombre}}</a>
 										</li>
 									</ul>
 								</div>
-								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-								<br>
-								<button class="confirmar_boton" @click="confirmarSesion">Confirmar</button>
 							</div>
 						</div>
 					</div>
@@ -662,24 +667,26 @@
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div id="nuevaSesionEjercicios-app">
-							<br>
+							<p class="titulo">INGRESAR SESIÓN</p>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<div class= "col-80">
 							</div>
 							<ul class="lista_sesion_ejercicios">
 								<li v-for="ejercicio in ejercicios">
 									<div class= "col-80">
 										<span><p>{{ejercicio.nombre}}</p></span>
-										<p>Series:</p><input type="Number" placeholder="Número de Series" v-model="ejercicio.series">
-										<br>
-										<p>Reps:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.reps">
-										<br>
-										<p>Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="ejercicio.intensidad">
-										<br>
-										<p>Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="ejercicio.tiempo">
-										<br>
 										<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+										<p class="lista_ejercicio_elemento">Series:</p><input type="Number" placeholder="Número de Series" v-model="ejercicio.series">
+										<br>
+										<p class="lista_ejercicio_elemento">Reps:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.reps">
+										<br>
+										<p class="lista_ejercicio_elemento">Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="ejercicio.intensidad">
+										<br>
+										<p class="lista_ejercicio_elemento">Tiempo:</p><input type="Number" placeholder="Tiempo de Ejecución" v-model="ejercicio.tiempo">										
+										<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+										<br>
 									</div>
-									<br>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								</li>
 							</ul>
 							<br>
@@ -701,8 +708,10 @@
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div>
 							<div id="visualizarPlanes-app">
+							<p class="titulo">PLANES</p>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<br>
 								<div class="col-80">
-									<br>
 									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
 									<br>
 									<ul class="lista_planes_visualizar"><br>
@@ -723,29 +732,28 @@
 				<div id='visualizarEjercicios-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Ejercicios</div>
+						<div class='mui-page-title'>EJERCICIOS</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
-						<br>
-						<div class= "col-80">
-						</div>
+						<p class="titulo">EJERCICIOS</p>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						<ul class="lista_sesion_ejercicios">
 							<li v-for="ejercicio in ejercicios">
 								<div class= "col-80">
 									<p class="nombre_ejercicio">{{ejercicio.nombre}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<p class="lista_ejercicio_elemento">Series: {{ejercicio.series}}</p>
 									<br>
-									<p>Series: {{ejercicio.series}}</p>
+									<p class="lista_ejercicio_elemento">Reps: {{ejercicio.reps}}</p>
 									<br>
-									<p>Reps: {{ejercicio.reps}}</p>
+									<p class="lista_ejercicio_elemento">Intensidad: {{ejercicio.intensidad}}</p>
 									<br>
-									<p>Intensidad: {{ejercicio.intensidad}}</p>
-									<br>
-									<p>Tiempo: {{ejercicio.tiempo}}</p>
-									<br>
+									<p class="lista_ejercicio_elemento">Tiempo: {{ejercicio.tiempo}}</p>
 									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 									<br>
 								</div>
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<br>
 							</li>
 						</ul>
@@ -758,7 +766,7 @@
 				<div id="asignarPlan-page" class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>Asignar Plan</div>
+						<div class='mui-page-title'>ASIGNAR PLAN</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
