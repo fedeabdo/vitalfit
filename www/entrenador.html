@@ -117,7 +117,7 @@
 			})
 
 			const nuevaSesion = new Vue({
-				el: "#nuevaSesion-page",
+				el: "#nuevaSesion-app",
 				data: {
 					planes: [],
 					plan_actual: '',
@@ -153,6 +153,19 @@
 							}
 
 						})
+
+						
+					},
+
+					abrirDiaSesionNueva: function (value1, value2) {
+						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
+						ejerciciosSesion.planSerial = value1
+						ejerciciosSesion.diaSerial = value2
+						mui.viewport.showPage("nuevaSesionEjercicios-page", "SLIDE_LEFT")
+					},
+					confirmarSesion: function() {
+
+						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -345,9 +358,9 @@
 					}
 				}
 			})
-
+			/*
 			const sesionNueva = new Vue({
-				el: '#nuevaSesion-app',
+				el: '#nuevaSesion-appPEPO',
 				data: {
 					alumnoId: "",
 					planes:[
@@ -392,6 +405,7 @@
 					}
 				}
 			})
+			*/
 
 			const ejerciciosSesion = new Vue({
 				el: '#nuevaSesionEjercicios-app',
