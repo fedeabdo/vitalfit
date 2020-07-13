@@ -76,10 +76,11 @@
 					},
 					abrirPlanNuevo: function (alumno) {
 						planNuevo.alumno = alumno
-						console.log(alumno)
 						mui.viewport.showPage("planNuevo-page", 'DEF')
 					},
 					abrirNuevaSesion: function () {
+						nuevaSesion.alumno = this.alumnoSeleccionado
+						nuevaSesion.cargarDatos()
 						mui.viewport.showPage("nuevaSesion-page", 'DEF')
 					},
 					asignacionPlan: function () {
@@ -111,6 +112,47 @@
 					},
 					seleccionarAlumno(alumno) {
 						this.alumnoSeleccionado = alumno
+					}
+				}
+			})
+
+			const nuevaSesion = new Vue({
+				el: "#nuevaSesion-page",
+				data: {
+					planes: [],
+					plan_actual: '',
+					alumno: ""
+				},
+				methods: {
+					async cargarDatos() {
+						URL = 'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/planes'
+						await $.ajax({
+							type: 'GET',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							dataType: 'json',
+							success: (responseData) => {
+								this.planes = responseData
+							}
+
+						})
+
+						URL =  'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/plan_asignado'
+						await $.ajax({
+							type: 'GET',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							dataType: 'json',
+							success: (responseData)=>{
+								this.plan_actual = responseData
+							},
+							error: (responseData)=>{
+								this.plan_actual = "No hay plan actual";
+							}
+
+						})
 					}
 				}
 			})
@@ -462,7 +504,6 @@
 
 						})
 
-						console.log(this.plan_actual)
 					},
 
 					asignarPlanSeleccionado: function(){
@@ -719,7 +760,7 @@
 								<div class="col-80">
 									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
 									<ul class="lista_planes">
-										<li v-for='(plan, index1) in planes'>
+										<li v-for='plan in planes'>
 											<a onclick="desplegarDiasOnclick(this)">{{plan.nombre}}</a>
 										</li>
 									</ul>
