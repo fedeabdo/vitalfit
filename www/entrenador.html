@@ -83,7 +83,9 @@
 						mui.viewport.showPage("nuevaSesion-page", 'SLIDE_LEFT')
 					},
 					asignacionPlan: function() {
-						mui.viewport.showPage("asignarPlan-page", 'SLIDE_LEFT')
+						asignarPlan.alumno = this.alumnoSeleccionado
+						asignarPlan.cargarPlanes()
+						mui.viewport.showPage("asignarPlan-page", 'DEF')
 					},
 					
 					
@@ -384,12 +386,25 @@
 			const asignarPlan = new Vue({
 				el: '#asignarPlan-page',
 				data: {
-					planes: [
-						{nombre: "Pecho"},
-						{nombre: "torso"}
-					]
+					alumno: '',
+					planes: []
 				},
-				methods: {}
+				methods: {
+					async cargarPlanes(){
+						URL =  'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/planes'
+						await $.ajax({
+							type: 'GET',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							dataType: 'json',
+							success: (responseData)=>{
+								this.planes = responseData
+							}
+
+						})
+					}
+				}
 			})
 		})
 	</script>
@@ -714,6 +729,7 @@
 								<select class="col-80 planes_selector">
 									<option v-for="plan in planes">{{plan.nombre}}</option>
 								</select>
+								<button v-if="1">Asignar plan</button>
 							</div>
 						</div>
 					</div>
