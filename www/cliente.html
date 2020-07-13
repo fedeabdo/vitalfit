@@ -25,6 +25,8 @@
 	<script src="mobileui/mui.min.js" type="text/javascript"></script>
 	<script src="custom/custom.js" type="text/javascript"></script>
 
+	<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<!-- <script src="node_modules/keen-ui/dist/keen-ui.min.js"></script> -->
 
@@ -166,10 +168,31 @@
 					dia: Object
 				},
                 methods: {
+					graph: function (ejercicio){
+						valores = []
+						numeros = []
+						i = 0
+						for(const sesion in ejercicio.sesiones) {
+							if(sesion.intensidad)
+							i++;
+							valores.push(sesion.intensidad);
+							numeros.push(i);
+						}
+						zingchart.render({
+						id: 'myChart',
+						data: {
+							type: 'line',
+							series: [
+							{ values: valores},
+							{ values: numeros}
+							]
+						}
+						});
+					}
 				}
 				
 			})
-
+			
 			const diaPageAsignado = new Vue({
 				el:"#dia-page-asignado",
 				data: {
@@ -185,8 +208,31 @@
 					seleccionarSesion: function(sesionSelected){
 						this.sesion=sesionSelected;
 					}
+				},
+				mounted(){
+						valores = []
+						numeros = []
+						i = 0
+						for(const sesion in ejercicio.sesiones) {
+							if(sesion.intensidad)
+							i++;
+							valores.push(sesion.intensidad);
+							numeros.push(i);
+						}
+						zingchart.render({
+						id: 'myChart',
+						data: {
+							type: 'line',
+							series: [
+							{ values: valores},
+							{ values: numeros}
+							]
+						}
+						});
+					}
 					
-				}
+					
+				
 				
 			})
 
@@ -238,7 +284,7 @@
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
 							success: function(data){
-								alert("Contra cambiada");
+								alert("Contraseña cambiada");
 							}
 						})
 					}
@@ -337,20 +383,21 @@
 								<button class="col-80" style="overflow:scroll" @click="handleSelectEjercicio(ejercicio)">
 									{{ejercicio.nombre}}
 									<li>
-										<a>Nombre de ejercicio: {{ ejercicio.nombre }}</a>
-										<a>Series: {{ ejercicio.series }}</a>
-										<a>Intensidad: {{ ejercicio.intensidad }}</a>
-										<a>Tiempo: {{ ejercicio.tiempo }}</a>
+										<a> Nombre de ejercicio: {{ ejercicio.nombre }}</a>
+										<a> Series: {{ ejercicio.series }}</a>
+										<a> Intensidad: {{ ejercicio.intensidad }}</a>
+										<a> Tiempo: {{ ejercicio.tiempo }}</a>
 									</li>
 								</button>
-								<ul class="lista_sesiones"><br>
+								<div id="myChart"></div>
+								<li class="lista_sesiones"><br>
 									<li v-for="sesion in ejercicio.sesiones">
-										<a>Nombre: {{ sesion.nombre }}</a>
-										<a>Series: {{ sesion.series }}</a>
-										<a>Intensidad: {{ sesion.intensidad }}</a>
-										<a>Tiempo: {{ sesion.tiempo }}</a>
+										<a> Nombre: {{ sesion.nombre }}</a>
+										<a> Series: {{ sesion.series }}</a>
+										<a> Intensidad: {{ sesion.intensidad }}</a>
+										<a> Tiempo: {{ sesion.tiempo }}</a>
 									</li>
-								</ul>
+								</li>
 							</div>
 						</div>
 					</div>
@@ -363,18 +410,34 @@
 						<div class='mui-page-title'>{{dia.nombre}}</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
-					<div class="mui-page-body mui-scrollable" id="second-body">
-						<div class="col-80">
-							<div class="iniciar-sesion-ventana" v-for="ejercicio in dia.ejercicios">
+					<div class="mui-page-body" id="second-body"  style="overflow:scroll">
+						<div class="col-80" style="overflow:scroll">
+							<div class="iniciar-sesion-ventana" style="overflow:scroll" v-for="ejercicio in dia.ejercicios">
 								<!-- <img src="img1.jpg" style="width:100%"> -->
-								<button class="col-80">{{ejercicio.nombre}}</button>
-								<div v-for="sesion in ejercicio.sesiones"> {{sesion.nombre}} </div>
+								<button class="col-80" style="overflow:scroll">
+									{{ejercicio.nombre}}
+									<li>
+										<a> Nombre de ejercicio: {{ ejercicio.nombre }}</a>
+										<a> Series: {{ ejercicio.series }}</a>
+										<a> Intensidad: {{ ejercicio.intensidad }}</a>
+										<a> Tiempo: {{ ejercicio.tiempo }}</a>
+									</li>
+								</button>
+								<div id="myChart"></div>
+								<li class="lista_sesiones"><br>
+									<li v-for="sesion in ejercicio.sesiones">
+										<a> Nombre: {{ sesion.nombre }}</a>
+										<a> Series: {{ sesion.series }}</a>
+										<a> Intensidad: {{ sesion.intensidad }}</a>
+										<a> Tiempo: {{ sesion.tiempo }}</a>
+									</li>
+								</li>
 							</div>
 						</div>
-						<!-- Next and previous buttons -->
 					</div>
 					<br>
 				</div>
+
 				<div id='ejercicio-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
