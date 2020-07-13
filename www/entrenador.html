@@ -296,7 +296,7 @@
 													data: {
 														'nombre': this.dias[i].ejercicios[i].nombre,
 														'intensidad': this.dias[i].ejercicios[i].intensidad,
-														'repeticiones': this.dias[i].ejercicios[i].reps,
+														'repeticiones': this.dias[i].ejercicios[i].repeticiones,
 														'series': this.dias[i].ejercicios[i].series,
 														'tiempo': this.dias[i].ejercicios[i].tiempo
 													},
@@ -329,7 +329,7 @@
 						var ejercicio = {
 							nombre: "",
 							series: "",
-							reps: "",
+							repeticiones: "",
 							intensidad: "",
 							tiempo: ""
 						}
@@ -360,7 +360,7 @@
 										{
 											nombre: "pecho plano",
 											series: 3,
-											reps: 2,
+											repeticiones: 2,
 											intensidad: 10,
 											tiempo: 60,
 											sesiones:[]
@@ -368,7 +368,7 @@
 										{
 											nombre: "Tren Inferior",
 											series: 4,
-											reps: 1,
+											repeticiones: 1,
 											intensidad: 70,
 											tiempo: 60,
 											sesiones:[]
@@ -406,7 +406,7 @@
 							var sesionAux = {
 								nombre: "",
 								series: "",
-								reps: "",
+								repeticiones: "",
 								intensidad: "",
 								tiempo: ""
 							}
@@ -414,7 +414,7 @@
 
 							sesionAux.nombre = ejercicioAux.nombre,
 							sesionAux.series = ejercicioAux.series,
-							sesionAux.reps = ejercicioAux.reps,
+							sesionAux.repeticiones = ejercicioAux.repeticiones,
 							sesionAux.intensidad = ejercicioAux.intensidad,
 							sesionAux.tiempo = ejercicioAux.tiempo
 							
@@ -680,9 +680,6 @@
 							</div>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<div class= "col-80">
-								<span>
-									<input type="text" class="filtro_dias_input" onkeyup="filtro('.filtro_dias_input', '.lista_dias')" placeholder="Buscar día">
-								</span>
 								<ul class="lista_dias">
 									<li v-for="(dia, index) in dias">
 										<a v-on:click="diaNuevo(index)" v-text="dia.nombre"></a>
@@ -723,7 +720,7 @@
 										<br>
 										<p>Series:</p><input type="Number" v-model="ejercicioA.series">
 										<br>
-										<p>Reps:</p><input type="Number" v-model="ejercicioA.reps">
+										<p>repeticiones:</p><input type="Number" v-model="ejercicioA.repeticiones">
 										<br>
 										<p>Intensidad:</p><input type="Number" v-model="ejercicioA.intensidad">
 										<br>
@@ -793,7 +790,7 @@
 										<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 										<p class="lista_ejercicio_elemento">Series:</p><input type="Number" placeholder="Número de Series" v-model="ejercicio.series">
 										<br>
-										<p class="lista_ejercicio_elemento">Reps:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.reps">
+										<p class="lista_ejercicio_elemento">repeticiones:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.repeticiones">
 										<br>
 										<p class="lista_ejercicio_elemento">Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="ejercicio.intensidad">
 										<br>
@@ -860,7 +857,7 @@
 									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 									<p class="lista_ejercicio_elemento">Series: {{ejercicio.series}}</p>
 									<br>
-									<p class="lista_ejercicio_elemento">Reps: {{ejercicio.reps}}</p>
+									<p class="lista_ejercicio_elemento">repeticiones: {{ejercicio.repeticiones}}</p>
 									<br>
 									<p class="lista_ejercicio_elemento">Intensidad: {{ejercicio.intensidad}}</p>
 									<br>
