@@ -117,7 +117,7 @@
 			})
 
 			const nuevaSesion = new Vue({
-				el: "#nuevaSesion-page",
+				el: "#nuevaSesion-app",
 				data: {
 					planes: [],
 					plan_actual: '',
@@ -153,6 +153,19 @@
 							}
 
 						})
+
+						
+					},
+
+					abrirDiaSesionNueva: function (value1, value2) {
+						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
+						ejerciciosSesion.planSerial = value1
+						ejerciciosSesion.diaSerial = value2
+						mui.viewport.showPage("nuevaSesionEjercicios-page", "SLIDE_LEFT")
+					},
+					confirmarSesion: function() {
+
+						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -345,9 +358,9 @@
 					}
 				}
 			})
-
+			/*
 			const sesionNueva = new Vue({
-				el: '#nuevaSesion-app',
+				el: '#nuevaSesion-appPEPO',
 				data: {
 					alumnoId: "",
 					planes:[
@@ -392,6 +405,7 @@
 					}
 				}
 			})
+			*/
 
 			const ejerciciosSesion = new Vue({
 				el: '#nuevaSesionEjercicios-app',
@@ -757,7 +771,10 @@
 								<div class="col-80">
 									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
 									<ul class="lista_planes">
-										<li v-for='plan in planes'>
+
+										<li v-for="(alumno, index) in alumnos">{{alumno.nombre}}</li>
+
+										<li v-for='(plan, index1) in planes'>
 											<a onclick="desplegarDiasOnclick(this)">{{plan.nombre}}</a>
 										</li>
 									</ul>
