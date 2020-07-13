@@ -161,6 +161,7 @@
 						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
 						ejerciciosSesion.planSerial = value1
 						ejerciciosSesion.diaSerial = value2
+						ejerciciosSesion.alumno = this.alumno
 						mui.viewport.showPage("nuevaSesionEjercicios-page", "SLIDE_LEFT")
 					},
 					confirmarSesion: function() {
@@ -364,6 +365,7 @@
 			const ejerciciosSesion = new Vue({
 				el: '#nuevaSesionEjercicios-app',
 				data: {
+					alumno: "",
 					planSerial: 0,
 					diaSerial: 0,
 					ejercicios: []
@@ -388,8 +390,28 @@
 							
 							var planId = nuevaSesion.planes[this.planSerial]._id
 							var diaId = nuevaSesion.planes[this.planSerial].dias[this.diaSerial]._id
-							var ejercicioId = ejercicios[i]._id
-							//sesionNueva.planes[this.planSerial].dias[this.diaSerial].ejercicios[i].sesiones.push(sesionAux)
+							var ejercicioId = this.ejercicios[i]._id
+
+							URL = 'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username +"/planes/" + planId + "/dias/" + diaId + "/ejercicios/" + ejercicioId + "/sesiones"
+
+							$.ajax({
+								type: 'POST',
+								url: URL,
+								xhrFields: { withCredentials: true },
+								crossDomain: true,
+								data: {
+									"nombre": sesionAux.nombre,
+									"series": sesionAux.series,
+									"intensidad": sesionAux.intensidad,
+									"tiempo": sesionAux.tiempo,
+									"repeticiones": sesionAux.repeticiones
+								},
+								dataType: 'json',
+								success: (responseData)=>{
+									
+								}
+							})
+
 						}
 						this.ejercicios = []
 						mui.viewport.showPage("nuevaSesion-page", "SLIDE_RIGHT")
@@ -429,6 +451,19 @@
 				el: '#visualizarEjercicios-page',
 				data: {
 					ejercicios: []
+				},
+				methods: {
+					verSesiones: function(value) {
+						verSesiones.sesiones = this.ejercicios[value].sesiones
+						mui.viewport.showPage("visualizarSesiones-page", "SLIDE_LEFT")
+					}
+				}
+			})
+
+			const verSesiones = new Vue({
+				el: '#visualizarSesiones-page',
+				data: {
+					sesiones: []
 				},
 				methods: {}
 			})
@@ -589,7 +624,7 @@
 				</div>
 
 
-				<!-- VISUALIZAR ALUMNO -->
+<!-- VISUALIZAR ALUMNO -->
 
 
 				<div id='visualizarAlumno-page' class="mui-page">
@@ -617,7 +652,7 @@
 				</div>
 
 
-				<!-- CARGA DE DATOS PLAN NUEVO -->
+<!-- CARGA DE DATOS PLAN NUEVO -->
 
 
 				<div id='planNuevo-page' class="mui-page">
@@ -661,7 +696,7 @@
 				</div>
 
 
-				<!-- CARGA DE EJERCICIOS AL DIA -->
+<!-- CARGA DE EJERCICIOS AL DIA -->
 
 
 				<div id='diaNuevo-page' class="mui-page">
@@ -707,7 +742,7 @@
 				</div>
 
 
-				<!-- CARGA DE DATOS SESION NUEVA -->
+<!-- CARGA DE DATOS SESION NUEVA -->
 
 
 				<div id="nuevaSesion-page" class="mui-page">
@@ -736,7 +771,7 @@
 				</div>
 
 
-				<!-- CARGA DE SESION POR EJERCICIO -->
+<!-- CARGA DE SESION POR EJERCICIO -->
 
 
 				<div id='nuevaSesionEjercicios-page' class="mui-page">
@@ -776,7 +811,7 @@
 				</div>
 
 
-				<!-- VISUALIZAR PLANES -->
+<!-- VISUALIZAR PLANES -->
 
 
 				<div id="visualizarPlanes-page" class="mui-page">
@@ -806,7 +841,7 @@
 				</div>
 
 
-				<!-- VISUALIZAR EJERCICIOS -->
+<!-- VISUALIZAR EJERCICIOS -->
 
 
 				<div id='visualizarEjercicios-page' class="mui-page">
@@ -819,7 +854,7 @@
 						<p class="titulo">EJERCICIOS</p>
 						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						<ul class="lista_sesion_ejercicios">
-							<li v-for="ejercicio in ejercicios">
+							<li v-for="(ejercicio, index) in ejercicios">
 								<div class="col-80">
 									<p class="nombre_ejercicio">{{ejercicio.nombre}}</p>
 									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
@@ -831,6 +866,41 @@
 									<br>
 									<p class="lista_ejercicio_elemento">Tiempo: {{ejercicio.tiempo}}</p>
 									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<button class="ver_sesiones_boton" @click="verSesiones(index)">Ver Sesiones</button>
+								</div>
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+								<br>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+
+<!-- VISUALIZAR SESIONES -->
+
+
+				<div id='visualizarSesiones-page' class="mui-page">
+					<div class="mui-page-header">
+						<a class="mui-backarrow" href="#"></a>
+						<div class='mui-page-title'>SESIONES</div>
+						<a class="mui-headmenu" href="#"></a>
+					</div>
+					<div class="mui-page-body" id="second-body" style="overflow:scroll">
+						<p class="titulo">SESIONES</p>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+						<ul class="lista_sesion_ejercicios">
+							<li v-for="sesion in sesiones">
+								<div class="col-80">
+									<p class="nombre_ejercicio">{{sesion.nombre}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<p class="lista_ejercicio_elemento">Series: {{sesion.series}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">repeticiones: {{sesion.repeticiones}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">Intensidad: {{sesion.intensidad}}</p>
+									<br>
+									<p class="lista_ejercicio_elemento">Tiempo: {{sesion.tiempo}}</p>
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 									<br>
 								</div>
 								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
@@ -839,6 +909,7 @@
 						</ul>
 					</div>
 				</div>
+
 
 <!-- ASIGNAR PLAN -->
 
@@ -866,11 +937,11 @@
 				</div>
 
 
-				<!-- Copy the code of "template-page" to add more pages -->
-				<!-- Copie el código de template-plage para agregar más páginas -->
+<!-- Copy the code of "template-page" to add more pages -->
+<!-- Copie el código de template-plage para agregar más páginas -->
 
-				<!-- Optional.Toolbar out of mui-viewport to be omnipresent. Remove if not needed. -->
-				<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->
+<!-- Optional.Toolbar out of mui-viewport to be omnipresent. Remove if not needed. -->
+<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->
 
 
 				<div class="mui-tabbar" id="footer">
@@ -882,8 +953,8 @@
 				</div>
 			</div>
 
-			<!-- mui-screen level panel -->
-			<!-- Panel a nivel de mui-screen -->
+<!-- mui-screen level panel -->
+<!-- Panel a nivel de mui-screen -->
 
 		</div>
 		<div id="menu-panel" class="mui-panel">
