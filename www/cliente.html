@@ -173,6 +173,7 @@
 					},
 					verSesiones: function(value) {
 						verSesiones.sesiones = value.sesiones
+						verSesiones.nombreEjercicio = value.nombre
 						mui.viewport.showPage("visualizarSesiones-page", "SLIDE_LEFT")
 					},
 					graph: function (ejercicio){
@@ -203,6 +204,7 @@
 			const verSesiones = new Vue({
 				el: '#visualizarSesiones-page',
 				data: {
+					nombreEjercicio: "",
 					sesiones: []
 				},
 				methods: {}
@@ -542,12 +544,12 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
-						<p class="titulo">SESIONES</p>
+						<p class="titulo">{{nombreEjercicio}}</p>
 						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						<ul class="lista_sesion_ejercicios">
-							<li v-for="sesion in sesiones">
+							<li v-for="(sesion, i) in sesiones">
 								<div class="col-80">
-									<p class="nombre_ejercicio">{{sesion.nombre}}</p>
+									<p class="nombre_ejercicio">Sesión - {{i + 1}}</p>
 									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 									<p class="lista_ejercicio_elemento">Series: {{sesion.series}}</p>
 									<br>
