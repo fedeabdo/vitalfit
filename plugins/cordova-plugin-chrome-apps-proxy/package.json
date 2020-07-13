@@ -1,0 +1,61 @@
+{
+  "_from": "cordova-plugin-chrome-apps-proxy",
+  "_id": "cordova-plugin-chrome-apps-proxy@0.1.0",
+  "_inBundle": false,
+  "_integrity": "sha1-44grzK/xQv83WGCd+6znFu/r2yc=",
+  "_location": "/cordova-plugin-chrome-apps-proxy",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-chrome-apps-proxy",
+    "name": "cordova-plugin-chrome-apps-proxy",
+    "escapedName": "cordova-plugin-chrome-apps-proxy",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-chrome-apps-proxy/-/cordova-plugin-chrome-apps-proxy-0.1.0.tgz",
+  "_shasum": "e3882bccaff142ff3758609dfbace716efebdb27",
+  "_spec": "cordova-plugin-chrome-apps-proxy",
+  "_where": "C:\\Users\\Usuario\\OneDrive - Universidad de Montevideo\\Documentos\\vitalfit-app\\vitalfit\\vitalfit",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/MobileChromeApps/cordova-plugin-chrome-apps-proxy/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-chrome-apps-proxy",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "deprecated": false,
+  "description": "This plugin provides the ability to set a proxy for the app.",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "homepage": "https://github.com/MobileChromeApps/cordova-plugin-chrome-apps-proxy",
+  "keywords": [
+    "chrome",
+    "proxy",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "license": "BSD",
+  "name": "cordova-plugin-chrome-apps-proxy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MobileChromeApps/cordova-plugin-chrome-apps-proxy.git"
+  },
+  "version": "0.1.0"
+}
