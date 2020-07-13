@@ -118,7 +118,6 @@
 			const alumnoNuevo = new Vue({
 				el: "#nuevoAlumno-page",
 				data: {
-					alumnos: [],
 					alumno: {
 						nombre: "",
 						apellido: "",
@@ -129,34 +128,35 @@
 				},
 				methods: {
 					confirmarAlumno: function () {
-						// this.alumnos.push(this.alumno)
-						$.ajax({
-							type: 'POST',
-							url: 'https://app-personal-trainer.herokuapp.com/clientes/',
-							xhrFields: { withCredentials: true },
-							crossDomain: true,
-							data: {
-								'nombre': this.alumno.nombre + " " + this.alumno.apellido,
-								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.split(" ")[0].toLowerCase(),
-								'admin': false,
-								'password': this.alumno.apellido,
-								'fecha_nacimiento': this.alumno.fecha_nacimiento,
-								'nro_contacto': this.alumno.nro_contacto,
-								'mail': this.alumno.mail
-							},
-							dataType: 'json',
-							success: (responseData) => {
-								alert(responseData)
-							}
+						if(this.alumno.nombre != "" && this.alumno.apellido != "" && this.alumno.fechaDeNac != "" && this.alumno.nroContacto != "" && this.alumno.email != "") {
+							$.ajax({
+								type: 'POST',
+								url: 'https://app-personal-trainer.herokuapp.com/clientes/',
+								xhrFields: { withCredentials: true },
+								crossDomain: true,
+								data: {
+									'nombre': this.alumno.nombre + " " + this.alumno.apellido,
+									'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.split(" ")[0].toLowerCase(),
+									'admin': false,
+									'password': this.alumno.apellido,
+									'fecha_nacimiento': this.alumno.fecha_nacimiento,
+									'nro_contacto': this.alumno.nro_contacto,
+									'mail': this.alumno.mail
+								},
+								dataType: 'json',
+								success: (responseData) => {
+									alert(responseData)
+								}
 
-						})
-						alert(this.alumno.nombre)
-						this.alumno.nombre = ""
-						this.alumno.apellido = ""
-						this.alumno.fechaDeNac = ""
-						this.alumno.nroContacto = ""
-						this.alumno.email = ""
-						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
+							})
+							homePage.alumnos.push(this.alumno)
+							this.alumno.nombre = ""
+							this.alumno.apellido = ""
+							this.alumno.fechaDeNac = ""
+							this.alumno.nroContacto = ""
+							this.alumno.email = ""
+							mui.viewport.showPage("home-page", "SLIDE_RIGHT")
+						}
 					}
 				}
 			})
@@ -521,7 +521,7 @@
 			<div id="mui-viewport" class="mui-viewport">
 
 
-				<!-- PAGINA INICIO -->
+<!-- PAGINA INICIO -->
 
 
 				<div id="home-page" class="mui-page">
@@ -555,7 +555,7 @@
 				</div>
 
 
-				<!-- CARGA DE DATOS NUEVO ALUMNO -->
+<!-- CARGA DE DATOS NUEVO ALUMNO -->
 
 
 				<div id='nuevoAlumno-page' class="mui-page">
