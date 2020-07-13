@@ -119,7 +119,7 @@
 			})
 
 			const nuevaSesion = new Vue({
-				el: "#nuevaSesion-app",
+				el: "#nuevaSesion-page",
 				data: {
 					planes: [],
 					plan_actual: '',
@@ -248,7 +248,7 @@
 			})
 
 			const planNuevo = new Vue({
-				el: "#planNuevo-app",
+				el: "#planNuevo-page",
 				data: {
 					alumno: "",
 					nombrePlan: '',
@@ -272,6 +272,7 @@
 					diaNuevo: function (value) {
 						diaNuevo.ejercicios = this.dias[value].ejercicios
 						diaNuevo.indiceDia = value
+						diaNuevo.nombreDia = this.dias[value].nombre
 						mui.viewport.showPage("diaNuevo-page", "SLIDE_LEFT")
 					},
 					confirmarPlan: function () {
@@ -335,9 +336,10 @@
 
 
 			const diaNuevo = new Vue({
-				el: '#diaNuevo-app',
+				el: '#diaNuevo-page',
 				data: {
 					indiceDia: 0,
+					nombreDia: "",
 					ejercicios: []
 				},
 				methods: {
@@ -364,7 +366,7 @@
 			
 
 			const ejerciciosSesion = new Vue({
-				el: '#nuevaSesionEjercicios-app',
+				el: '#nuevaSesionEjercicios-page',
 				data: {
 					alumno: "",
 					planSerial: 0,
@@ -429,6 +431,7 @@
 				methods: {
 					abrirEjerciciosVisualizar: function (dia) {
 						verEjercicios.ejercicios = dia.ejercicios
+						verEjercicios.diaNombre = dia.nombre
 						mui.viewport.showPage("visualizarEjercicios-page", "SLIDE_LEFT")
 					},
 					async cargarPlanes() {
@@ -451,11 +454,13 @@
 			const verEjercicios = new Vue({
 				el: '#visualizarEjercicios-page',
 				data: {
+					diaNombre:"",
 					ejercicios: []
 				},
 				methods: {
 					verSesiones: function(value) {
 						verSesiones.sesiones = this.ejercicios[value].sesiones
+						verSesiones.nombreEjercicio = this.ejercicios[value].nombre
 						mui.viewport.showPage("visualizarSesiones-page", "SLIDE_LEFT")
 					}
 				}
@@ -464,6 +469,7 @@
 			const verSesiones = new Vue({
 				el: '#visualizarSesiones-page',
 				data: {
+					nombreEjercicio: "",
 					sesiones: []
 				},
 				methods: {}
@@ -606,7 +612,7 @@
 				<div id='nuevoAlumno-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>CARGA DE DATOS - NUEVO ALUMNO</div>
+						<div class='mui-page-title'>NUEVO ALUMNO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -635,12 +641,9 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
+						<p class="titulo">{{alumno.nombre}} {{alumno.apellido}}</p>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						<div class="col-80" id="vistaAlumno">
-							<br>
-							<p class="propiedad">Nombre:</p>
-							<p v-text="alumno.nombre"></p>
-							<p class="propiedad">Apellido:</p>
-							<p v-text="alumno.apellido"></p>
 							<p class="propiedad">Fecha de Nacimiento:</p>
 							<p v-text="alumno.fecha_nacimiento"></p>
 							<p class="propiedad">Nro. de Contacto:</p>
@@ -648,67 +651,75 @@
 							<p class="propiedad">Email:</p>
 							<p v-text="alumno.mail"></p><br>
 						</div>
-							<button class="confirmar_boton" @click="eliminarAlumno"> Eliminar usuario </button>
+						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+						<button class="confirmar_boton" @click="eliminarAlumno"> Eliminar usuario </button>
 					</div>
 				</div>
 
 
-<!-- CARGA DE DATOS PLAN NUEVO -->
+<!-- PLAN NUEVO -->
 
 
 				<div id='planNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>CARGA DE DATOS - PLAN NUEVO</div>
+						<div class='mui-page-title'>PLAN NUEVO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div id="planNuevo-app">
 							<div class="col-80">
-								<br>
+								<p class="titulo">PLAN NUEVO</p>
+							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<div class="col-80">
 								<div>
-									<label class="nombre_plan_label">Nombre del Plan: </label>
+									<p class="plan_nuevo_label">Nombre del Plan: </p>
 									<input v-model="nombrePlan" type="text" placeholder="Ingrese Nuevo Nombre"
 										class="nombre_plan_input">
+									<p class="plan_nuevo_label">Días: </p>
+									<span>
+										<input type="text" class="nombre_dia_input" v-model="nombreDia"
+											placeholder="Ingrese Nombre Dia">
+										<button id="nuevoDia" class="agregar_boton" v-on:click="agregarDia">＋</button>
+										<button id="quitarDia" class="quitar_boton" v-on:click="quitarDia">&minus;</button>
+									</span>
 								</div>
 							</div>
-							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<div class= "col-80">
-								<p class="titulo">DÍAS</p>
-								<span>
-									<button id="nuevoDia" class="agregar_boton" v-on:click="agregarDia">＋</button>
-									<button id="quitarDia" class="quitar_boton" v-on:click="quitarDia">&minus;</button>
-									<input type="text" class="nombre_dia_input" v-model="nombreDia"
-										placeholder="Ingrese Nombre Dia">
-								</span>
-							</div>
-							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-							<div class= "col-80">
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<ul class="lista_dias">
 									<li v-for="(dia, index) in dias">
 										<a v-on:click="diaNuevo(index)" v-text="dia.nombre"></a>
 									</li>
 								</ul>
 								<br>
-								<button class="confirmar_boton" @click="confirmarPlan">Confirmar</button>
+								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">							
+								<br>								
 							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">	
+							<br>
+							<button class="confirmar_boton" @click="confirmarPlan">Confirmar</button>
 						</div>
 					</div>
 				</div>
 
 
-<!-- CARGA DE EJERCICIOS AL DIA -->
+<!-- PLAN NUEVO - DIA NUEVO -->
 
 
 				<div id='diaNuevo-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>CARGA DE DATOS - DÍA NUEVO</div>
+						<div class='mui-page-title'>DÍA NUEVO</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div id="diaNuevo-app">
-							<br>
+							<div class="col-80">
+								<p class="titulo">{{nombreDia}}</p>
+							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<div class= "col-80">
 								<button id="nuevoEjercicio" class="agregar_ejercicio_boton" v-on:click="agregarEjercicio">Agregar Ejercicio</button>
 								<button id="quitarEjercicio" class="quitar_boton" v-on:click="quitarEjercicio">&minus;</button>
@@ -732,8 +743,7 @@
 										<br>
 									</div>
 									<br>
-									<hr
-										style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								</li>
 							</ul>
 							<br>
@@ -743,42 +753,40 @@
 				</div>
 
 
-<!-- CARGA DE DATOS SESION NUEVA -->
+<!-- SESION NUEVA -->
 
 
 				<div id="nuevaSesion-page" class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>CARGA DE DATOS - NUEVA SESIÓN</div>
+						<div class='mui-page-title'>NUEVA SESIÓN - PLANES</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
-						<div>
-							<div id="nuevaSesion-app">
-								<p class="titulo">PLANES</p>
-								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
-								<br>
-								<div class="col-80">
-									<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
-									<ul class="lista_planes">
-										<li v-for='(plan, index1) in planes'>
-											<a onclick="desplegarDiasOnclick(this)">{{plan.nombre}}</a>
-										</li>
-									</ul>
-								</div>
+						<div id="nuevaSesion-app">
+							<p class="titulo">PLANES</p>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<br>
+							<div class="col-80">
+								<input type="text" class="filtro_planes_input" onkeyup="filtro('.filtro_planes_input', '.lista_planes')" placeholder="Buscar plan">
+								<ul class="lista_planes">
+									<li v-for='(plan, index1) in planes'>
+										<a onclick="desplegarDiasOnclick(this)">{{plan.nombre}}</a>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
 				</div>
 
 
-<!-- CARGA DE SESION POR EJERCICIO -->
+<!-- SESION NUEVA - EJERCICIOS -->
 
 
 				<div id='nuevaSesionEjercicios-page' class="mui-page">
 					<div class="mui-page-header">
 						<a class="mui-backarrow" href="#"></a>
-						<div class='mui-page-title'>CARGA DE DATOS - NUEVA SESIÓN</div>
+						<div class='mui-page-title'>NUEVA SESIÓN - EJERCICIOS</div>
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
@@ -842,7 +850,7 @@
 				</div>
 
 
-<!-- VISUALIZAR EJERCICIOS -->
+<!-- VISUALIZAR PLANES - VISUALIZAR EJERCICIOS -->
 
 
 				<div id='visualizarEjercicios-page' class="mui-page">
@@ -852,7 +860,7 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
-						<p class="titulo">EJERCICIOS</p>
+						<p class="titulo">{{diaNombre}}</p>
 						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						<ul class="lista_sesion_ejercicios">
 							<li v-for="(ejercicio, index) in ejercicios">
@@ -877,7 +885,7 @@
 				</div>
 
 
-<!-- VISUALIZAR SESIONES -->
+<!-- VISUALIZAR PLANES - VISUALIZAR EJERCICIOS - VISUALIZAR SESIONES -->
 
 
 				<div id='visualizarSesiones-page' class="mui-page">
@@ -887,12 +895,12 @@
 						<a class="mui-headmenu" href="#"></a>
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
-						<p class="titulo">SESIONES</p>
+						<p class="titulo">{{nombreEjercicio}}</p>
 						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						<ul class="lista_sesion_ejercicios">
-							<li v-for="sesion in sesiones">
+							<li v-for="(sesion, i) in sesiones">
 								<div class="col-80">
-									<p class="nombre_ejercicio">{{sesion.nombre}}</p>
+									<p class="nombre_ejercicio">Sesión - {{i + 1}}</p>
 									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 									<p class="lista_ejercicio_elemento">Series: {{sesion.series}}</p>
 									<br>
@@ -929,10 +937,13 @@
 									<option disabled value="">Seleccione un plan</option>
 									<option v-for="plan in planes" v-bind:value="plan._id">{{plan.nombre}}</option>
 								</select>
-								<br>
 								<button class="confirmar_selector_boton" @click="asignarPlanSeleccionado">Agregar/cambiar plan asignado</button>
-								<div>Plan asignado: {{plan_actual.nombre}}</div>
 							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<div class="col-80">
+								<div class="plan_asignado_contenedor"><span class="plan_asignado_label">Plan asignado:</span> {{plan_actual.nombre}}</div>
+							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						</div>
 					</div>
 				</div>

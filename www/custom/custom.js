@@ -42,6 +42,13 @@ function installEvents() {
 			}
 		},
 		{
+			id: '.mui-backarrow-home',
+			fn: () => {
+				mui.viewport.showPage("home-page", "SLIDE_RIGHT");
+				return false;
+			}
+		},
+		{
 			id: '.mui-headmenu',
 			ev: 'click',	//If not, it assumes click
 			fn: () => {
@@ -281,12 +288,24 @@ function desplegarDiasVisualizarOnclick(event) {
 	$(".dias_desplegados_visualizar", event).slideToggle()
 }
 
+function desplegarDiasCliente() {
+	let diasHtml = $('<div class="dias_desplegados_cliente"><div v-for="dia in plan.dias"><button class="plan_cliente_dia_boton" @click="handleSelectDia(dia)">{{dia.nombre}}</button><br></div></div>')
+	$('li a', ".lista_planes_cliente").append(diasHtml)
+	$('.dias_desplegados_cliente').hide()
+}
+
+function desplegarDiasClienteOnclick(event) {
+	$(".dias_desplegados_cliente").not($(".dias_desplegados_cliente", event)).slideUp()
+	$(".dias_desplegados_cliente", event).slideToggle()
+}
+
 
 
 $(document).ready(() => {
 	desplegarOpciones()
 	desplegarDias()
 	desplegarDiasVisualizar()
+	desplegarDiasCliente()
 });
 
 
