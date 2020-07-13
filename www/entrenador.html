@@ -30,22 +30,22 @@
 
 
 	<script>
-		$(document).ready(() => {	
-			
-//******** INTERACCIONES CON LA BASE DE DATOS **********//
+		$(document).ready(() => {
+
+			//******** INTERACCIONES CON LA BASE DE DATOS **********//
 
 			$.ajax({
 				type: 'GET',
 				url: 'https://app-personal-trainer.herokuapp.com/clientes/',
 				xhrFields: { withCredentials: true },
 				crossDomain: true,
-				success: function(data){
+				success: function (data) {
 					homePage.alumnos = data
 				}
 			})
-			
 
-//******** OBJETOS VUE **********//
+
+			//******** OBJETOS VUE **********//
 
 			const homePage = new Vue({
 				el: "#home-page",
@@ -57,8 +57,8 @@
 					nuevoAlumno: function() {
 						mui.viewport.showPage("nuevoAlumno-page", 'SLIDE_LEFT')
 					},
-					verAlumno: function() {
-						verAlumno.alumno.nombre =this.alumnoSeleccionado.nombre.split(" ")[0]
+					verAlumno: function () {
+						verAlumno.alumno.nombre = this.alumnoSeleccionado.nombre.split(" ")[0]
 						verAlumno.alumno.apellido = this.alumnoSeleccionado.nombre.split(" ")[1]
 						verAlumno.alumno.username = this.alumnoSeleccionado.username
 						if(this.alumnoSeleccionado.fecha_nacimiento != undefined){
@@ -68,40 +68,104 @@
 						verAlumno.alumno.mail = this.alumnoSeleccionado.mail
 						mui.viewport.showPage("visualizarAlumno-page", 'SLIDE_LEFT')
 					},
-					verPlanes: async function(){
+					verPlanes: async function () {
 						verPlanes.alumno = this.alumnoSeleccionado
 						await verPlanes.cargarPlanes()
-							mui.viewport.showPage("visualizarPlanes-page", 'SLIDE_LEFT')
+						mui.viewport.showPage("visualizarPlanes-page", 'DEF')
 
 					},
-					abrirPlanNuevo: function(value) {
-						this.alumnos[value]._id = planNuevo.alumnoId
-						mui.viewport.showPage("planNuevo-page", 'SLIDE_LEFT')
+					abrirPlanNuevo: function (alumno) {
+						planNuevo.alumno = alumno
+						mui.viewport.showPage("planNuevo-page", 'DEF')
 					},
-					abrirNuevaSesion: function(value) {
-						this.alumnos[value]._id = sesionNueva.alumnoId
-						mui.viewport.showPage("nuevaSesion-page", 'SLIDE_LEFT')
+					abrirNuevaSesion: function () {
+						nuevaSesion.alumno = this.alumnoSeleccionado
+						nuevaSesion.cargarDatos()
+						mui.viewport.showPage("nuevaSesion-page", 'DEF')
 					},
-					asignacionPlan: function() {
-						asignarPlan.alumno = this.alumnoSeleccionado
-						asignarPlan.cargarPlanes()
+					asignacionPlan: function () {
 						mui.viewport.showPage("asignarPlan-page", 'DEF')
 					},
-					
-					
-					logout: function(){
+					eliminarAlumno: function () {
+						username = this.alumnoSeleccionado.username
+						$.ajax({
+							type: 'DELETE',
+							url: 'https://app-personal-trainer.herokuapp.com/clientes/' + username,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							success: function (data) {
+								alert("Eliminado")
+							}
+						})
+					},
+
+					logout: function () {
 						$.ajax({
 							type: 'GET',
 							url: 'https://app-personal-trainer.herokuapp.com/logout',
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
-							success: function(data){
+							success: function (data) {
 								document.location.href = "index.html"
 							}
 						})
 					},
-					seleccionarAlumno(alumno){
+					seleccionarAlumno(alumno) {
 						this.alumnoSeleccionado = alumno
+					}
+				}
+			})
+
+			const nuevaSesion = new Vue({
+				el: "#nuevaSesion-app",
+				data: {
+					planes: [],
+					plan_actual: '',
+					alumno: ""
+				},
+				methods: {
+					async cargarDatos() {
+						URL = 'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/planes'
+						await $.ajax({
+							type: 'GET',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							dataType: 'json',
+							success: (responseData) => {
+								this.planes = responseData
+							}
+
+						})
+
+						URL =  'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/plan_asignado'
+						await $.ajax({
+							type: 'GET',
+							url: URL,
+							xhrFields: { withCredentials: true },
+							crossDomain: true,
+							dataType: 'json',
+							success: (responseData)=>{
+								this.plan_actual = responseData
+							},
+							error: (responseData)=>{
+								this.plan_actual = "No hay plan actual";
+							}
+
+						})
+
+						
+					},
+
+					abrirDiaSesionNueva: function (value1, value2) {
+						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
+						ejerciciosSesion.planSerial = value1
+						ejerciciosSesion.diaSerial = value2
+						mui.viewport.showPage("nuevaSesionEjercicios-page", "SLIDE_LEFT")
+					},
+					confirmarSesion: function() {
+
+						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
@@ -109,8 +173,7 @@
 			const alumnoNuevo = new Vue({
 				el: "#nuevoAlumno-page",
 				data: {
-					alumnos: [],
-					alumno:{
+					alumno: {
 						nombre: "",
 						apellido: "",
 						fechaDeNac: "",
@@ -119,41 +182,42 @@
 					}
 				},
 				methods: {
-					confirmarAlumno: function() {
-						// this.alumnos.push(this.alumno)
-						$.ajax({
-							type: 'POST',
-							url: 'https://app-personal-trainer.herokuapp.com/clientes/',
-							xhrFields: { withCredentials: true },
-							crossDomain: true,
-							data: {
-								'nombre': this.alumno.nombre + " " + this.alumno.apellido,
-								'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.split(" ")[0].toLowerCase(),
-								'admin': false,
-								'password': this.alumno.apellido,
-								'fecha_nacimiento': this.alumno.fecha_nacimiento,
-								'nro_contacto': this.alumno.nro_contacto,
-								'mail': this.alumno.mail
-							},
-							dataType: 'json',
-							success: (responseData)=>{
-								alert(responseData)
-							}
+					confirmarAlumno: function () {
+						if(this.alumno.nombre != "" && this.alumno.apellido != "" && this.alumno.fechaDeNac != "" && this.alumno.nroContacto != "" && this.alumno.email != "") {
+							$.ajax({
+								type: 'POST',
+								url: 'https://app-personal-trainer.herokuapp.com/clientes/',
+								xhrFields: { withCredentials: true },
+								crossDomain: true,
+								data: {
+									'nombre': this.alumno.nombre + " " + this.alumno.apellido,
+									'username': this.alumno.nombre.toLowerCase() + "." + this.alumno.apellido.split(" ")[0].toLowerCase(),
+									'admin': false,
+									'password': this.alumno.apellido,
+									'fecha_nacimiento': this.alumno.fecha_nacimiento,
+									'nro_contacto': this.alumno.nro_contacto,
+									'mail': this.alumno.mail
+								},
+								dataType: 'json',
+								success: (responseData) => {
+									alert(responseData)
+								}
 
-						})
-						alert(this.alumno.nombre)
-						this.alumno.nombre = ""
-						this.alumno.apellido = ""
-						this.alumno.fechaDeNac = ""
-						this.alumno.nroContacto = ""
-						this.alumno.email = ""
-						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
+							})
+							homePage.alumnos.push(this.alumno)
+							this.alumno.nombre = ""
+							this.alumno.apellido = ""
+							this.alumno.fechaDeNac = ""
+							this.alumno.nroContacto = ""
+							this.alumno.email = ""
+							mui.viewport.showPage("home-page", "SLIDE_RIGHT")
+						}
 					}
 				}
 			})
 
 			const verAlumno = new Vue({
-				el:"#visualizarAlumno-page",
+				el: "#visualizarAlumno-page",
 				data: {
 					alumno: {
 						nombre: "",
@@ -184,7 +248,7 @@
 			const planNuevo = new Vue({
 				el: "#planNuevo-app",
 				data: {
-					alumnoId: "",
+					alumno: "",
 					nombrePlan: '',
 					dias: [],
 					nombreDia: "",
@@ -193,7 +257,7 @@
 					agregarDia: function () {
 						diaAux = {
 							nombre: this.nombreDia,
-							ejercicios:[]
+							ejercicios: []
 						}
 						if (this.nombreDia != "") {
 							this.dias.push(diaAux)
@@ -208,16 +272,65 @@
 						diaNuevo.indiceDia = value
 						mui.viewport.showPage("diaNuevo-page", "SLIDE_LEFT")
 					},
-					confirmarPlan: function() {
-						var planAux = {
-							nombreAux: this.nombrePlan,
-							diasAux: this.dias
+					confirmarPlan: function () {
+						if (this.nombrePlan != "" && this.dias.length > 0) {
+							var planAux = {
+								nombre: this.nombrePlan,
+								dias: this.dias
+							}
+							console.log(planAux)
+							$.ajax({
+								type: 'POST',
+								url: 'https://app-personal-trainer.herokuapp.com/clientes/' + this.alumno.username + '/planes',
+								xhrFields: { withCredentials: true },
+								crossDomain: true,
+								data: {
+									'nombre': this.nombrePlan,
+								},
+								dataType: 'json',
+								success: (responseData) => {
+									for (let i = 0; i < this.dias.length; i++) {
+										$.ajax({
+											type: 'POST',
+											url: 'https://app-personal-trainer.herokuapp.com/clientes/' + this.alumno.username + '/planes/' + responseData._id + '/dias',
+											xhrFields: { withCredentials: true },
+											crossDomain: true,
+											data: {
+												'nombre': this.dias[i].nombre,
+												'ejercicios': this.dias[i].ejercicios
+											},
+											dataType: 'json',
+											success: (responseData2) => {
+												for (let j = 0; j < this.dias[i].ejercicios.length; j++) {
+													$.ajax({
+														type: 'POST',
+														url: 'https://app-personal-trainer.herokuapp.com/clientes/' + this.alumno.username + '/planes/' + responseData._id + '/dias/' + responseData2._id + '/ejercicios',
+														xhrFields: { withCredentials: true },
+														crossDomain: true,
+														data: {
+															'nombre': this.dias[i].ejercicios[j].nombre,
+															'intensidad': this.dias[i].ejercicios[j].intensidad,
+															'repeticiones': this.dias[i].ejercicios[j].repeticiones,
+															'series': this.dias[i].ejercicios[j].series,
+															'tiempo': this.dias[i].ejercicios[j].tiempo
+														},
+														dataType: 'json',
+														success: (r) => {
+															console.log(r)
+														}
+													})
+												}
+											}
+										})
+									}
+								}
+							})
+							mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 						}
-						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
 					}
 				}
 			})
-			
+
 
 			const diaNuevo = new Vue({
 				el: '#diaNuevo-app',
@@ -230,7 +343,7 @@
 						var ejercicio = {
 							nombre: "",
 							series: "",
-							reps: "",
+							repeticiones: "",
 							intensidad: "",
 							tiempo: ""
 						}
@@ -239,60 +352,14 @@
 					quitarEjercicio: function () {
 						this.ejercicios.pop()
 					},
-					confirmarEjercicio: function() {
+					confirmarEjercicio: function () {
 						planNuevo.dias[this.indiceDia].ejercicios = this.ejercicios
 						this.ejercicios = []
 						mui.viewport.showPage("planNuevo-page", "SLIDE_RIGHT")
 					}
 				}
 			})
-
-			const sesionNueva = new Vue({
-				el: '#nuevaSesion-app',
-				data: {
-					alumnoId: "",
-					planes:[
-						{
-							nombre: 'Prueba',
-							dias: [
-								{
-									nombre: "Dia de Pecho",
-									ejercicios: [
-										{
-											nombre: "pecho plano",
-											series: 3,
-											reps: 2,
-											intensidad: 10,
-											tiempo: 60,
-											sesiones:[]
-										},
-										{
-											nombre: "Tren Inferior",
-											series: 4,
-											reps: 1,
-											intensidad: 70,
-											tiempo: 60,
-											sesiones:[]
-										}
-									]
-								}
-							]
-						}
-					]
-				},
-				methods: {
-					abrirDiaSesionNueva: function(value1, value2) {
-						ejerciciosSesion.ejercicios = this.planes[value1].dias[value2].ejercicios
-						ejerciciosSesion.planSerial = value1
-						ejerciciosSesion.diaSerial = value2
-						mui.viewport.showPage("nuevaSesionEjercicios-page", "SLIDE_LEFT")
-					},
-					confirmarSesion: function() {
-
-						mui.viewport.showPage("home-page", "SLIDE_RIGHT")
-					}
-				}
-			})
+			
 
 			const ejerciciosSesion = new Vue({
 				el: '#nuevaSesionEjercicios-app',
@@ -307,7 +374,7 @@
 							var sesionAux = {
 								nombre: "",
 								series: "",
-								reps: "",
+								repeticiones: "",
 								intensidad: "",
 								tiempo: ""
 							}
@@ -315,12 +382,12 @@
 
 							sesionAux.nombre = ejercicioAux.nombre,
 							sesionAux.series = ejercicioAux.series,
-							sesionAux.reps = ejercicioAux.reps,
+							sesionAux.repeticiones = ejercicioAux.repeticiones,
 							sesionAux.intensidad = ejercicioAux.intensidad,
 							sesionAux.tiempo = ejercicioAux.tiempo
 							
-							var planId = planes[this.planSerial]._id
-							var diaId = dias[this.diaSerial]._id
+							var planId = nuevaSesion.planes[this.planSerial]._id
+							var diaId = nuevaSesion.planes[this.planSerial].dias[this.diaSerial]._id
 							var ejercicioId = ejercicios[i]._id
 							//sesionNueva.planes[this.planSerial].dias[this.diaSerial].ejercicios[i].sesiones.push(sesionAux)
 						}
@@ -334,22 +401,22 @@
 				el: '#visualizarPlanes-page',
 				data: {
 					alumno: '',
-					planes:[]
+					planes: []
 				},
 				methods: {
-					abrirEjerciciosVisualizar: function( dia ) {
+					abrirEjerciciosVisualizar: function (dia) {
 						verEjercicios.ejercicios = dia.ejercicios
 						mui.viewport.showPage("visualizarEjercicios-page", "SLIDE_LEFT")
 					},
-					async cargarPlanes(){
-						URL =  'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/planes'
+					async cargarPlanes() {
+						URL = 'https://app-personal-trainer.herokuapp.com' + '/clientes/' + this.alumno.username + '/planes'
 						await $.ajax({
 							type: 'GET',
 							url: URL,
 							xhrFields: { withCredentials: true },
 							crossDomain: true,
 							dataType: 'json',
-							success: (responseData)=>{
+							success: (responseData) => {
 								this.planes = responseData
 							}
 
@@ -405,7 +472,6 @@
 
 						})
 
-						console.log(this.plan_actual)
 					},
 
 					asignarPlanSeleccionado: function(){
@@ -475,15 +541,21 @@
 					<div class="mui-page-body" id="home-body" style="overflow:scroll">
 						<div>
 							<div class="col-80">
+								<p class="titulo">ALUMNOS</p>
+							</div>
+							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+							<div class="col-80">
 								<br>
 								<span>
-									<input type="text" class="filtro_alumnos_input" onkeyup="filtro('.filtro_alumnos_input', '.lista_alumnos')" placeholder="Buscar por nombre">
+									<input type="text" class="filtro_alumnos_input"
+										onkeyup="filtro('.filtro_alumnos_input', '.lista_alumnos')"
+										placeholder="Buscar por nombre">
 									<button class="agregar_alumno_boton" @click="nuevoAlumno">＋</button>
 								</span>
-								<p class="titulo">ALUMNOS</p>
-								<ul class="lista_alumnos"><br>
+								<ul class="lista_alumnos">
 									<li v-for="(alumno, index) in alumnos">
-										<a @click="seleccionarAlumno(alumno)" onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
+										<a @click="seleccionarAlumno(alumno)"
+											onclick="desplegarOpcionesOnclick(this)">{{ alumno.nombre }}</a>
 									</li>
 								</ul>
 							</div>
@@ -506,8 +578,10 @@
 							<br>
 							<p>Nombre:</p><input type="text" placeholder="Nombre" v-model="alumno.nombre"><br>
 							<p>Apellido:</p><input type="text" placeholder="Apellido" v-model="alumno.apellido"><br>
-							<p>Fecha de Nacimiento:</p><input type="date" placeholder="Fecha de Nacimiento" v-model="alumno.fechaDeNac"><br>
-							<p>Nro. de Contacto:</p><input type="tel" placeholder="Nro. de Contacto" v-model="alumno.nroContacto"><br>
+							<p>Fecha de Nacimiento:</p><input type="date" placeholder="Fecha de Nacimiento"
+								v-model="alumno.fechaDeNac"><br>
+							<p>Nro. de Contacto:</p><input type="tel" placeholder="Nro. de Contacto"
+								v-model="alumno.nroContacto"><br>
 							<p>Email:</p><input type="email" placeholder="Email" v-model="alumno.email"><br><br>
 							<button class="confirmar_boton" @click="confirmarAlumno">Confirmar</button>
 						</div>
@@ -515,7 +589,7 @@
 				</div>
 
 
-<!-- VISUALIZAR ALUMNO -->
+				<!-- VISUALIZAR ALUMNO -->
 
 
 				<div id='visualizarAlumno-page' class="mui-page">
@@ -527,19 +601,23 @@
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div class="col-80" id="vistaAlumno">
 							<br>
-							<p class="propiedad">Nombre:</p><p v-text="alumno.nombre"></p>
-							<p class="propiedad">Apellido:</p><p v-text="alumno.apellido"></p>
-							<p class="propiedad">Fecha de Nacimiento:</p><p v-text="alumno.fecha_nacimiento"></p>
-							<p class="propiedad">Nro. de Contacto:</p><p v-text="alumno.nro_contacto"></p>
-							<p class="propiedad">Email:</p><p v-text="alumno.mail"></p><br>
+							<p class="propiedad">Nombre:</p>
+							<p v-text="alumno.nombre"></p>
+							<p class="propiedad">Apellido:</p>
+							<p v-text="alumno.apellido"></p>
+							<p class="propiedad">Fecha de Nacimiento:</p>
+							<p v-text="alumno.fecha_nacimiento"></p>
+							<p class="propiedad">Nro. de Contacto:</p>
+							<p v-text="alumno.nro_contacto"></p>
+							<p class="propiedad">Email:</p>
+							<p v-text="alumno.mail"></p><br>
 						</div>
-
 							<button class="confirmar_boton" @click="eliminarAlumno"> Eliminar usuario </button>
 					</div>
 				</div>
 
 
-<!-- CARGA DE DATOS PLAN NUEVO -->
+				<!-- CARGA DE DATOS PLAN NUEVO -->
 
 
 				<div id='planNuevo-page' class="mui-page">
@@ -550,11 +628,12 @@
 					</div>
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div id="planNuevo-app">
-							<div class= "col-80">
+							<div class="col-80">
 								<br>
 								<div>
 									<label class="nombre_plan_label">Nombre del Plan: </label>
-									<input v-model="nombrePlan" type="text" placeholder="Ingrese Nuevo Nombre" class="nombre_plan_input">
+									<input v-model="nombrePlan" type="text" placeholder="Ingrese Nuevo Nombre"
+										class="nombre_plan_input">
 								</div>
 							</div>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
@@ -563,16 +642,14 @@
 								<span>
 									<button id="nuevoDia" class="agregar_boton" v-on:click="agregarDia">＋</button>
 									<button id="quitarDia" class="quitar_boton" v-on:click="quitarDia">&minus;</button>
-									<input type="text" class="nombre_dia_input" v-model="nombreDia" placeholder="Ingrese Nombre Dia">
+									<input type="text" class="nombre_dia_input" v-model="nombreDia"
+										placeholder="Ingrese Nombre Dia">
 								</span>
 							</div>
 							<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 							<div class= "col-80">
-								<span>
-									<input type="text" class="filtro_dias_input" onkeyup="filtro('.filtro_dias_input', '.lista_dias')" placeholder="Buscar día">
-								</span>
 								<ul class="lista_dias">
-									<li  v-for="(dia, index) in dias">
+									<li v-for="(dia, index) in dias">
 										<a v-on:click="diaNuevo(index)" v-text="dia.nombre"></a>
 									</li>
 								</ul>
@@ -584,7 +661,7 @@
 				</div>
 
 
-<!-- CARGA DE EJERCICIOS AL DIA -->
+				<!-- CARGA DE EJERCICIOS AL DIA -->
 
 
 				<div id='diaNuevo-page' class="mui-page">
@@ -603,13 +680,15 @@
 							<ul class="lista_ejercicios">
 								<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								<li v-for="(ejercicioA,index) in ejercicios">
-									<div class= "col-80">
-										<span><p>Ejercicio - {{ index + 1}}</p></span>
+									<div class="col-80">
+										<span>
+											<p>Ejercicio - {{ index + 1}}</p>
+										</span>
 										<p>Nombre:</p><input type="Text" v-model="ejercicioA.nombre">
 										<br>
 										<p>Series:</p><input type="Number" v-model="ejercicioA.series">
 										<br>
-										<p>Reps:</p><input type="Number" v-model="ejercicioA.reps">
+										<p>repeticiones:</p><input type="Number" v-model="ejercicioA.repeticiones">
 										<br>
 										<p>Intensidad:</p><input type="Number" v-model="ejercicioA.intensidad">
 										<br>
@@ -617,7 +696,8 @@
 										<br>
 									</div>
 									<br>
-									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
+									<hr
+										style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 								</li>
 							</ul>
 							<br>
@@ -627,7 +707,7 @@
 				</div>
 
 
-<!-- CARGA DE DATOS SESION NUEVA -->
+				<!-- CARGA DE DATOS SESION NUEVA -->
 
 
 				<div id="nuevaSesion-page" class="mui-page">
@@ -656,7 +736,7 @@
 				</div>
 
 
-<!-- CARGA DE SESION POR EJERCICIO -->
+				<!-- CARGA DE SESION POR EJERCICIO -->
 
 
 				<div id='nuevaSesionEjercicios-page' class="mui-page">
@@ -678,7 +758,7 @@
 										<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 										<p class="lista_ejercicio_elemento">Series:</p><input type="Number" placeholder="Número de Series" v-model="ejercicio.series">
 										<br>
-										<p class="lista_ejercicio_elemento">Reps:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.reps">
+										<p class="lista_ejercicio_elemento">repeticiones:</p><input type="Number" placeholder="Número de Repeticiones" v-model="ejercicio.repeticiones">
 										<br>
 										<p class="lista_ejercicio_elemento">Intensidad:</p><input type="Number" placeholder="Intensidad Alcanzada" v-model="ejercicio.intensidad">
 										<br>
@@ -696,7 +776,7 @@
 				</div>
 
 
-<!-- VISUALIZAR PLANES -->
+				<!-- VISUALIZAR PLANES -->
 
 
 				<div id="visualizarPlanes-page" class="mui-page">
@@ -726,7 +806,7 @@
 				</div>
 
 
-<!-- VISUALIZAR EJERCICIOS -->
+				<!-- VISUALIZAR EJERCICIOS -->
 
 
 				<div id='visualizarEjercicios-page' class="mui-page">
@@ -740,12 +820,12 @@
 						<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 						<ul class="lista_sesion_ejercicios">
 							<li v-for="ejercicio in ejercicios">
-								<div class= "col-80">
+								<div class="col-80">
 									<p class="nombre_ejercicio">{{ejercicio.nombre}}</p>
 									<hr style="width:95%; height:3px; border-width:0; color:gray; background-color:gray">
 									<p class="lista_ejercicio_elemento">Series: {{ejercicio.series}}</p>
 									<br>
-									<p class="lista_ejercicio_elemento">Reps: {{ejercicio.reps}}</p>
+									<p class="lista_ejercicio_elemento">repeticiones: {{ejercicio.repeticiones}}</p>
 									<br>
 									<p class="lista_ejercicio_elemento">Intensidad: {{ejercicio.intensidad}}</p>
 									<br>
@@ -772,13 +852,13 @@
 					<div class="mui-page-body" id="second-body" style="overflow:scroll">
 						<div>
 							<div class="col-80">
-								<p class="seleccionar_plan">Seleccionar Plan:</p>
-								<br>
+								<p class="seleccionar_plan_label">Seleccionar Plan:</p>
 								<select class="col-80 planes_selector" v-model="id_planSeleccionado">
 									<option disabled value="">Seleccione un plan</option>
 									<option v-for="plan in planes" v-bind:value="plan._id">{{plan.nombre}}</option>
 								</select>
-								<button @click="asignarPlanSeleccionado">Agregar/cambiar plan asignado</button>
+								<br>
+								<button class="confirmar_selector_boton" @click="asignarPlanSeleccionado">Agregar/cambiar plan asignado</button>
 								<div>Plan asignado: {{plan_actual.nombre}}</div>
 							</div>
 						</div>
@@ -786,11 +866,11 @@
 				</div>
 
 
-<!-- Copy the code of "template-page" to add more pages -->
-<!-- Copie el código de template-plage para agregar más páginas -->
+				<!-- Copy the code of "template-page" to add more pages -->
+				<!-- Copie el código de template-plage para agregar más páginas -->
 
-<!-- Optional.Toolbar out of mui-viewport to be omnipresent. Remove if not needed. -->
-<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->
+				<!-- Optional.Toolbar out of mui-viewport to be omnipresent. Remove if not needed. -->
+				<!-- Opcional. Barra de herramientas fuera de mui-viewport para ser omnipresente. Elimínalo si no lo necesitas. -->
 
 
 				<div class="mui-tabbar" id="footer">
@@ -804,7 +884,7 @@
 
 			<!-- mui-screen level panel -->
 			<!-- Panel a nivel de mui-screen -->
-		
+
 		</div>
 		<div id="menu-panel" class="mui-panel">
 			<div class="mui-panel-header">
@@ -820,4 +900,5 @@
 		</div>
 	</div>
 </body>
+
 </html>
